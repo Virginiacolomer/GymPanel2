@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:host {
+  display: block;
+}
+
+.page-with-compact-header {
+  min-height: 100svh;
+}
+
+.page-body {
+  display: flex;
+  justify-content: center;
+  padding: 1rem max(1.25rem, env(safe-area-inset-right)) calc(2.5rem + env(safe-area-inset-bottom)) max(1.25rem, env(safe-area-inset-left));
+}
+
+.signup-shell {
+  width: min(100%, 920px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Manrope', sans-serif;
+}
+
+.signup-shell h1 {
+  margin: 0 0 0.8rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(3rem, 8vw, 4.4rem);
+  line-height: 0.85;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #3985f4;
+  text-align: center;
+}
+
+.signup-panel {
+  width: 100%;
+  border-radius: 24px;
+  padding: 0.7rem 0.85rem 0.9rem;
+  background: #8f959c;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.status-message {
+  margin: 0 0 0.6rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 10px;
+  background: rgba(49, 56, 63, 0.5);
+  color: #f1f5f8;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'Manrope', sans-serif;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #1f2225;
+}
+
+thead th {
+  padding: 0.6rem 0.8rem;
+  background: #49505a;
+  font-size: 1.65rem;
+  font-family: 'Space Grotesk', sans-serif;
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-align: left;
+  color: #e3e7ea;
+}
+
+thead th:first-child {
+  border-radius: 14px 0 0 14px;
+}
+
+thead th:last-child {
+  border-radius: 0 14px 14px 0;
+}
+
+tbody td {
+  padding: 0.6rem 0.8rem;
+  font-size: 1.35rem;
+  font-family: 'Space Grotesk', sans-serif;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.actions-head {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.actions-cell {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.action-btn {
+  border: 0;
+  border-radius: 3px 14px 3px 14px;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.8rem;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.action-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.action-btn-accept {
+	border-radius: 4px 18px 4px 4px;
+	background: linear-gradient(180deg, rgba(57, 133, 244, 0.32) 0%, rgba(28, 79, 214, 0.24) 100%);
+	border: 1px solid rgba(93, 221, 228, 0.45);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -12px 18px -10px rgba(57, 133, 244, 0.25);
+	backdrop-filter: blur(6px);
+	color: #eaf3ff;
+}
+
+.action-btn-delete {
+	border-radius: 4px 4px 4px 18px;
+	background: linear-gradient(180deg, rgba(255, 90, 90, 0.26) 0%, rgba(150, 35, 35, 0.22) 100%);
+	border: 1px solid rgba(255, 140, 140, 0.4);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), inset 0 -12px 18px -10px rgba(255, 90, 90, 0.22);
+	backdrop-filter: blur(6px);
+	color: #ffe6e6;
+}
+
+.empty-row {
+  padding: 1rem;
+  font-family: 'Manrope', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  color: #2f3337;
+}
+
+@media (max-width: 760px) {
+  .signup-panel {
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 680px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-body {
+    padding-right: max(1rem, env(safe-area-inset-right));
+    padding-left: max(1rem, env(safe-area-inset-left));
+  }
+
+  .signup-shell h1 {
+    font-size: 3rem;
+  }
+}

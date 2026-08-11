@@ -1,0 +1,10 @@
+
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/frontend/browser",
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "^/$", "status": 308, "headers": { "Location": "/pagina-inicio" } },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}

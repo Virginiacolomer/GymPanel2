@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:host {
+	display: block;
+}
+
+.page-with-compact-header {
+	min-height: 100svh;
+}
+
+.page-body {
+	display: flex;
+	justify-content: center;
+	padding: 1.4rem max(1.5rem, env(safe-area-inset-right)) calc(3rem + env(safe-area-inset-bottom)) max(1.5rem, env(safe-area-inset-left));
+}
+
+.client-menu {
+	width: min(100%, 760px);
+	font-family: 'Manrope', sans-serif;
+}
+
+/* Encabezado alineado a la izquierda, ya no centrado. */
+.menu-heading {
+	margin-bottom: 2rem;
+}
+
+.menu-eyebrow {
+	display: block;
+	font-family: 'Space Grotesk', sans-serif;
+	font-size: 0.78rem;
+	font-weight: 600;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: #5ddde4;
+	margin-bottom: 0.4rem;
+}
+
+.menu-heading h1 {
+	margin: 0;
+	font-family: 'Space Grotesk', sans-serif;
+	font-size: clamp(2.2rem, 6vw, 3.2rem);
+	line-height: 1;
+	letter-spacing: 0.01em;
+	color: #eef2f4;
+}
+
+/* Grilla de accesos: reemplaza la lista vertical de filas apiladas. */
+.menu-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+	gap: 1rem;
+}
+
+.menu-tile {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.85rem;
+	padding: 1.5rem 1.35rem 1.35rem;
+	border-radius: 4px 22px 4px 22px;
+	background: linear-gradient(165deg, #171d29 0%, #0d121c 100%);
+	border: 1px solid rgba(93, 221, 228, 0.16);
+	text-decoration: none;
+	transition: transform 170ms ease, border-color 170ms ease, box-shadow 170ms ease;
+}
+
+.menu-tile:hover {
+	transform: translateY(-3px);
+	border-color: rgba(93, 221, 228, 0.45);
+	box-shadow: 0 14px 30px rgba(3, 6, 10, 0.5);
+}
+
+.menu-tile:active {
+	transform: translateY(-1px);
+}
+
+@media (hover: none) {
+	.menu-tile:hover {
+		transform: none;
+		box-shadow: none;
+	}
+}
+
+.menu-tile-wide {
+	grid-column: span 2;
+	flex-direction: row;
+	align-items: center;
+}
+
+.menu-tile-wide .menu-label,
+.menu-tile-wide .menu-hint {
+	display: block;
+}
+
+/* Insignia hexagonal del icono: distinta de la placa redondeada anterior. */
+.icon-badge {
+	flex: none;
+	width: 50px;
+	height: 50px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+	background: linear-gradient(160deg, #3985f4 0%, #1c4fd6 100%);
+}
+
+.icon-badge .fi {
+	font-size: 1.3rem;
+	line-height: 1;
+	color: #eef4ff;
+}
+
+.menu-label {
+	color: #eef2f4;
+	font-family: 'Space Grotesk', sans-serif;
+	font-size: 1.1rem;
+	font-weight: 600;
+	letter-spacing: 0.01em;
+}
+
+.menu-hint {
+	color: #a7b0b8;
+	font-size: 0.82rem;
+	line-height: 1.35;
+}
+
+@media (max-width: 620px) {
+	.menu-grid {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+@media (max-width: 480px) {
+	.page-body {
+		padding-top: 1rem;
+		padding-right: max(1.1rem, env(safe-area-inset-right));
+		padding-left: max(1.1rem, env(safe-area-inset-left));
+	}
+
+	.menu-heading {
+		margin-bottom: 1.4rem;
+	}
+
+	.menu-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.menu-tile-wide {
+		grid-column: span 1;
+	}
+}

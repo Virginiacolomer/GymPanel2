@@ -1,0 +1,53 @@
+<app-page-bg>
+  <main class="page-with-compact-header">
+    <app-page-header-compact backHref="/menu-admin"></app-page-header-compact>
+
+    <section class="page-body">
+      <div class="signup-shell">
+        <h1>Alta de usuarios</h1>
+
+        <div class="signup-panel">
+          <p *ngIf="statusMessage" class="status-message" role="status" aria-live="polite">{{ statusMessage }}</p>
+
+          <button type="button" class="action-btn action-btn-accept" [disabled]="isLoading" (click)="reloadPendingUsers()">
+            {{ reloadButtonLabel }}
+          </button>
+
+          <table aria-label="Solicitudes de alta de usuarios">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>DNI</th>
+                <th>Estado</th>
+                <th class="actions-head">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="pendingAccounts.length === 0">
+                <td class="empty-row" colspan="5">No hay cuentas pendientes de aprobacion.</td>
+              </tr>
+
+              <ng-container *ngIf="pendingAccounts.length > 0">
+                <tr *ngFor="let account of pendingAccounts; trackBy: trackByAccountId">
+                  <td>{{ account.nombre || '-' }}</td>
+                  <td>{{ account.apellido || '-' }}</td>
+                  <td>{{ account.dni || '-' }}</td>
+                  <td>{{ account.estado || '-' }}</td>
+                  <td class="actions-cell">
+                    <button type="button" class="action-btn action-btn-accept" [disabled]="processingUserId === account.id" (click)="acceptAccount(account.id)">
+                      Aceptar
+                    </button>
+                    <button type="button" class="action-btn action-btn-delete" [disabled]="processingUserId === account.id" (click)="deleteAccount(account.id)">
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+</app-page-bg>

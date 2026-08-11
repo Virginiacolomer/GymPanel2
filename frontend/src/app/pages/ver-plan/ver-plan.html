@@ -1,0 +1,177 @@
+<app-page-bg>
+  <main class="page-with-compact-header">
+    <app-page-header-compact backHref="/asignar-plan"></app-page-header-compact>
+    <section class="page-body">
+      <div class="plan-shell">
+        <h1>Plan {{ selectedUserName }}</h1>
+
+        @if (currentPlan?.nombre) {
+          <p class="plan-name-caption">Nombre del plan: {{ currentPlan?.nombre }}</p>
+        }
+
+        @if (statusMessage) {
+          <p class="status-message" role="status" aria-live="polite">{{ statusMessage }}</p>
+        }
+
+        @if (isLoading) {
+          <p class="status-message" role="status" aria-live="polite">Cargando plan...</p>
+        }
+
+        <section class="plan-days" aria-label="Rutina semanal">
+          @for (day of days; track day.label; let index = $index) {
+            <article class="day-block">
+              <button
+                type="button"
+                class="day-toggle"
+                [attr.aria-expanded]="day.expanded"
+                (click)="toggleDay(index)"
+              >
+                <span class="day-label">
+                  {{ day.label }}
+                  @if (day.description) {
+                    <span class="day-description-inline"> - {{ day.description }}</span>
+                  }
+                </span>
+                <span class="day-arrow" [class.day-arrow-open]="day.expanded" aria-hidden="true"></span>
+              </button>
+
+              @if (day.expanded) {
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Ejercicio</th>
+                        <th>Series y repeticiones</th>
+                        @if (isEditing) {
+                          <th class="remove-head"></th>
+                        }
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (row of day.exercises; track rowIndex; let rowIndex = $index) {
+                        <tr>
+                          @if (isEditing) {
+                            <td>
+                              <input
+                                type="text"
+                                [(ngModel)]="row.exercise"
+                                class="exercise-input"
+                                placeholder="Nombre del ejercicio"
+                                list="exercise-options"
+                                (blur)="validateExerciseSelection(index, rowIndex)"
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="text"
+                                [(ngModel)]="row.workload"
+                                class="workload-input"
+                                placeholder="3x12"
+                              />
+                            </td>
+                            <td class="remove-cell">
+                              <button
+                                type="button"
+                                class="remove-row-btn"
+                                (click)="removeExerciseRow(index, rowIndex)"
+                                aria-label="Quitar fila"
+                                title="Quitar fila"
+                              >
+                                -
+                              </button>
+                            </td>
+                          } @else {
+                            <td>
+                              <span class="exercise-name-cell">
+                                @if (row.imagenUrl) {
+                                  <app-zoomable-image [src]="row.imagenUrl" [alt]="row.exercise" class="exercise-row-thumb"></app-zoomable-image>
+                                }
+                                {{ row.exercise }}
+                              </span>
+                            </td>
+                            <td>{{ row.workload }}</td>
+                          }
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+
+                  @if (isEditing) {
+                    <button type="button" class="add-row-btn" (click)="addExerciseRow(index)">
+                      Agregar fila
+                    </button>
+                  }
+                </div>
+              }
+            </article>
+          }
+        </section>
+
+        <datalist id="exercise-options">
+          @for (exerciseName of exerciseOptions; track exerciseName) {
+            <option [value]="exerciseName"></option>
+          }
+        </datalist>
+
+        <div class="button-group">
+          @if (isEditing) {
+            @if (availablePlans.length > 0) {
+              <div class="predefined-plans-section">
+                <label class="plans-label">Asignar plan predeterminado:</label>
+                <div class="plans-controls">
+                  <select [(ngModel)]="selectedPlanId" class="plans-select">
+                    <option value="">-- Seleccionar plan --</option>
+                    @for (plan of availablePlans; track plan.id) {
+                      <option [value]="plan.id">{{ plan.title }}</option>
+                    }
+                  </select>
+                  <button type="button" class="assign-plan-btn" (click)="assignPredefinedPlan()" [disabled]="!selectedPlanId">
+                    <span class="icon" aria-hidden="true"></span>
+                    Asignar
+                  </button>
+                </div>
+              </div>
+            }
+            <button type="button" class="save-btn" (click)="savePlan()">
+              <span class="icon" aria-hidden="true"></span>
+              <span>Guardar cambios</span>
+            </button>
+            <button type="button" class="cancel-btn" (click)="cancelEditing()">
+              <span>Cancelar</span>
+            </button>
+          } @else {
+            <button type="button" class="edit-btn" [disabled]="days.length === 0 || isLoading" (click)="startEditing()">
+              <span class="icon" aria-hidden="true"></span>
+              <span>Editar plan</span>
+            </button>
+            <button type="button" class="download-btn" [disabled]="days.length === 0 || isLoading" (click)="downloadPdf()">
+              <span class="download-icon" aria-hidden="true"></span>
+              <span>Descargar PDF</span>
+            </button>
+            @if (dbPlans.length > 0) {
+              <div class="assign-db-section">
+                <label class="assign-db-label">Asignar plan existente:</label>
+                <div class="assign-db-controls">
+                  <select [(ngModel)]="selectedDbPlanId" class="assign-db-select">
+                    <option [ngValue]="null">-- Seleccionar plan --</option>
+                    @for (plan of dbPlans; track plan.id) {
+                      <option [ngValue]="plan.id">{{ plan.nombre }}</option>
+                    }
+                  </select>
+                  <button
+                    type="button"
+                    class="assign-db-btn"
+                    (click)="assignDbPlan()"
+                    [disabled]="!selectedDbPlanId || isAssigning || isLoading"
+                  >
+                    {{ isAssigning ? 'Asignando...' : 'Asignar' }}
+                  </button>
+                </div>
+              </div>
+            }
+          }
+        </div>
+      </div>
+    </section>
+  </main>
+</app-page-bg>

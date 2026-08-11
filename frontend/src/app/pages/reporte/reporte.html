@@ -1,0 +1,92 @@
+<app-page-bg>
+  <main class="page-with-compact-header">
+    <app-page-header-compact backHref="/menu-admin"></app-page-header-compact>
+
+    <section class="page-body">
+      <div class="reporte-card">
+        <h1>Generar reporte</h1>
+        <p class="subtitle">Selecciona el rango de fechas para el reporte.</p>
+
+        <form class="reporte-form" (ngSubmit)="onGenerar()" #form="ngForm" novalidate>
+          <div class="field-group">
+            <label for="fechaDesde">Desde</label>
+            <input
+              id="fechaDesde"
+              type="date"
+              name="fechaDesde"
+              [(ngModel)]="fechaDesde"
+              [max]="fechaHasta || hoy"
+              required
+            />
+          </div>
+
+          <div class="field-group">
+            <label for="fechaHasta">Hasta</label>
+            <input
+              id="fechaHasta"
+              type="date"
+              name="fechaHasta"
+              [(ngModel)]="fechaHasta"
+              [min]="fechaDesde || undefined"
+              [max]="hoy"
+              required
+            />
+          </div>
+
+          <div class="gastos-section">
+            <h2 class="gastos-title">Gastos del periodo</h2>
+
+            <ul class="gastos-list" aria-label="Lista de gastos">
+              @for (gasto of gastos; track trackByIndex($index)) {
+                <li class="gasto-row">
+                  <input
+                    type="text"
+                    class="gasto-input gasto-titulo"
+                    [name]="'gastoTitulo' + $index"
+                    [(ngModel)]="gasto.titulo"
+                    placeholder="Concepto (ej: alquiler)"
+                    maxlength="80"
+                  />
+                  <input
+                    type="text"
+                    inputmode="decimal"
+                    class="gasto-input gasto-valor"
+                    [name]="'gastoValor' + $index"
+                    [(ngModel)]="gasto.valor"
+                    placeholder="Monto"
+                    (keydown)="onValorKeydown($event)"
+                    (input)="onValorInput($event, gasto)"
+                  />
+                  @if (gastos.length > 1) {
+                    <button
+                      type="button"
+                      class="btn-eliminar-gasto"
+                      (click)="eliminarGasto($index)"
+                      aria-label="Eliminar gasto"
+                    >✕</button>
+                  }
+                </li>
+              }
+            </ul>
+
+            <button type="button" class="btn-agregar-gasto" (click)="agregarGasto()">
+              + Agregar gasto
+            </button>
+
+            @if (totalGastos > 0) {
+              <p class="gastos-total">Total gastos: <strong>${{ totalGastos | number: '1.2-2' }}</strong></p>
+            }
+          </div>
+
+          @if (errorMsg) {
+            <p class="error-msg" role="alert">{{ errorMsg }}</p>
+          }
+
+          <button type="submit" class="btn-generar">
+            {{ isGenerando ? 'Generando...' : 'Generar reporte' }}
+          </button>
+        </form>
+      </div>
+    </section>
+  </main>
+</app-page-bg>

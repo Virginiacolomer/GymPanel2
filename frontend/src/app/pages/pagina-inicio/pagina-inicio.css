@@ -1,0 +1,523 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+/* Hace que el componente ocupe todo el ancho disponible dentro del router-outlet. */
+:host {
+	display: block;
+}
+
+/* En escritorio: alto exacto de viewport y margen negativo que compensa el
+   padding-bottom que .app-content (layout raiz) reserva para el footer fijo,
+   para que el home entre en una sola pantalla sin scroll. */
+@media (min-width: 1041px) {
+	:host {
+		height: 100svh;
+		margin-bottom: -2.4rem;
+	}
+}
+
+/* Variables de color del home (fondo y circulos gestionados por app-page-bg). */
+.home-page {
+	--bg: #030607;
+	--panel: #4c5562;
+	--green: #3985f4;
+	--green-soft: #59dae1;
+	--light: #d9dadd;
+	--text: #e9edf0;
+	--muted: #b7c2c8;
+	min-height: 100svh;
+	color: var(--text);
+	font-family: 'Manrope', sans-serif;
+}
+
+/* En pantallas de escritorio, todo el home entra en una sola pantalla sin scroll. */
+@media (min-width: 1041px) {
+	.home-page {
+		height: 100svh;
+		overflow: hidden;
+	}
+}
+
+/* Contenedor central del hero para limitar ancho maximo y agregar padding. */
+.hero-shell {
+	position: relative;
+	z-index: 1;
+	max-width: 1280px;
+	margin: 0 auto;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	padding: 0.6rem 2rem;
+}
+
+/* Header horizontal: marca a la izquierda, botones a la derecha. */
+.topbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-bottom: 0.55rem;
+}
+
+/* Bloque de marca (logo + texto). */
+.brand {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.42rem;
+	margin-left: -10px;
+	text-decoration: none;
+}
+
+/* Tamaño del logo con clamp para escalar segun pantalla. */
+.brand-logo {
+	display: block;
+	height: clamp(50px, 4vw, 40px);
+	width: auto;
+	object-fit: contain;
+}
+
+/* Texto GYMPANEL con fuente display. */
+.brand-text {
+	font-family: 'Space Grotesk', sans-serif;
+	font-size: clamp(2.05rem, 3.7vw, 3.05rem);
+	line-height: 0.76;
+	letter-spacing: 0.025em;
+	font-weight: 700;
+	color: #eef2f4;
+}
+
+/* Colorea solo la parte GYM del texto de marca. */
+.brand-text span {
+	color: var(--green);
+}
+
+/* Grupo de botones de login/registro. */
+.actions {
+	display: flex;
+	gap: 0.9rem;
+}
+
+/* Estilo base para ambos botones del header. */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 110px;
+	padding: 0.58rem 1.1rem;
+	border-radius: 3px 14px 3px 14px;
+	font-weight: 700;
+	font-size: 0.9rem;
+	text-decoration: none;
+	transition: transform 160ms ease, filter 160ms ease;
+}
+
+/* Feedback visual al pasar el mouse. */
+.btn:hover {
+	transform: translateY(-1px);
+	filter: brightness(1.05);
+}
+
+/* Variante verde del boton principal. */
+.btn-primary {
+	color: #050d23;
+	background: var(--green);
+}
+
+/* Variante clara del boton secundario. */
+.btn-light {
+	color: #24262b;
+	background: #d3d5d8;
+}
+
+/* Grilla principal de dos columnas: imagen a la izquierda, contenido a la derecha. */
+.hero-grid {
+	display: grid;
+	grid-template-columns: 1.05fr 0.95fr;
+	gap: 1.6rem;
+	align-items: start;
+	align-content: center;
+	flex: 1;
+	min-height: 0;
+}
+
+.hero-copy {
+	order: 2;
+}
+
+.panel-preview {
+	order: 1;
+}
+
+/* Titulo grande del hero. */
+.hero-copy h1 {
+	margin: 0;
+	font-family: 'Space Grotesk', sans-serif;
+	font-size: clamp(1.9rem, 2.6vw + 1rem, 2.9rem);
+	line-height: 1.02;
+	letter-spacing: 0.01em;
+	text-transform: uppercase;
+	max-width: 420px;
+	color: var(--green);
+}
+
+/* Parrafo descriptivo bajo el titulo. */
+.hero-copy p {
+	margin: 0.6rem 0 0.85rem;
+	max-width: 500px;
+	font-size: 0.88rem;
+	line-height: 1.45;
+	color: var(--muted);
+}
+
+/* Lista vertical de filas de beneficio (en vez de tarjetas apiladas). */
+.feature-cards {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+	margin-bottom: 0.85rem;
+	max-width: 460px;
+}
+
+/* Fila individual de beneficio: icono en badge + texto. */
+.feature {
+	display: flex;
+	align-items: center;
+	gap: 0.7rem;
+	border-radius: 10px;
+	border: 1px solid rgba(93, 221, 228, 0.18);
+	background: rgba(255, 255, 255, 0.03);
+	padding: 0.5rem 0.85rem;
+}
+
+/* Texto interno de cada fila. */
+.feature h2 {
+	margin: 0;
+	font-size: 0.85rem;
+	line-height: 1.3;
+	font-weight: 600;
+	color: #f2f5f7;
+}
+
+/* Badge cuadrado del icono Flaticon. */
+.feature .fi {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: none;
+	width: 32px;
+	height: 32px;
+	border-radius: 8px;
+	background: rgba(57, 133, 244, 0.16);
+	font-size: 1.02rem;
+	line-height: 1;
+	color: var(--green-soft);
+}
+
+/* Base de los iconos custom de las tarjetas. */
+.feature-icon {
+	width: 40px;
+	height: 34px;
+	margin-bottom: 0.82rem;
+	position: relative;
+}
+
+/* Piezas de iconos dibujadas con pseudo-elementos. */
+.feature-icon-doc::before,
+.feature-icon-doc::after,
+.feature-icon-pay::before,
+.feature-icon-pay::after {
+	content: '';
+	position: absolute;
+	border: 2px solid #3770f4;
+}
+
+/* Icono tipo documento: capa frontal. */
+.feature-icon-doc::before {
+	inset: 2px 8px 4px 2px;
+}
+
+/* Icono tipo documento: capa trasera desplazada. */
+.feature-icon-doc::after {
+	inset: -2px 2px 10px 8px;
+}
+
+/* Icono de pago: mano simplificada. */
+.feature-icon-pay::before {
+	width: 22px;
+	height: 16px;
+	left: 2px;
+	bottom: 6px;
+	border-radius: 8px;
+	border-top-color: transparent;
+	transform: rotate(-36deg);
+}
+
+/* Icono de pago: moneda. */
+.feature-icon-pay::after {
+	width: 12px;
+	height: 12px;
+	right: 1px;
+	top: 1px;
+	border-radius: 50%;
+}
+
+/* Boton CTA principal debajo de las tarjetas. */
+.cta-group {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.8rem;
+	max-width: 100%;
+}
+
+.cta {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 3px 14px 3px 14px;
+	padding: 0.68rem 1.3rem;
+	font-size: 0.92rem;
+	font-weight: 700;
+	text-decoration: none;
+	transition: transform 170ms ease, box-shadow 170ms ease;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+.cta-primary {
+	background: linear-gradient(120deg, #1143cc, #5ddde4);
+	color: #060b16;
+}
+
+.cta-secondary {
+	background: rgba(217, 218, 221, 0.12);
+	border: 1px solid rgba(217, 218, 221, 0.28);
+	color: #eef2f4;
+}
+
+/* Hover del CTA para dar sensacion de elevacion. */
+.cta:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 10px 24px rgba(67, 147, 255, 0.24);
+}
+
+.home-contact {
+	margin-top: 0.75rem;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.3rem 1.1rem;
+	font-size: 0.78rem;
+	line-height: 1.4;
+	color: #d4dde1;
+	max-width: 520px;
+}
+
+.home-contact strong {
+	color: var(--green-soft);
+}
+
+/* Tarjeta que muestra una vista previa del plan (sin fotografias). Ocupa todo su ancho de columna. */
+.panel-preview {
+	width: 100%;
+	border-radius: 16px;
+	border: 1px solid rgba(93, 221, 228, 0.28);
+	overflow: hidden;
+	background: #0c111c;
+	box-shadow: 0 24px 60px rgba(2, 4, 10, 0.55);
+	justify-self: stretch;
+}
+
+/* Barra superior estilo ventana de aplicacion. */
+.panel-preview-bar {
+	display: flex;
+	align-items: center;
+	gap: 0.45rem;
+	padding: 0.8rem 1.35rem;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+	background: rgba(255, 255, 255, 0.02);
+}
+
+.panel-dot {
+	width: 9px;
+	height: 9px;
+	border-radius: 50%;
+	background: rgba(217, 218, 221, 0.3);
+}
+
+.panel-preview-title {
+	margin-left: auto;
+	font-family: 'Space Grotesk', sans-serif;
+	font-size: 0.85rem;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--muted);
+}
+
+.panel-preview-body {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	padding: 1.3rem 1.35rem 1.4rem;
+}
+
+/* Cada dia del plan: encabezado con badge + lista de ejercicios. */
+.plan-day {
+	padding-bottom: 1rem;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.plan-day:last-child {
+	padding-bottom: 0;
+	border-bottom: 0;
+}
+
+.plan-day-head {
+	display: flex;
+	align-items: center;
+	gap: 0.7rem;
+	margin-bottom: 0.6rem;
+	font-family: 'Space Grotesk', sans-serif;
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: #eef2f4;
+}
+
+/* Insignia hexagonal del dia: mismo lenguaje visual que los menus. */
+.plan-day-badge {
+	flex: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 38px;
+	height: 38px;
+	clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+	background: linear-gradient(160deg, #3985f4 0%, #1c4fd6 100%);
+	font-size: 0.72rem;
+	font-weight: 700;
+	letter-spacing: 0.01em;
+	color: #eef4ff;
+	text-transform: uppercase;
+}
+
+.plan-exercise-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+}
+
+.plan-exercise-list li {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	padding-left: 3.1rem;
+	font-size: 0.95rem;
+	color: var(--muted);
+}
+
+.plan-exercise-list li span:last-child {
+	font-family: 'Space Grotesk', sans-serif;
+	font-weight: 600;
+	color: #eef2f4;
+}
+
+/* Tablet: pasa a 1 columna y adapta espaciados. */
+@media (max-width: 1040px) {
+	.home-page {
+		height: auto;
+		overflow: visible;
+	}
+
+	.hero-shell {
+		height: auto;
+		display: block;
+		padding-inline: 1.25rem;
+	}
+
+	.hero-grid {
+		grid-template-columns: 1fr;
+		gap: 1.4rem;
+		align-items: start;
+		flex: initial;
+	}
+
+	.panel-preview {
+		justify-self: stretch;
+		width: 100%;
+		max-width: 560px;
+	}
+
+	.hero-copy h1 {
+		max-width: 560px;
+	}
+
+	.decor-bottom {
+		right: 0;
+		bottom: -42%;
+	}
+}
+
+/* Mobile intermedio: header vertical y elementos mas compactos. */
+@media (max-width: 720px) {
+	.topbar {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.actions {
+		width: 100%;
+	}
+
+	.btn {
+		flex: 1;
+	}
+
+	.hero-copy h1 {
+		max-width: 330px;
+	}
+
+	.hero-copy p {
+		margin-bottom: 1.2rem;
+	}
+
+	.cta {
+		width: 100%;
+	}
+
+	.home-contact {
+		font-size: 0.89rem;
+	}
+}
+
+/* Mobile chico: reduce paddings, logo, tipografias y altura de imagen. */
+@media (max-width: 460px) {
+	.hero-shell {
+		padding: 1rem 0.9rem 1.3rem;
+	}
+
+	.brand {
+		margin-left: -4px;
+	}
+
+	.brand-logo {
+		height: 28px;
+	}
+
+	.brand-text {
+		font-size: 1.86rem;
+	}
+
+	.cta {
+		width: 100%;
+	}
+
+	.panel-preview {
+		border-radius: 14px;
+	}
+
+	.panel-preview-body {
+		padding: 1.1rem 0.9rem 1.3rem;
+	}
+}

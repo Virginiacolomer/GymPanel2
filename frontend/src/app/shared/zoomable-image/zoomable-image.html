@@ -1,0 +1,18 @@
+<button
+  type="button"
+  class="zoomable-thumb"
+  (click)="open()"
+  [attr.aria-label]="alt ? 'Ampliar imagen de ' + alt : 'Ampliar imagen'"
+>
+  <img [src]="src" [alt]="alt" />
+  <span class="zoomable-badge" aria-hidden="true">⤢</span>
+</button>
+
+@if (isExpanded) {
+  <div class="zoomable-overlay" (click)="close()">
+    <button type="button" class="zoomable-close" (click)="close()" aria-label="Cerrar imagen ampliada">
+      &times;
+    </button>
+    <img [src]="src" [alt]="alt" class="zoomable-overlay-img" (click)="$event.stopPropagation()" />
+  </div>
+}

@@ -1,0 +1,71 @@
+<app-page-bg>
+  <main class="page-with-compact-header">
+    <app-page-header-compact backHref="/menu-admin"></app-page-header-compact>
+    <section class="page-body">
+      <div class="assign-shell">
+        <h1>Asignar plan</h1>
+
+        <div class="assign-panel">
+          @if (statusMessage) {
+            <p class="status-message" role="status" aria-live="polite">{{ statusMessage }}</p>
+          }
+
+          <div class="filter-box">
+            <label class="sr-only" for="user-search">Filtrar usuarios</label>
+            <input
+              id="user-search"
+              type="text"
+              placeholder="Filtrar por nombre, apellido o DNI"
+              [value]="filterTerm"
+              (input)="onFilterInput($any($event.target).value)"
+            />
+            <i class="fi fi-sr-filter" aria-hidden="true"></i>
+          </div>
+
+          <div class="table-wrap">
+            <table aria-label="Tabla de usuarios para asignar plan">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>DNI</th>
+                  <th>Plan</th>
+                </tr>
+              </thead>
+              <tbody>
+                @if (isLoading) {
+                  <tr>
+                    <td class="no-results" colspan="4">Cargando usuarios...</td>
+                  </tr>
+                } @else if (filteredUsers.length === 0) {
+                  <tr>
+                    <td class="no-results" colspan="4">No se encontraron usuarios para la busqueda.</td>
+                  </tr>
+                } @else {
+                  @for (user of filteredUsers; track user.id) {
+                    <tr>
+                      <td>{{ user.firstName }}</td>
+                      <td>{{ user.lastName }}</td>
+                      <td>{{ user.dni }}</td>
+                      <td>
+                        <div class="plan-actions">
+                          <a
+                            class="action-btn view-btn"
+                            routerLink="/ver-plan"
+                            [queryParams]="{ userId: user.id, usuario: user.firstName + ' ' + user.lastName, frecuencia: user.membershipFrequency }"
+                          >
+                            Ver y editar
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                  }
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</app-page-bg>

@@ -1,0 +1,80 @@
+<app-page-bg>
+  <main class="page-with-compact-header">
+    <app-page-header-compact backHref="/menu-cliente"></app-page-header-compact>
+    <section class="page-body">
+      <div class="payments-shell">
+        <h1>Mis pagos</h1>
+
+        @if (redirectStatusMessage) {
+          <p
+            class="redirect-status-banner"
+            [class.redirect-status-success]="redirectStatusType === 'success'"
+            [class.redirect-status-error]="redirectStatusType === 'error'"
+            [class.redirect-status-info]="redirectStatusType === 'info'"
+          >
+            {{ redirectStatusMessage }}
+          </p>
+        }
+
+        <section class="status-panel" aria-label="Estado del pago actual">
+          <div class="status-pill">
+            <span
+              class="status-dot"
+              [class.status-dot-up-to-date]="currentStatus === 'upToDate'"
+              [class.status-dot-overdue]="currentStatus === 'pending'"
+              aria-hidden="true"
+            ></span>
+            <span class="status-label">{{ status.label }}</span>
+          </div>
+
+          <p class="status-detail">{{ statusDetail }}</p>
+          <p class="next-payment">Proximo pago: <strong>{{ nextPaymentLabel }}</strong></p>
+
+          @if (currentStatus === 'pending') {
+            <button
+              type="button"
+              class="pay-button"
+              [disabled]="isRedirectingToCheckout"
+              (click)="iniciarPago()"
+            >
+              {{ isRedirectingToCheckout ? 'Redirigiendo a Mercado Pago...' : 'Pagar con Mercado Pago' }}
+            </button>
+
+            @if (checkoutErrorMessage) {
+              <p class="checkout-error">{{ checkoutErrorMessage }}</p>
+            }
+          }
+        </section>
+
+        <section class="current-payments-panel" aria-label="Pagos del mes actual">
+          <div class="current-payments-header">
+            <h2>Pagos de {{ currentMonthLabel }}</h2>
+            <span class="payments-count">{{ currentMonthPayments.length }} registrados</span>
+          </div>
+
+          @if (paymentsLoadError) {
+            <p class="current-payments-error">{{ paymentsLoadError }}</p>
+          } @else if (currentMonthPayments.length > 0) {
+            <div class="current-payments-list">
+              @for (payment of currentMonthPayments; track payment.id) {
+                <article class="payment-card">
+                  <div>
+                    <p class="payment-month">{{ payment.monthLabel }}</p>
+                    <h3>{{ payment.membershipName }}</h3>
+                    <p class="payment-date">Cobrado el {{ payment.createdAtLabel }}</p>
+                  </div>
+
+                  <strong class="payment-amount">{{ payment.amountLabel }}</strong>
+                </article>
+              }
+            </div>
+          } @else {
+            <p class="current-payments-empty">No hay pagos registrados para {{ currentMonthLabel }}.</p>
+          }
+        </section>
+
+        <a class="history-link" routerLink="/historial-de-pagos">Historial de pagos</a>
+      </div>
+    </section>
+  </main>
+</app-page-bg>

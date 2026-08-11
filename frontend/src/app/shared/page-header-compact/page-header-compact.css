@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:host {
+  display: block;
+}
+
+.compact-topbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(1.2rem + env(safe-area-inset-top)) max(1.5rem, env(safe-area-inset-right)) 0 max(1.5rem, env(safe-area-inset-left));
+  margin-bottom: 1rem;
+  min-width: 0;
+}
+
+.compact-left {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 0.62rem;
+  min-width: 0;
+}
+
+.compact-back {
+  position: absolute;
+  left: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  color: #3985f4;
+  font-size: 1.45rem;
+  text-decoration: none;
+}
+
+.compact-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  min-width: 0;
+  text-decoration: none;
+}
+
+.compact-logo {
+  display: block;
+  height: clamp(30px, 4vw, 46px);
+  width: auto;
+  object-fit: contain;
+}
+
+.compact-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.25rem, 4.1vw, 4rem);
+  line-height: 0.76;
+  letter-spacing: 0.02em;
+  font-weight: 700;
+  color: #eef2f4;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.compact-text span {
+  color: #3985f4;
+}
+
+@media (max-width: 720px) {
+  .compact-topbar {
+    padding-top: calc(1rem + env(safe-area-inset-top));
+    padding-right: max(1rem, env(safe-area-inset-right));
+    padding-left: max(1rem, env(safe-area-inset-left));
+    margin-bottom: 0.85rem;
+  }
+
+  .compact-back {
+    left: 1rem;
+  }
+
+  .compact-left {
+    gap: 0.48rem;
+  }
+
+  .compact-logo {
+    height: 30px;
+  }
+
+  .compact-text {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 460px) {
+  .compact-topbar {
+    margin-bottom: 0.55rem;
+  }
+
+  .compact-back {
+    width: 24px;
+    height: 24px;
+    font-size: 1.1rem;
+  }
+
+  .compact-logo {
+    height: 24px;
+  }
+
+  .compact-text {
+    font-size: 1.62rem;
+    letter-spacing: 0.01em;
+  }
+}
+
+@media (max-width: 360px) {
+  .compact-logo {
+    display: none;
+  }
+
+  .compact-text {
+    font-size: 1.4rem;
+  }
+}

@@ -1,0 +1,100 @@
+<app-page-bg>
+<div class="home-page">
+	<!-- Contenedor principal del hero: header + contenido + vista previa del plan. -->
+	<section class="hero-shell">
+		<!-- Encabezado reutilizable compartido en /shared. -->
+		<app-page-header></app-page-header>
+
+		<!-- Grilla de dos columnas: vista previa del plan a la izquierda, contenido a la derecha. -->
+		<div class="hero-grid">
+			<!-- Columna de contenido principal. -->
+			<article class="hero-copy">
+				<h1>Tu gimnasio, en un solo panel</h1>
+				<!-- Parrafo descriptivo del valor de la plataforma. -->
+				<p>
+					Dejá las planillas sueltas. Con GymPanel consultás tu membresia, tu plan de
+					entrenamiento y los horarios de clases desde un mismo lugar.
+				</p>
+
+				<!-- Funcionalidades disponibles para el usuario logueado. -->
+				<div class="feature-cards">
+					<section class="feature">
+						<!-- Icono decorativo. -->
+						<i class="fi fi-sr-list-check" aria-hidden="true"></i>
+						<h2>Tu plan de entrenamiento, siempre a mano</h2>
+					</section>
+
+					<section class="feature">
+						<!-- Icono decorativo. -->
+						<i class="fi fi-sr-credit-card" aria-hidden="true"></i>
+						<h2>Estado de tu membresia y pagos al dia</h2>
+					</section>
+
+					<section class="feature">
+						<!-- Icono decorativo. -->
+						<i class="fi fi-sr-calendar-clock" aria-hidden="true"></i>
+						<h2>Horarios de clases siempre actualizados</h2>
+					</section>
+				</div>
+
+				<!-- Botones principales de acceso a membresias y horarios. -->
+				<div class="cta-group">
+					<a class="cta cta-primary" href="/membresias">Ver membresias</a>
+					<a class="cta cta-secondary" href="/horarios">Ver horarios</a>
+				</div>
+
+				<div class="home-contact" aria-label="Informacion de contacto">
+					<span><strong>Instagram:</strong> {{ gymContact.instagram }}</span>
+					<span><strong>Celular:</strong> {{ gymContact.phone }}</span>
+					<span><strong>Direccion:</strong> {{ gymContact.address }}</span>
+				</div>
+			</article>
+
+			<!-- Columna visual: vista previa del plan de entrenamiento, sin fotografias. -->
+			<aside class="panel-preview" aria-label="Vista previa del plan de entrenamiento">
+				<div class="panel-preview-bar">
+					<span class="panel-dot"></span>
+					<span class="panel-dot"></span>
+					<span class="panel-dot"></span>
+					<span class="panel-preview-title">Mi plan</span>
+				</div>
+
+				<div class="panel-preview-body">
+					<div class="plan-day">
+						<div class="plan-day-head">
+							<span class="plan-day-badge">Lun</span>
+							<span>Tren superior</span>
+						</div>
+						<ul class="plan-exercise-list">
+							<li><span>Press banca</span><span>4x10</span></li>
+							<li><span>Remo con barra</span><span>4x10</span></li>
+						</ul>
+					</div>
+
+					<div class="plan-day">
+						<div class="plan-day-head">
+							<span class="plan-day-badge">Mie</span>
+							<span>Tren inferior</span>
+						</div>
+						<ul class="plan-exercise-list">
+							<li><span>Sentadilla</span><span>4x8</span></li>
+							<li><span>Peso muerto</span><span>3x8</span></li>
+						</ul>
+					</div>
+
+					<div class="plan-day">
+						<div class="plan-day-head">
+							<span class="plan-day-badge">Vie</span>
+							<span>Full body</span>
+						</div>
+						<ul class="plan-exercise-list">
+							<li><span>Dominadas</span><span>3x8</span></li>
+							<li><span>Plancha</span><span>3x40s</span></li>
+						</ul>
+					</div>
+				</div>
+			</aside>
+		</div>
+	</section>
+</div>
+</app-page-bg>

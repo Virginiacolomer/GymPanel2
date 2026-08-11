@@ -1,0 +1,573 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:host {
+	display: block;
+}
+
+.page-with-compact-header {
+	min-height: 100svh;
+}
+
+.page-body {
+	display: flex;
+	justify-content: center;
+	padding: 1rem max(1.25rem, env(safe-area-inset-right)) calc(2rem + env(safe-area-inset-bottom)) max(1.25rem, env(safe-area-inset-left));
+}
+
+.plan-shell {
+	width: min(100%, 760px);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	min-height: calc(100svh - 8rem);
+	padding-top: clamp(0.5rem, 4vw, 1.2rem);
+	font-family: 'Manrope', sans-serif;
+}
+
+.plan-shell h1 {
+	margin: 0 0 1.25rem;
+	font-family: 'Space Grotesk', sans-serif;
+	font-size: clamp(3rem, 8vw, 4.5rem);
+	line-height: 0.85;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: #3985f4;
+	text-align: center;
+}
+
+.plan-name-caption {
+	margin: -0.65rem 0 1.1rem;
+	padding: 0.42rem 0.8rem;
+	border-radius: 10px;
+	border: 1px solid rgba(57, 133, 244, 0.28);
+	background: rgba(21, 22, 28, 0.42);
+	color: #f0f5ff;
+	font-size: clamp(1.03rem, 2.1vw, 1.2rem);
+	font-weight: 700;
+	letter-spacing: 0.01em;
+	text-align: center;
+}
+
+.plan-days {
+	width: 100%;
+	align-self: stretch;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	margin-bottom: auto;
+}
+
+.day-block {
+	width: min(100%, 36rem);
+}
+
+.day-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.65rem;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: #3985f4;
+	font-family: 'Space Grotesk', sans-serif;
+	font-size: clamp(2rem, 5vw, 2.6rem);
+	font-weight: 700;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+
+.day-label {
+	line-height: 0.9;
+}
+
+.day-description-inline {
+	font-family: 'Manrope', sans-serif;
+	font-size: 0.9rem;
+	font-weight: 500;
+	text-transform: none;
+	letter-spacing: 0;
+	color: #d7e0e4;
+	line-height: 1.35;
+}
+
+.day-arrow {
+	position: relative;
+	width: 30px;
+	height: 22px;
+	border-radius: 8px;
+	background: #0fd9ff;
+	box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.12);
+}
+
+.day-arrow::before {
+	content: '';
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-top: 6px solid #101314;
+	transform: translate(-50%, -30%);
+	transition: transform 160ms ease;
+}
+
+.day-arrow-open::before {
+	transform: translate(-50%, -60%) rotate(180deg);
+}
+
+.table-wrap {
+	margin-top: 0.7rem;
+	overflow-x: hidden;
+	border-radius: 18px;
+	background: rgba(81, 88, 98, 0.92);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	color: #edf1f3;
+	font-size: 0.96rem;
+	table-layout: fixed;
+}
+
+th,
+td {
+	padding: 0.95rem 0.75rem;
+	text-align: left;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+}
+
+thead th {
+	background: rgba(31, 36, 41, 0.44);
+	font-size: 0.87rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	color: #cfd8dc;
+}
+
+tbody tr:not(:last-child) td {
+	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+tbody td:last-child,
+thead th:last-child {
+	width: 34%;
+}
+
+.remove-head {
+	width: 56px;
+}
+
+.remove-cell {
+	width: 56px;
+	text-align: center;
+}
+
+
+.download-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.55rem;
+	margin-top: 2rem;
+	padding: 0.6rem 1rem;
+	border: 0;
+	border-radius: 3px 14px 3px 14px;
+	background: #5e646d;
+	color: #f1f3f4;
+	font-family: 'Manrope', sans-serif;
+	font-size: 0.95rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+
+.exercise-input,
+.workload-input {
+	width: 100%;
+	padding: 0.5rem 0.65rem;
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	border-radius: 6px;
+	background: rgba(31, 36, 41, 0.6);
+	color: #f1f3f4;
+	font-family: 'Manrope', sans-serif;
+	font-size: 0.96rem;
+	outline: 0;
+	transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+.exercise-input:focus,
+.workload-input:focus {
+	background: rgba(31, 36, 41, 0.9);
+	border-color: rgba(255, 255, 255, 0.3);
+}
+
+.exercise-input::placeholder,
+.workload-input::placeholder {
+	color: rgba(207, 216, 220, 0.5);
+}
+
+.exercise-name-cell {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.exercise-row-thumb {
+	width: 46px;
+	height: 46px;
+	border-radius: 8px;
+	flex-shrink: 0;
+}
+
+.assign-db-section {
+	width: 100%;
+	padding: 1rem;
+	border-radius: 16px;
+	background: rgba(81, 88, 98, 0.6);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.assign-db-label {
+	display: block;
+	margin-bottom: 0.75rem;
+	color: #cfd8dc;
+	font-size: 0.92rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+}
+
+.assign-db-controls {
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+	align-items: stretch;
+}
+
+.assign-db-select {
+	padding: 0.65rem 0.75rem;
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	border-radius: 8px;
+	background: rgba(31, 36, 41, 0.7);
+	color: #f1f3f4;
+	font-family: 'Manrope', sans-serif;
+	font-size: 0.95rem;
+	cursor: pointer;
+	outline: 0;
+}
+
+.assign-db-select:focus {
+	border-color: rgba(255, 255, 255, 0.3);
+	background: rgba(31, 36, 41, 0.9);
+}
+
+.assign-db-select option {
+	background: #1f242a;
+	color: #f1f3f4;
+}
+
+.assign-db-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 0.6rem 1rem;
+	border: 0;
+	border-radius: 3px 14px 3px 14px;
+	background: #41d2d3;
+	color: #0c111c;
+	font-family: 'Manrope', sans-serif;
+	font-size: 0.92rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: filter 140ms ease, opacity 140ms ease;
+}
+
+.assign-db-btn:not(:disabled):hover {
+	filter: brightness(1.05);
+}
+
+.assign-db-btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.predefined-plans-section {
+	width: 100%;
+	padding: 1rem;
+	border-radius: 16px;
+	background: rgba(81, 88, 98, 0.6);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.plans-label {
+	display: block;
+	margin-bottom: 0.75rem;
+	color: #cfd8dc;
+	font-size: 0.92rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+}
+
+.plans-controls {
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+	align-items: stretch;
+}
+
+.plans-select {
+	padding: 0.65rem 0.75rem;
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	border-radius: 8px;
+	background: rgba(31, 36, 41, 0.7);
+	color: #f1f3f4;
+	font-family: 'Manrope', sans-serif;
+	font-size: 0.95rem;
+	cursor: pointer;
+	outline: 0;
+}
+
+.plans-select:focus {
+	border-color: rgba(255, 255, 255, 0.3);
+	background: rgba(31, 36, 41, 0.9);
+}
+
+.plans-select option {
+	background: #1f242a;
+	color: #f1f3f4;
+}
+
+.assign-plan-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 0.6rem 1rem;
+	border: 0;
+	border-radius: 3px 14px 3px 14px;
+	background: #41d2d3;
+	color: #0c111c;
+	font-family: 'Manrope', sans-serif;
+	font-size: 0.92rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: filter 140ms ease, opacity 140ms ease;
+}
+
+.assign-plan-btn:not(:disabled):hover {
+	filter: brightness(1.05);
+}
+
+.assign-plan-btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.remove-row-btn {
+	width: 34px;
+	height: 34px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: 0;
+	border-radius: 3px 14px 3px 14px;
+	background: #e34d4d;
+	color: #fff7f7;
+	font-family: 'Manrope', sans-serif;
+	font-size: 1.1rem;
+	font-weight: 800;
+	line-height: 1;
+	cursor: pointer;
+	transition: filter 140ms ease;
+}
+
+.remove-row-btn:hover {
+	filter: brightness(1.08);
+}
+
+.add-row-btn {
+	margin: 0.8rem 0.8rem 0.9rem;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.55rem 0.9rem;
+	border: 0;
+	border-radius: 3px 14px 3px 14px;
+	background: #5ddde4;
+	color: #0c111c;
+	font-family: 'Manrope', sans-serif;
+	font-size: 0.88rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: filter 140ms ease;
+}
+
+.add-row-btn:hover {
+	filter: brightness(1.05);
+}
+
+.button-group {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.75rem;
+	margin-top: 2rem;
+	flex-wrap: wrap;
+	justify-content: center;
+	flex-direction: column;
+	width: 100%;
+	max-width: 600px;
+}
+
+.edit-btn,
+.save-btn,
+.cancel-btn,
+.download-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.55rem;
+	padding: 0.6rem 1rem;
+	border: 0;
+	border-radius: 3px 14px 3px 14px;
+	color: #f1f3f4;
+	font-family: 'Manrope', sans-serif;
+	font-size: 0.95rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: filter 140ms ease;
+}
+
+.edit-btn {
+	background: #5ddde4;
+	color: #0c111c;
+}
+
+.edit-btn:hover {
+	filter: brightness(1.04);
+}
+
+.save-btn {
+	background: #3985f4;
+	color: #0c111c;
+}
+
+.save-btn:hover {
+	filter: brightness(1.04);
+}
+
+.cancel-btn {
+	background: #5e646d;
+	color: #f1f3f4;
+}
+
+.cancel-btn:hover {
+	filter: brightness(1.08);
+}
+
+.download-btn {
+	background: #5e646d;
+}
+
+.download-btn:hover {
+	filter: brightness(1.08);
+}
+
+.download-icon {
+	position: relative;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: #8f949b;
+}
+
+.download-icon::before,
+.download-icon::after {
+	content: '';
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	background: #4e545b;
+}
+
+.download-icon::before {
+	top: 4px;
+	width: 2px;
+	height: 8px;
+}
+
+.download-icon::after {
+	top: 10px;
+	width: 8px;
+	height: 8px;
+	clip-path: polygon(50% 100%, 0 35%, 32% 35%, 32% 0, 68% 0, 68% 35%, 100% 35%);
+}
+
+@media (max-width: 640px) {
+	.plan-shell {
+		min-height: auto;
+	}
+
+	.day-block {
+		width: 100%;
+	}
+
+	.day-toggle {
+		font-size: 2.1rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.page-body {
+		padding-right: max(1rem, env(safe-area-inset-right));
+		padding-left: max(1rem, env(safe-area-inset-left));
+	}
+
+	.plan-shell h1 {
+		font-size: 3.2rem;
+	}
+
+	.day-toggle {
+		font-size: 1.9rem;
+	}
+
+	.day-arrow {
+		width: 28px;
+		height: 21px;
+	}
+
+	th,
+	td {
+		padding: 0.78rem 0.8rem;
+		font-size: 0.9rem;
+	}
+
+	.download-btn {
+		align-self: center;
+		font-size: 0.88rem;
+	}
+}
+
+@media (max-width: 360px) {
+	.plan-shell h1 {
+		font-size: 2.8rem;
+	}
+
+	.day-toggle {
+		font-size: 1.7rem;
+	}
+
+	table {
+		font-size: 0.86rem;
+	}
+}

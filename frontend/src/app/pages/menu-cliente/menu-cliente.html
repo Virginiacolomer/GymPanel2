@@ -1,0 +1,39 @@
+<app-page-bg>
+  <main class="page-with-compact-header">
+    <app-page-header-compact backHref="/?fromMenu=1"></app-page-header-compact>
+    <section class="page-body">
+      <div class="client-menu">
+        <header class="menu-heading">
+          <span class="menu-eyebrow">Panel del cliente</span>
+          <h1>Hola de nuevo</h1>
+        </header>
+
+        <nav class="menu-grid" aria-label="Menu del cliente">
+          <a class="menu-tile" routerLink="/mi-plan">
+            <span class="icon-badge" aria-hidden="true">
+              <i class="fi fi-sr-list-check"></i>
+            </span>
+            <span class="menu-label">Mi plan</span>
+            <span class="menu-hint">Rutina de entrenamiento</span>
+          </a>
+
+          <a class="menu-tile" routerLink="/mi-membresia">
+            <span class="icon-badge" aria-hidden="true">
+              <i class="fi fi-sr-calendar-lines"></i>
+            </span>
+            <span class="menu-label">Mi membresia</span>
+            <span class="menu-hint">Estado y vencimiento</span>
+          </a>
+
+          <a class="menu-tile menu-tile-wide" routerLink="/mis-pagos">
+            <span class="icon-badge" aria-hidden="true">
+              <i class="fi fi-sr-credit-card"></i>
+            </span>
+            <span class="menu-label">Mis pagos</span>
+            <span class="menu-hint">Historial y proximo vencimiento</span>
+          </a>
+        </nav>
+      </div>
+    </section>
+  </main>
+</app-page-bg>

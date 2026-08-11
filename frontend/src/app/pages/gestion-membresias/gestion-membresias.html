@@ -1,0 +1,235 @@
+<app-page-bg>
+  <main class="page-with-compact-header">
+    <app-page-header-compact backHref="/menu-admin"></app-page-header-compact>
+    <section class="page-body">
+      <div class="memberships-shell">
+        <h1>Gestion de membresias</h1>
+
+        <div class="memberships-panel">
+          @if (statusMessage) {
+            <p class="status-message" role="status" aria-live="polite">{{ statusMessage }}</p>
+          }
+
+          <div class="table-wrap">
+            <table aria-label="Tabla de gestion de membresias">
+              <thead>
+                <tr>
+                  <th>Membresia</th>
+                  <th>Descripcion</th>
+                  <th>Costo</th>
+                  <th>Frecuencia</th>
+                  <th class="actions-head"></th>
+                </tr>
+              </thead>
+              <tbody>
+                @if (isLoading) {
+                  <tr>
+                    <td class="empty-state" colspan="5">Cargando membresias...</td>
+                  </tr>
+                } @else if (memberships.length === 0) {
+                  <tr>
+                    <td class="empty-state" colspan="5">No hay membresias para mostrar.</td>
+                  </tr>
+                } @else {
+                  @for (membership of memberships; track trackMembership($index, membership)) {
+                    <tr [class.editing-row]="membership.isEditing">
+                      <td>
+                        @if (membership.isEditing) {
+                          <input
+                            class="name-input"
+                            type="text"
+                            [(ngModel)]="membership.draftName"
+                            placeholder="Ingresa el nombre"
+                            aria-label="Editar nombre de membresia"
+                          />
+                        } @else {
+                          <span>{{ membership.name }}</span>
+                        }
+                      </td>
+                      <td>
+                        <div class="description-cell">
+                          @if (membership.isEditing) {
+                            <textarea
+                              class="description-input"
+                              [(ngModel)]="membership.draftDescription"
+                              (input)="autoResizeDescription($event)"
+                              placeholder="Descripcion de la membresia"
+                              aria-label="Editar descripcion de membresia"
+                              rows="3"
+                            ></textarea>
+                          } @else {
+                            <span>{{ membership.description || '-' }}</span>
+                          }
+
+                          @if (!membership.isEditing) {
+                            <button
+                              type="button"
+                              class="icon-button"
+                              aria-label="Editar descripcion de membresia"
+                              title="Editar descripcion"
+                              (click)="startEditing(membership.id!)"
+                            >
+                              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path
+                                  d="M4 20L8.2 18.8L18.3 8.7C19.2 7.8 19.2 6.3 18.3 5.4L17.6 4.7C16.7 3.8 15.2 3.8 14.3 4.7L4.2 14.8L3 19L4 20Z"
+                                  stroke="currentColor"
+                                  stroke-width="1.8"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                                <path
+                                  d="M13.5 5.5L17.5 9.5"
+                                  stroke="currentColor"
+                                  stroke-width="1.8"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              </svg>
+                            </button>
+                          }
+                        </div>
+                      </td>
+                      <td>
+                        <div class="cost-cell">
+                          @if (membership.isEditing) {
+                            <input
+                              class="cost-input"
+                              type="text"
+                              inputmode="numeric"
+                              [(ngModel)]="membership.draftAmount"
+                              aria-label="Editar costo de membresia"
+                            />
+                          } @else {
+                            <span class="cost-value">{{ formatAmount(membership.amount) }}</span>
+                          }
+
+                          @if (!membership.isEditing) {
+                            <button
+                              type="button"
+                              class="icon-button"
+                              aria-label="Editar membresia"
+                              title="Editar membresia"
+                              (click)="startEditing(membership.id!)"
+                            >
+                              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path
+                                  d="M4 20L8.2 18.8L18.3 8.7C19.2 7.8 19.2 6.3 18.3 5.4L17.6 4.7C16.7 3.8 15.2 3.8 14.3 4.7L4.2 14.8L3 19L4 20Z"
+                                  stroke="currentColor"
+                                  stroke-width="1.8"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                                <path
+                                  d="M13.5 5.5L17.5 9.5"
+                                  stroke="currentColor"
+                                  stroke-width="1.8"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              </svg>
+                            </button>
+                          }
+                        </div>
+                      </td>
+                      <td>
+                        <div class="days-cell">
+                          @if (membership.isEditing) {
+                            <input
+                              class="days-input"
+                              type="number"
+                              min="1"
+                              step="1"
+                              [(ngModel)]="membership.draftFrequency"
+                              aria-label="Editar frecuencia de membresia (veces por semana)"
+                            />
+                          } @else {
+                            <span class="days-value">{{ membership.frequency }}</span>
+                          }
+
+                          @if (!membership.isEditing) {
+                            <button
+                              type="button"
+                              class="icon-button"
+                              aria-label="Editar membresia"
+                              title="Editar membresia"
+                              (click)="startEditing(membership.id!)"
+                            >
+                              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path
+                                  d="M4 20L8.2 18.8L18.3 8.7C19.2 7.8 19.2 6.3 18.3 5.4L17.6 4.7C16.7 3.8 15.2 3.8 14.3 4.7L4.2 14.8L3 19L4 20Z"
+                                  stroke="currentColor"
+                                  stroke-width="1.8"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                                <path
+                                  d="M13.5 5.5L17.5 9.5"
+                                  stroke="currentColor"
+                                  stroke-width="1.8"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              </svg>
+                            </button>
+                          }
+                        </div>
+                      </td>
+                      <td class="action-cell">
+                        @if (membership.isEditing) {
+                          <div class="action-buttons">
+                            <button
+                              type="button"
+                              class="save-button"
+                              [disabled]="membership.isSaving"
+                              (click)="saveMembership(membership.id)"
+                            >
+                              {{ membership.isSaving ? 'Guardando...' : 'Guardar' }}
+                              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path
+                                  d="M6 3H18L20 5V21L12 17L4 21V5L6 3Z"
+                                  stroke="currentColor"
+                                  stroke-width="1.7"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              </svg>
+                            </button>
+
+                            <button
+                              type="button"
+                              class="cancel-button"
+                              [disabled]="membership.isSaving"
+                              (click)="cancelEditing(membership.id)"
+                            >
+                              Cancelar
+                            </button>
+                          </div>
+                        } @else {
+                          <div class="action-buttons action-buttons--idle">
+                            <button
+                              type="button"
+                              class="delete-button"
+                              [disabled]="membership.isDeleting"
+                              (click)="deleteMembership(membership.id!)"
+                            >
+                              {{ membership.isDeleting ? 'Eliminando...' : 'Eliminar' }}
+                            </button>
+                          </div>
+                        }
+                      </td>
+                    </tr>
+                  }
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <button type="button" class="add-membership-btn" (click)="addNewMembership()">
+            <i class="fi fi-sr-plus" aria-hidden="true"></i>
+            Agregar membresia
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+</app-page-bg>

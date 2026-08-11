@@ -1,0 +1,212 @@
+<app-page-bg>
+  <main class="page-with-compact-header">
+    <app-page-header-compact backHref="/menu-admin"></app-page-header-compact>
+    <section class="page-body">
+      <div class="users-shell">
+        <h1>Gestion de usuarios</h1>
+
+        <div class="users-panel">
+          @if (statusMessage) {
+            <p class="status-message" role="status" aria-live="polite">{{ statusMessage }}</p>
+          }
+
+          <div class="filter-box">
+            <label class="sr-only" for="users-search">Filtrar usuarios</label>
+            <input
+              id="users-search"
+              type="text"
+              placeholder="Filtrar por nombre, apellido o DNI"
+              [value]="filterTerm"
+              (input)="onFilterInput($any($event.target).value)"
+            />
+            <i class="fi fi-sr-filter" aria-hidden="true"></i>
+          </div>
+
+          <div class="table-wrap">
+            <table aria-label="Tabla de gestion de usuarios">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>DNI</th>
+                  <th>Membresia</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                @if (isLoading) {
+                  <tr>
+                    <td class="no-results" colspan="5">Cargando usuarios...</td>
+                  </tr>
+                } @else if (filteredUsers.length === 0) {
+                  <tr>
+                    <td class="no-results" colspan="5">No se encontraron usuarios para la busqueda.</td>
+                  </tr>
+                } @else {
+                  @for (user of filteredUsers; track user.id) {
+                    <tr>
+                      <td>{{ user.firstName }}</td>
+                      <td>{{ user.lastName }}</td>
+                      <td>{{ user.dni }}</td>
+                      <td>
+                        <div class="membership-cell">
+                          @if (user.memberships.length > 0) {
+                            @for (membership of user.memberships; track membership.membresiaId) {
+                              <div class="membership-main">
+                                <span class="membership-pill">{{ membership.nombre }}</span>
+
+                                <button
+                                  type="button"
+                                  class="mini-action icon-action"
+                                  aria-label="Editar membresia"
+                                  title="Editar membresia"
+                                  (click)="toggleMembershipEditor(user.id, membership.membresiaId)"
+                                >
+                                  <svg
+                                    class="icon-svg"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    aria-hidden="true"
+                                  >
+                                    <path
+                                      d="M4 20L8.2 18.8L18.3 8.7C19.2 7.8 19.2 6.3 18.3 5.4L17.6 4.7C16.7 3.8 15.2 3.8 14.3 4.7L4.2 14.8L3 19L4 20Z"
+                                      stroke="currentColor"
+                                      stroke-width="1.8"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                    />
+                                    <path
+                                      d="M13.5 5.5L17.5 9.5"
+                                      stroke="currentColor"
+                                      stroke-width="1.8"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                    />
+                                  </svg>
+                                </button>
+                              </div>
+                            }
+                          } @else {
+                            <div class="membership-main">
+                              <span class="membership-pill">Sin membresia</span>
+                              <button
+                                type="button"
+                                class="mini-action icon-action"
+                                aria-label="Editar membresia"
+                                title="Editar membresia"
+                                (click)="toggleMembershipEditor(user.id, null)"
+                              >
+                                <svg
+                                  class="icon-svg"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  aria-hidden="true"
+                                >
+                                  <path
+                                    d="M4 20L8.2 18.8L18.3 8.7C19.2 7.8 19.2 6.3 18.3 5.4L17.6 4.7C16.7 3.8 15.2 3.8 14.3 4.7L4.2 14.8L3 19L4 20Z"
+                                    stroke="currentColor"
+                                    stroke-width="1.8"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  />
+                                  <path
+                                    d="M13.5 5.5L17.5 9.5"
+                                    stroke="currentColor"
+                                    stroke-width="1.8"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                          }
+
+                          @if (user.editMembershipOpen) {
+                            <div class="membership-editor">
+                              <label class="sr-only" [for]="'membership-' + user.id">Cambiar membresia</label>
+                              <select
+                                [id]="'membership-' + user.id"
+                                [ngModel]="user.pendingMembershipId"
+                                (ngModelChange)="setPendingMembership(user.id, $event === null ? null : +$event)"
+                              >
+                                <option [ngValue]="null">Seleccionar membresia</option>
+                                @for (option of getAlternativeMemberships(user); track option.id) {
+                                  <option [ngValue]="option.id">{{ option.nombre }}</option>
+                                }
+                              </select>
+                              <button
+                                type="button"
+                                class="mini-action apply-action"
+                                (click)="applyMembershipChange(user.id)"
+                              >
+                                Guardar
+                              </button>
+                            </div>
+                          }
+                        </div>
+                      </td>
+                      <td>
+                        <div class="status-cell">
+                          <div class="status-main">
+                            <span
+                              class="status-pill"
+                              [class.status-pill-ok]="user.paymentState === 'alDia'"
+                              [class.status-pill-danger]="user.paymentState === 'cuotaPendiente'"
+                            >
+                              {{ getStatusLabel(user.paymentState) }}
+                            </span>
+
+                            @if (user.paymentState !== 'alDia') {
+                              <button
+                                type="button"
+                                class="mini-action icon-action"
+                                aria-label="Poner cuota al dia"
+                                title="Poner al dia"
+                                (click)="makeStatusUpToDate(user.id)"
+                              >
+                                <svg
+                                  class="icon-svg"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  aria-hidden="true"
+                                >
+                                  <circle
+                                    cx="12"
+                                    cy="12"
+                                    r="9"
+                                    stroke="currentColor"
+                                    stroke-width="1.8"
+                                  />
+                                  <path
+                                    d="M12 7V17"
+                                    stroke="currentColor"
+                                    stroke-width="1.8"
+                                    stroke-linecap="round"
+                                  />
+                                  <path
+                                    d="M14.6 9.3C14 8.7 13.1 8.4 12.1 8.4C10.7 8.4 9.8 9.1 9.8 10.1C9.8 12.1 14.4 11.2 14.4 13.8C14.4 14.9 13.4 15.6 12 15.6C10.9 15.6 10 15.2 9.3 14.5"
+                                    stroke="currentColor"
+                                    stroke-width="1.8"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  />
+                                </svg>
+                              </button>
+                            }
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  }
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</app-page-bg>

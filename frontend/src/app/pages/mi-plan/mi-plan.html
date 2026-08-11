@@ -1,0 +1,90 @@
+<app-page-bg>
+  <main class="page-with-compact-header">
+    <app-page-header-compact backHref="/menu-cliente"></app-page-header-compact>
+    <section class="page-body">
+      <div class="plan-shell">
+        <h1>Mi plan</h1>
+
+        @if (isLoading) {
+          <div class="status-banner" role="status" aria-live="polite">
+            Cargando tu plan...
+          </div>
+        }
+
+        @if (errorMessage) {
+          <div class="status-banner status-banner-error" role="alert">
+            {{ errorMessage }}
+          </div>
+        }
+
+        <div class="no-plan-message" [class.is-hidden]="hasPlan || isLoading || !!errorMessage">
+          <p>¡Aun no tienes un plan de entrenamiento! Comunicate con tu entrenador</p>
+        </div>
+
+        <section class="plan-summary" [class.is-hidden]="!hasPlan">
+          <h2>{{ planName }}</h2>
+          @if (currentUser) {
+            <p>Alumno: {{ currentUser.nombre }} {{ currentUser.apellido }}</p>
+          }
+          @if (planDescription) {
+            <p>{{ planDescription }}</p>
+          }
+        </section>
+
+        <section class="plan-days" aria-label="Rutina semanal" [class.is-hidden]="!hasPlan || days.length === 0">
+          @for (day of days; track day.label; let index = $index) {
+            <article class="day-block">
+              <button
+                type="button"
+                class="day-toggle"
+                [attr.aria-expanded]="day.expanded"
+                (click)="toggleDay(index)"
+              >
+                <span class="day-label">
+                  {{ day.label }}
+                  @if (day.description) {
+                    <span class="day-description-inline"> - {{ day.description }}</span>
+                  }
+                </span>
+                <span class="day-arrow" [class.day-arrow-open]="day.expanded" aria-hidden="true"></span>
+              </button>
+
+              @if (day.expanded) {
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Ejercicio</th>
+                        <th>Series y repeticiones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (row of day.exercises; track row.exercise) {
+                        <tr>
+                          <td>
+                            <span class="exercise-name-cell">
+                              @if (row.imagenUrl) {
+                                <app-zoomable-image [src]="row.imagenUrl" [alt]="row.exercise" class="exercise-row-thumb"></app-zoomable-image>
+                              }
+                              {{ row.exercise }}
+                            </span>
+                          </td>
+                          <td>{{ row.workload }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              }
+            </article>
+          }
+        </section>
+
+        <button type="button" class="download-btn" [class.is-hidden]="!hasPlan" (click)="downloadPdf()">
+          <span class="download-icon" aria-hidden="true"></span>
+          <span>Descargar PDF</span>
+        </button>
+      </div>
+    </section>
+  </main>
+</app-page-bg>

@@ -1,0 +1,67 @@
+<app-page-bg>
+  <main class="page-with-compact-header">
+    <app-page-header-compact backHref="/"></app-page-header-compact>
+    <section class="page-body">
+      <div class="login-shell">
+        <h1>Inicia sesión</h1>
+
+        <form class="login-form" (ngSubmit)="onSubmit()" novalidate>
+          <label class="sr-only" for="gimnasioId">Gimnasio</label>
+          <select
+            id="gimnasioId"
+            name="gimnasioId"
+            [(ngModel)]="form.gimnasioId"
+            [disabled]="loading || loadingGimnasios"
+          >
+            <option [ngValue]="null" disabled>
+              {{ loadingGimnasios ? 'Cargando gimnasios...' : 'Selecciona tu gimnasio' }}
+            </option>
+            @for (gimnasio of gimnasios; track gimnasio.id) {
+              <option [ngValue]="gimnasio.id">{{ gimnasio.nombre }}</option>
+            }
+          </select>
+
+          <label class="sr-only" for="email">Correo electronico</label>
+          <input
+            id="email"
+            type="email"
+            name="email"
+            [(ngModel)]="form.email"
+            placeholder="correo electronico"
+            autocomplete="email"
+            [disabled]="loading"
+          />
+
+          <label class="sr-only" for="password">Contrasena</label>
+          <input
+            id="password"
+            type="password"
+            name="password"
+            [(ngModel)]="form.password"
+            placeholder="contraseña"
+            autocomplete="current-password"
+            [disabled]="loading"
+          />
+
+          <button 
+            type="submit" 
+            class="primary-action" 
+            [disabled]="loading"
+          >
+            {{ loading ? 'Iniciando sesión...' : 'Iniciar sesión' }}
+          </button>
+
+          @if (errorMessage) {
+            <p class="feedback-error">{{ errorMessage }}</p>
+          }
+
+          @if (successMessage) {
+            <p class="feedback-success">{{ successMessage }}</p>
+          }
+
+          <a class="secondary-link" routerLink="/register">Todavía no tengo cuenta</a>
+        </form>
+      </div>
+    </section>
+  </main>
+</app-page-bg>

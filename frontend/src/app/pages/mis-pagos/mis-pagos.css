@@ -1,0 +1,334 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:host {
+	display: block;
+}
+
+.page-with-compact-header {
+	min-height: 100svh;
+}
+
+.page-body {
+	display: flex;
+	justify-content: center;
+	padding: 1rem max(1.25rem, env(safe-area-inset-right)) calc(2.5rem + env(safe-area-inset-bottom)) max(1.25rem, env(safe-area-inset-left));
+}
+
+.payments-shell {
+	width: min(100%, 760px);
+	min-height: calc(100svh - 8rem);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-top: clamp(0.5rem, 4vw, 1.2rem);
+	font-family: 'Manrope', sans-serif;
+	text-align: center;
+}
+
+.payments-shell h1 {
+	margin: 0 0 3.75rem;
+	font-family: 'Space Grotesk', sans-serif;
+	font-size: clamp(3rem, 8vw, 4.5rem);
+	line-height: 0.85;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: #3985f4;
+}
+
+.status-panel {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.85rem;
+	margin-bottom: 2rem;
+}
+
+.status-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 0.44rem 1.25rem 0.44rem 0.95rem;
+	border-radius: 20px;
+	background: linear-gradient(180deg, #5b626b 0%, #525960 100%);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.status-dot {
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	background: #3c9dff;
+	box-shadow: 0 0 16px rgba(60, 157, 255, 0.18);
+	flex: 0 0 35px;
+}
+
+.status-dot-up-to-date {
+	background: #3c9dff;
+	box-shadow: 0 0 16px rgba(60, 157, 255, 0.18);
+}
+
+.status-dot-due-soon {
+	background: #ffd23f;
+	box-shadow: 0 0 16px rgba(255, 210, 63, 0.18);
+}
+
+.status-dot-overdue {
+	background: #ff5a5a;
+	box-shadow: 0 0 16px rgba(255, 90, 90, 0.18);
+}
+
+.status-label {
+	color: #eceef0;
+	font-size: clamp(1.15rem, 2.6vw, 1.45rem);
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+.status-detail {
+	margin: 0;
+	font-size: 1.05rem;
+	color: #f3f4f5;
+}
+
+.next-payment {
+	margin: 0;
+	font-size: 1.05rem;
+	color: #f3f4f5;
+	font-weight: 600;
+}
+
+.next-payment strong {
+	font-size: 1.12em;
+	font-weight: 800;
+}
+
+.redirect-status-banner {
+	width: min(100%, 680px);
+	margin: 0 0 1.5rem;
+	padding: 0.85rem 1.1rem;
+	border-radius: 16px;
+	font-size: 0.95rem;
+	font-weight: 600;
+	text-align: center;
+}
+
+.redirect-status-success {
+	background: rgba(60, 157, 255, 0.16);
+	color: #3c9dff;
+}
+
+.redirect-status-info {
+	background: rgba(255, 210, 63, 0.14);
+	color: #ffd23f;
+}
+
+.redirect-status-error {
+	background: rgba(255, 90, 90, 0.14);
+	color: #ff5a5a;
+}
+
+.pay-button {
+	margin-top: 0.6rem;
+	padding: 0.75rem 1.6rem;
+	border: none;
+	border-radius: 3px 14px 3px 14px;
+	background: linear-gradient(180deg, #3c9dff 0%, #2f7fd6 100%);
+	color: #eceef0;
+	font-family: 'Manrope', sans-serif;
+	font-size: 1rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+	cursor: pointer;
+}
+
+.pay-button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.checkout-error {
+	margin: 0.6rem 0 0;
+	font-size: 0.9rem;
+	color: #ffd7d7;
+}
+
+.current-payments-panel {
+	width: min(100%, 680px);
+	margin-bottom: auto;
+	padding: 1.25rem;
+	border-radius: 28px;
+	background: rgba(82, 89, 96, 0.78);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+	text-align: left;
+}
+
+.current-payments-header {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-bottom: 1rem;
+}
+
+.current-payments-header h2 {
+	margin: 0;
+	font-family: 'Space Grotesk', sans-serif;
+	font-size: clamp(2rem, 4vw, 2.8rem);
+	line-height: 0.9;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	color: #eceef0;
+}
+
+.payments-count {
+	color: rgba(236, 238, 240, 0.78);
+	font-size: 0.95rem;
+	font-weight: 600;
+}
+
+.current-payments-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.85rem;
+}
+
+.payment-card {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 1rem 1.1rem;
+	border-radius: 20px;
+	background: rgba(33, 37, 41, 0.42);
+}
+
+.payment-month,
+.payment-date,
+.current-payments-error,
+.current-payments-empty {
+	margin: 0;
+	color: rgba(236, 238, 240, 0.8);
+}
+
+.payment-month {
+	font-size: 0.8rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #3985f4;
+}
+
+.payment-card h3 {
+	margin: 0.25rem 0 0;
+	font-size: 1.08rem;
+	color: #f3f4f5;
+}
+
+.payment-date {
+	margin-top: 0.22rem;
+	font-size: 0.88rem;
+	color: rgba(236, 238, 240, 0.68);
+}
+
+.payment-amount {
+	font-size: 1rem;
+	color: #f3f4f5;
+	white-space: nowrap;
+}
+
+.current-payments-empty {
+	padding: 0.95rem 0;
+	text-align: center;
+}
+
+.current-payments-error {
+	padding: 0.95rem 0;
+	text-align: center;
+	color: #ffd7d7;
+}
+
+.history-link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin-top: 2rem;
+	padding: 0.72rem 1.35rem;
+	border-radius: 3px 14px 3px 14px;
+	background: linear-gradient(180deg, #5b626b 0%, #525960 100%);
+	color: #eceef0;
+	font-size: clamp(1rem, 2.5vw, 1.1rem);
+	font-weight: 700;
+	text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+	.payments-shell {
+		min-height: auto;
+	}
+
+	.payments-shell h1 {
+		margin-bottom: 2.75rem;
+	}
+
+	.current-payments-panel {
+		padding: 1rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.page-body {
+		padding-right: max(1rem, env(safe-area-inset-right));
+		padding-left: max(1rem, env(safe-area-inset-left));
+	}
+
+	.payments-shell h1 {
+		font-size: 3.2rem;
+		margin-bottom: 2rem;
+	}
+
+	.status-pill {
+		gap: 0.8rem;
+		padding-right: 1rem;
+	}
+
+	.status-dot {
+		width: 32px;
+		height: 32px;
+		flex-basis: 32px;
+	}
+
+	.status-label {
+		font-size: 1rem;
+	}
+
+	.status-detail,
+	.next-payment {
+		font-size: 0.98rem;
+	}
+
+	.current-payments-header,
+	.payment-card {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.payment-amount {
+		font-size: 1.05rem;
+	}
+}
+
+@media (max-width: 360px) {
+	.payments-shell h1 {
+		font-size: 2.8rem;
+	}
+
+	.status-pill {
+		width: 100%;
+		justify-content: center;
+	}
+
+	.history-link {
+		width: 100%;
+	}
+}

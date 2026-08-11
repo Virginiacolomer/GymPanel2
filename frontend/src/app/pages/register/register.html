@@ -1,0 +1,108 @@
+<app-page-bg>
+  <main class="page-with-compact-header">
+    <app-page-header-compact backHref="/"></app-page-header-compact>
+    <section class="page-body">
+      <div class="register-shell">
+        <h1>Registrate</h1>
+
+        <form class="register-form" novalidate (ngSubmit)="onSubmit()">
+          <label class="sr-only" for="register-gimnasio">Gimnasio</label>
+          <select
+            id="register-gimnasio"
+            name="gimnasioId"
+            required
+            [(ngModel)]="form.gimnasioId"
+            [disabled]="loading || loadingGimnasios"
+          >
+            <option [ngValue]="null" disabled>
+              {{ loadingGimnasios ? 'Cargando gimnasios...' : 'Selecciona tu gimnasio' }}
+            </option>
+            @for (gimnasio of gimnasios; track gimnasio.id) {
+              <option [ngValue]="gimnasio.id">{{ gimnasio.nombre }}</option>
+            }
+          </select>
+
+          <label class="sr-only" for="register-email">Correo electronico</label>
+          <input
+            id="register-email"
+            type="email"
+            name="email"
+            placeholder="correo electronico"
+            autocomplete="email"
+            required
+            [(ngModel)]="form.email"
+          />
+
+          <label class="sr-only" for="register-name">Nombre</label>
+          <input
+            id="register-name"
+            type="text"
+            name="nombre"
+            placeholder="nombre"
+            autocomplete="given-name"
+            required
+            [(ngModel)]="form.nombre"
+          />
+
+          <label class="sr-only" for="register-lastname">Apellido</label>
+          <input
+            id="register-lastname"
+            type="text"
+            name="apellido"
+            placeholder="apellido"
+            autocomplete="family-name"
+            required
+            [(ngModel)]="form.apellido"
+          />
+
+          <label class="sr-only" for="register-dni">DNI</label>
+          <input
+            id="register-dni"
+            type="text"
+            name="dni"
+            placeholder="dni"
+            autocomplete="off"
+            required
+            [(ngModel)]="form.dni"
+          />
+
+          <label class="sr-only" for="register-password">Contraseña</label>
+          <input
+            id="register-password"
+            type="password"
+            name="password"
+            placeholder="contraseña"
+            autocomplete="new-password"
+            required
+            [(ngModel)]="form.password"
+          />
+
+          <label class="sr-only" for="register-password-confirm">Repeti tu contraseña</label>
+          <input
+            id="register-password-confirm"
+            type="password"
+            name="passwordConfirm"
+            placeholder="repeti tu contraseña"
+            autocomplete="new-password"
+            required
+            [(ngModel)]="form.passwordConfirm"
+          />
+
+          <button type="submit" class="primary-action" [disabled]="loading">
+            {{ loading ? 'Creando cuenta...' : 'Crear cuenta' }}
+          </button>
+
+          @if (errorMessage) {
+            <p class="feedback feedback-error">{{ errorMessage }}</p>
+          }
+
+          @if (successMessage) {
+            <p class="feedback feedback-success">{{ successMessage }}</p>
+          }
+
+          <a class="secondary-link" routerLink="/login">Ya tengo cuenta</a>
+        </form>
+      </div>
+    </section>
+  </main>
+</app-page-bg>

@@ -1,0 +1,19 @@
+<header class="topbar">
+  <div class="brand-wrap">
+    @if (showBack) {
+      <a class="back" [routerLink]="backHref" aria-label="Volver">
+        <i class="fi fi-sr-angle-left" aria-hidden="true"></i>
+      </a>
+    }
+
+    <a class="brand" [routerLink]="brandHref" aria-label="GymPanel inicio">
+      <img class="brand-logo" src="/images/gympanel-mark.svg" alt="GymPanel" />
+      <span class="brand-text">GYM<span>PANEL</span></span>
+    </a>
+  </div>
+
+  <nav class="actions" aria-label="Acciones principales">
+    <a class="btn btn-primary" [routerLink]="loginHref">Inicia Sesion</a>
+    <a class="btn btn-light" [routerLink]="registerHref">Registrate</a>
+  </nav>
+</header>

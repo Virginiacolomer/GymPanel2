@@ -1,0 +1,77 @@
+<app-page-bg>
+  <main class="page-with-compact-header">
+    <app-page-header-compact backHref="/asignar-plan"></app-page-header-compact>
+    <section class="page-body">
+      <div class="plan-shell">
+        <h1>Plan {{ selectedUserName }}</h1>
+
+        @if (planName) {
+          <p class="plan-name-caption">Nombre del plan: {{ planName }}</p>
+        }
+
+        @if (statusMessage) {
+          <p class="status-message" role="status" aria-live="polite">{{ statusMessage }}</p>
+        }
+
+        @if (isLoading) {
+          <p class="status-message" role="status" aria-live="polite">Cargando plan...</p>
+        }
+
+        <section class="plan-days" aria-label="Edicion de rutina semanal">
+          @for (day of days; track day.label; let dayIndex = $index) {
+            <article class="day-block">
+              <button
+                type="button"
+                class="day-toggle"
+                [attr.aria-expanded]="day.expanded"
+                (click)="toggleDay(dayIndex)"
+              >
+                <span class="day-label">{{ day.label }}</span>
+                <span class="day-arrow" [class.day-arrow-open]="day.expanded" aria-hidden="true"></span>
+              </button>
+
+              @if (day.expanded) {
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Ejercicio</th>
+                        <th>Series y repeticiones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (row of day.rows; track row; let rowIndex = $index) {
+                        <tr>
+                          <td>
+                            <label class="sr-only" [for]="'exercise-' + dayIndex + '-' + rowIndex">Ejercicio</label>
+                            <input
+                              [id]="'exercise-' + dayIndex + '-' + rowIndex"
+                              type="text"
+                              [(ngModel)]="row.exercise"
+                            />
+                          </td>
+                          <td>
+                            <label class="sr-only" [for]="'workload-' + dayIndex + '-' + rowIndex">Series y repeticiones</label>
+                            <input
+                              [id]="'workload-' + dayIndex + '-' + rowIndex"
+                              type="text"
+                              [(ngModel)]="row.workload"
+                            />
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              }
+            </article>
+          }
+        </section>
+
+        @if (days.length > 0) {
+          <a class="confirm-btn" routerLink="/asignar-plan">Confirmar</a>
+        }
+      </div>
+    </section>
+  </main>
+</app-page-bg>

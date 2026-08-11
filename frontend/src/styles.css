@@ -1,0 +1,14 @@
+@import url('https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css');
+@import url('https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css');
+@import url('https://cdn-uicons.flaticon.com/uicons-regular-straight/css/uicons-regular-straight.css');
+@import url('https://cdn-uicons.flaticon.com/uicons-thin-rounded/css/uicons-thin-rounded.css');
+@import url('https://cdn-uicons.flaticon.com/uicons-thin-straight/css/uicons-thin-straight.css');
+
+/* You can add global styles to this file, and also import other style files */
+
+/* Reset del margen por defecto del navegador: sin esto, body suma 16px
+   (8px arriba + 8px abajo) que rompen cualquier layout pensado a 100vh/100svh. */
+html,
+body {
+  margin: 0;
+}
