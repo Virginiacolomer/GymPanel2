@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Gimnasio } from './entities/gimnasio.entity';
 import { CreateGimnasioDto } from './dto/create-gimnasio.dto';
+import { UpdateGimnasioContactoDto } from './dto/update-gimnasio-contacto.dto';
 
 @Injectable()
 export class GimnasioService {
@@ -46,5 +47,49 @@ export class GimnasioService {
     }
 
     return gimnasio;
+  }
+
+  // Datos de contacto del propio gimnasio del usuario logueado (admin o
+  // cliente), identificado por el gimnasioId embebido en su JWT.
+  async findContactInfo(
+    gimnasioId: number,
+  ): Promise<Pick<Gimnasio, 'nombre' | 'instagram' | 'telefono' | 'direccion'>> {
+    const gimnasio = await this.gimnasioRepository.findOne({
+      where: { id: gimnasioId },
+      select: { nombre: true, instagram: true, telefono: true, direccion: true },
+    });
+
+    if (!gimnasio) {
+      throw new NotFoundException('No se encontro el gimnasio.');
+    }
+
+    return gimnasio;
+  }
+
+  async updateContactInfo(
+    gimnasioId: number,
+    updateGimnasioContactoDto: UpdateGimnasioContactoDto,
+  ): Promise<Pick<Gimnasio, 'nombre' | 'instagram' | 'telefono' | 'direccion'>> {
+    const gimnasio = await this.gimnasioRepository.findOne({ where: { id: gimnasioId } });
+
+    if (!gimnasio) {
+      throw new NotFoundException('No se encontro el gimnasio.');
+    }
+
+    if (typeof updateGimnasioContactoDto.instagram === 'string') {
+      gimnasio.instagram = updateGimnasioContactoDto.instagram.trim() || null;
+    }
+
+    if (typeof updateGimnasioContactoDto.telefono === 'string') {
+      gimnasio.telefono = updateGimnasioContactoDto.telefono.trim() || null;
+    }
+
+    if (typeof updateGimnasioContactoDto.direccion === 'string') {
+      gimnasio.direccion = updateGimnasioContactoDto.direccion.trim() || null;
+    }
+
+    await this.gimnasioRepository.save(gimnasio);
+
+    return this.findContactInfo(gimnasioId);
   }
 }

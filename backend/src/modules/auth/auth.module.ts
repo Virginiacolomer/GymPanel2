@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -12,7 +12,7 @@ import { GimnasioModule } from '../gimnasio/gimnasio.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
-    GimnasioModule,
+    forwardRef(() => GimnasioModule),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

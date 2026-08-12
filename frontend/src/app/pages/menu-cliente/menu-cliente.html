@@ -33,6 +33,23 @@
             <span class="menu-hint">Historial y proximo vencimiento</span>
           </a>
         </nav>
+
+        @if (gimnasioContacto && (gimnasioContacto.instagram || gimnasioContacto.telefono || gimnasioContacto.direccion)) {
+          <section class="gym-contact" aria-label="Informacion de contacto del gimnasio">
+            <h2>{{ gimnasioContacto.nombre }}</h2>
+            <div class="gym-contact-details">
+              @if (gimnasioContacto.instagram) {
+                <span><strong>Instagram:</strong> {{ gimnasioContacto.instagram }}</span>
+              }
+              @if (gimnasioContacto.telefono) {
+                <span><strong>Celular:</strong> {{ gimnasioContacto.telefono }}</span>
+              }
+              @if (gimnasioContacto.direccion) {
+                <span><strong>Direccion:</strong> {{ gimnasioContacto.direccion }}</span>
+              }
+            </div>
+          </section>
+        }
       </div>
     </section>
   </main>

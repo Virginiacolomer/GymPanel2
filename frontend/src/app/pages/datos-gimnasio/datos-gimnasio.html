@@ -1,0 +1,60 @@
+<app-page-bg>
+  <main class="page-with-compact-header">
+    <app-page-header-compact backHref="/menu-admin"></app-page-header-compact>
+    <section class="page-body">
+      <div class="datos-shell">
+        <h1>Datos del gimnasio</h1>
+        <p class="datos-subtitle">
+          Esta informacion la ven tus clientes en su menu. Solo aplica a
+          {{ nombreGimnasio || 'tu gimnasio' }}.
+        </p>
+
+        <form class="datos-form" novalidate (ngSubmit)="guardar()">
+          <label for="datos-instagram">Instagram</label>
+          <input
+            id="datos-instagram"
+            type="text"
+            name="instagram"
+            placeholder="@tu.gimnasio"
+            [disabled]="isLoading || isSaving"
+            [(ngModel)]="instagram"
+          />
+
+          <label for="datos-telefono">Celular</label>
+          <input
+            id="datos-telefono"
+            type="text"
+            name="telefono"
+            placeholder="11 1234-5678"
+            [disabled]="isLoading || isSaving"
+            [(ngModel)]="telefono"
+          />
+
+          <label for="datos-direccion">Direccion</label>
+          <input
+            id="datos-direccion"
+            type="text"
+            name="direccion"
+            placeholder="Direccion del gimnasio"
+            [disabled]="isLoading || isSaving"
+            [(ngModel)]="direccion"
+          />
+
+          <button type="submit" class="primary-action" [disabled]="isLoading || isSaving">
+            {{ isSaving ? 'Guardando...' : 'Guardar cambios' }}
+          </button>
+
+          @if (statusMessage) {
+            <p
+              class="feedback"
+              [class.feedback-success]="statusType === 'success'"
+              [class.feedback-error]="statusType === 'error'"
+            >
+              {{ statusMessage }}
+            </p>
+          }
+        </form>
+      </div>
+    </section>
+  </main>
+</app-page-bg>

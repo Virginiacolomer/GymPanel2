@@ -19,6 +19,7 @@ import { MiMembresia } from './pages/mi-membresia/mi-membresia';
 import { MisPagos } from './pages/mis-pagos/mis-pagos';
 import { HistorialDePagos } from './pages/historial-de-pagos/historial-de-pagos';
 import { Reporte } from './pages/reporte/reporte';
+import { DatosGimnasio } from './pages/datos-gimnasio/datos-gimnasio';
 import { authGuard } from './core/guards/auth.guard';
 import { publicGuard } from './core/guards/public.guard';
 
@@ -43,6 +44,7 @@ export const routes: Routes = [
 	{ path: 'editar-plan', component: EditarPlan, canActivate: [authGuard], data: { role: 'ADMIN' } },
 	{ path: 'ver-plan', component: VerPlan, canActivate: [authGuard], data: { role: 'ADMIN' } },
 	{ path: 'reporte', component: Reporte, canActivate: [authGuard], data: { role: 'ADMIN' } },
+	{ path: 'datos-gimnasio', component: DatosGimnasio, canActivate: [authGuard], data: { role: 'ADMIN' } },
 
 	// Rutas exclusivas para CLIENTE.
 	{ path: 'menu-cliente', component: MenuCliente, canActivate: [authGuard], data: { role: 'CLIENTE' } },

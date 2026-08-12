@@ -9,6 +9,13 @@ export interface Gimnasio {
   slug: string;
 }
 
+export interface GimnasioContacto {
+  nombre: string;
+  instagram: string | null;
+  telefono: string | null;
+  direccion: string | null;
+}
+
 @Injectable({ providedIn: 'root' })
 export class GimnasioApiService {
   private readonly http = inject(HttpClient);
@@ -17,5 +24,18 @@ export class GimnasioApiService {
   // Lista publica de gimnasios activos, usada para el selector en login/registro.
   findAllActive(): Observable<Gimnasio[]> {
     return this.http.get<Gimnasio[]>(`${this.apiBaseUrl}/gimnasios`);
+  }
+
+  // Datos de contacto del gimnasio del usuario logueado (segun el gimnasioId de su JWT).
+  getMiGimnasio(): Observable<GimnasioContacto> {
+    return this.http.get<GimnasioContacto>(`${this.apiBaseUrl}/gimnasios/mi-gimnasio`);
+  }
+
+  updateMiGimnasio(payload: {
+    instagram?: string;
+    telefono?: string;
+    direccion?: string;
+  }): Observable<GimnasioContacto> {
+    return this.http.patch<GimnasioContacto>(`${this.apiBaseUrl}/gimnasios/mi-gimnasio`, payload);
   }
 }
