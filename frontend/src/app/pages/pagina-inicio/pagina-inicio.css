@@ -260,60 +260,6 @@
 	border-radius: 50%;
 }
 
-/* Boton CTA principal debajo de las tarjetas. */
-.cta-group {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.8rem;
-	max-width: 100%;
-}
-
-.cta {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 3px 14px 3px 14px;
-	padding: 0.68rem 1.3rem;
-	font-size: 0.92rem;
-	font-weight: 700;
-	text-decoration: none;
-	transition: transform 170ms ease, box-shadow 170ms ease;
-	max-width: 100%;
-	box-sizing: border-box;
-}
-
-.cta-primary {
-	background: linear-gradient(120deg, #1143cc, #5ddde4);
-	color: #060b16;
-}
-
-.cta-secondary {
-	background: rgba(217, 218, 221, 0.12);
-	border: 1px solid rgba(217, 218, 221, 0.28);
-	color: #eef2f4;
-}
-
-/* Hover del CTA para dar sensacion de elevacion. */
-.cta:hover {
-	transform: translateY(-2px);
-	box-shadow: 0 10px 24px rgba(67, 147, 255, 0.24);
-}
-
-.home-contact {
-	margin-top: 0.75rem;
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.3rem 1.1rem;
-	font-size: 0.78rem;
-	line-height: 1.4;
-	color: #d4dde1;
-	max-width: 520px;
-}
-
-.home-contact strong {
-	color: var(--green-soft);
-}
-
 /* Tarjeta que muestra una vista previa del plan (sin fotografias). Ocupa todo su ancho de columna. */
 .panel-preview {
 	width: 100%;
@@ -481,14 +427,6 @@
 	.hero-copy p {
 		margin-bottom: 1.2rem;
 	}
-
-	.cta {
-		width: 100%;
-	}
-
-	.home-contact {
-		font-size: 0.89rem;
-	}
 }
 
 /* Mobile chico: reduce paddings, logo, tipografias y altura de imagen. */
@@ -507,10 +445,6 @@
 
 	.brand-text {
 		font-size: 1.86rem;
-	}
-
-	.cta {
-		width: 100%;
 	}
 
 	.panel-preview {

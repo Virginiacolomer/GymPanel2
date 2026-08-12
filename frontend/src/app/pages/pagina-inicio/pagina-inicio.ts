@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { PageHeaderComponent } from '../../shared/page-header/page-header';
 import { PageBgComponent } from '../../shared/page-bg/page-bg';
-import { environment } from '../../../environments/environment';
 
 // Componente de la pantalla principal (home/landing).
 @Component({
@@ -16,7 +15,4 @@ import { environment } from '../../../environments/environment';
   // Hoja de estilos especifica del componente.
   styleUrl: './pagina-inicio.css',
 })
-export class PaginaInicio {
-  // Datos de contacto del gimnasio, configurables por instancia en los archivos de environment.
-  readonly gymContact = environment.gymContact;
-}
+export class PaginaInicio {}
