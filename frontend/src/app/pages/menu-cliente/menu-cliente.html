@@ -32,6 +32,14 @@
             <span class="menu-label">Mis pagos</span>
             <span class="menu-hint">Historial y proximo vencimiento</span>
           </a>
+
+          <a class="menu-tile menu-tile-wide" routerLink="/mis-horarios">
+            <span class="icon-badge" aria-hidden="true">
+              <i class="fi fi-sr-calendar-clock"></i>
+            </span>
+            <span class="menu-label">Horarios</span>
+            <span class="menu-hint">Horarios de clases del gimnasio</span>
+          </a>
         </nav>
 
         @if (gimnasioContacto && (gimnasioContacto.instagram || gimnasioContacto.telefono || gimnasioContacto.direccion)) {

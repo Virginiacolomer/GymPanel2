@@ -6,6 +6,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { MembresiaModule } from './modules/membresia/membresia.module';
 import { PlanEntrenamientoModule } from './modules/plan-entrenamiento/plan-entrenamiento.module';
 import { GimnasioModule } from './modules/gimnasio/gimnasio.module';
+import { HorarioModule } from './modules/horario/horario.module';
 import { AppController } from './app.controller';
 @Module({
   controllers: [AppController],
@@ -39,6 +40,7 @@ import { AppController } from './app.controller';
     AuthModule,
     MembresiaModule,
     PlanEntrenamientoModule,
+    HorarioModule,
   ],
 })
 export class AppModule {}

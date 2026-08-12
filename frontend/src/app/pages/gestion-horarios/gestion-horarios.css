@@ -1,0 +1,332 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:host {
+	display: block;
+}
+
+.page-with-compact-header {
+	min-height: 100svh;
+}
+
+.page-body {
+	display: flex;
+	justify-content: center;
+	padding: 1rem max(1.25rem, env(safe-area-inset-right)) calc(2.4rem + env(safe-area-inset-bottom)) max(1.25rem, env(safe-area-inset-left));
+}
+
+.horarios-shell {
+	width: min(100%, 860px);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	font-family: 'Manrope', sans-serif;
+}
+
+.horarios-shell h1 {
+	margin: 0 0 0.75rem;
+	font-family: 'Space Grotesk', sans-serif;
+	font-size: clamp(3rem, 8vw, 4.4rem);
+	line-height: 0.85;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: #3985f4;
+	text-align: center;
+}
+
+.horarios-panel {
+	width: 100%;
+	background: #8f959c;
+	border-radius: 24px;
+	padding: 0.56rem 0.62rem 0.8rem;
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+	overflow: hidden;
+}
+
+.table-wrap {
+	width: 100%;
+	overflow-x: auto;
+	border-radius: 18px;
+}
+
+.status-message {
+	margin: 0 0 0.9rem;
+	padding: 0.7rem 0.9rem;
+	border-radius: 14px;
+	background: rgba(56, 66, 75, 0.78);
+	color: #eef3f6;
+	font-family: 'Manrope', sans-serif;
+	font-size: 0.95rem;
+	font-weight: 500;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	color: #191c20;
+	table-layout: fixed;
+}
+
+thead th {
+	padding: 0.42rem 0.32rem;
+	background: #4f5660;
+	font-family: 'Space Grotesk', sans-serif;
+	font-size: 1.55rem;
+	line-height: 0.9;
+	text-transform: uppercase;
+	letter-spacing: 0.01em;
+	text-align: left;
+	color: #d8dde1;
+}
+
+thead th:first-child {
+	border-radius: 14px 0 0 14px;
+}
+
+thead th:last-child {
+	border-radius: 0 14px 14px 0;
+}
+
+.actions-head {
+	width: 1%;
+}
+
+tbody td {
+	padding: 0.52rem 0.38rem;
+	font-family: 'Space Grotesk', sans-serif;
+	font-size: 1.42rem;
+	line-height: 0.9;
+	letter-spacing: 0.01em;
+	border-bottom: 1px solid rgba(239, 242, 244, 0.36);
+	vertical-align: middle;
+	overflow-wrap: anywhere;
+}
+
+thead th:nth-child(1),
+tbody td:nth-child(1) {
+	width: 45%;
+}
+
+thead th:nth-child(2),
+tbody td:nth-child(2) {
+	width: 30%;
+}
+
+thead th:nth-child(3),
+tbody td:nth-child(3) {
+	width: 25%;
+}
+
+.editing-row td {
+	background: rgba(222, 228, 233, 0.18);
+}
+
+tbody tr:last-child td {
+	border-bottom: 0;
+}
+
+.horario-cell {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.26rem;
+	width: 100%;
+}
+
+.descripcion-input,
+.horario-input {
+	width: 100%;
+	padding: 0.2rem 0.34rem;
+	border: 1px solid rgba(46, 53, 60, 0.58);
+	border-radius: 8px;
+	background: #dce1e5;
+	color: #1d2125;
+	font-family: 'Manrope', sans-serif;
+	font-size: 0.95rem;
+	font-weight: 500;
+	line-height: 1.2;
+	outline: 0;
+}
+
+.descripcion-input::placeholder,
+.horario-input::placeholder {
+	color: rgba(29, 33, 37, 0.6);
+	font-weight: 400;
+}
+
+.icon-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: #22282e;
+	cursor: pointer;
+}
+
+.icon-button svg {
+	width: 16px;
+	height: 16px;
+	display: block;
+}
+
+.action-cell {
+	text-align: left;
+	white-space: normal;
+	width: 1%;
+}
+
+.action-buttons {
+	display: inline-flex;
+	align-items: center;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+	gap: 0.22rem;
+	max-width: 150px;
+}
+
+.action-buttons--idle {
+	max-width: none;
+}
+
+.save-button {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3rem;
+	padding: 0.3rem 0.56rem;
+	font-family: 'Manrope', sans-serif;
+	font-size: 0.74rem;
+	font-weight: 700;
+	line-height: 1;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: filter 140ms ease;
+	border-radius: 4px 18px 4px 4px;
+	background: linear-gradient(180deg, rgba(57, 133, 244, 0.32) 0%, rgba(28, 79, 214, 0.24) 100%);
+	border: 1px solid rgba(93, 221, 228, 0.45);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -12px 18px -10px rgba(57, 133, 244, 0.25);
+	backdrop-filter: blur(6px);
+	color: #eaf3ff;
+}
+
+.save-button:disabled,
+.delete-button:disabled,
+.cancel-button:disabled,
+.add-horario-btn:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.save-button:hover {
+	filter: brightness(1.06);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24), 0 0 22px rgba(57, 133, 244, 0.45);
+}
+
+.save-button svg {
+	width: 14px;
+	height: 14px;
+	display: block;
+}
+
+.cancel-button {
+	padding: 0.3rem 0.56rem;
+	border: 0;
+	border-radius: 10px;
+	background: #5d6670;
+	color: #eef3f6;
+	font-family: 'Manrope', sans-serif;
+	font-size: 0.74rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+
+.delete-button {
+	padding: 0.3rem 0.56rem;
+	border: 0;
+	border-radius: 10px;
+	background: #8c2f36;
+	color: #fff4f4;
+	font-family: 'Manrope', sans-serif;
+	font-size: 0.74rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: filter 140ms ease;
+}
+
+.delete-button:hover {
+	filter: brightness(1.06);
+}
+
+.empty-state {
+	text-align: center;
+	font-family: 'Manrope', sans-serif;
+	font-size: 1rem;
+	padding: 1.2rem;
+}
+
+.add-horario-btn {
+	margin-top: 0.85rem;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.45rem;
+	padding: 0.5rem 1rem;
+	font-family: 'Manrope', sans-serif;
+	font-size: 0.95rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: filter 140ms ease;
+	border-radius: 4px 18px 4px 4px;
+	background: linear-gradient(180deg, rgba(57, 133, 244, 0.32) 0%, rgba(28, 79, 214, 0.24) 100%);
+	border: 1px solid rgba(93, 221, 228, 0.45);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -12px 18px -10px rgba(57, 133, 244, 0.25);
+	backdrop-filter: blur(6px);
+	color: #eaf3ff;
+}
+
+.add-horario-btn:hover {
+	filter: brightness(1.04);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24), 0 0 22px rgba(57, 133, 244, 0.45);
+}
+
+.add-horario-btn .fi {
+	font-size: 1.1rem;
+	line-height: 1;
+}
+
+@media (max-width: 780px) {
+	.horarios-panel {
+		padding: 0.55rem 0.65rem 0.75rem;
+	}
+
+	thead th,
+	tbody td {
+		white-space: normal;
+	}
+
+	thead th {
+		font-size: 1.38rem;
+	}
+
+	tbody td {
+		font-size: 1.15rem;
+	}
+
+	.save-button {
+		font-size: 0.78rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.page-body {
+		padding-right: max(1rem, env(safe-area-inset-right));
+		padding-left: max(1rem, env(safe-area-inset-left));
+	}
+
+	.horarios-shell h1 {
+		font-size: 3rem;
+	}
+}

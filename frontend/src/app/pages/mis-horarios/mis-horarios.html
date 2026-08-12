@@ -1,0 +1,36 @@
+<app-page-bg>
+  <main class="page-with-compact-header">
+    <app-page-header-compact backHref="/menu-cliente"></app-page-header-compact>
+    <section class="page-body">
+      <div class="hours-shell">
+        <h1>Horarios de clases</h1>
+
+        <div class="panel-card" aria-label="Horarios del gimnasio">
+          <div class="panel-card-bar">
+            <span class="panel-dot"></span>
+            <span class="panel-dot"></span>
+            <span class="panel-dot"></span>
+            <span class="panel-card-title">Semana</span>
+          </div>
+
+          <div class="panel-card-body">
+            @if (isLoading) {
+              <p class="panel-empty">Cargando horarios...</p>
+            } @else if (hasError) {
+              <p class="panel-empty">No se pudieron cargar los horarios.</p>
+            } @else if (horarios.length === 0) {
+              <p class="panel-empty">Todavia no hay horarios cargados.</p>
+            } @else {
+              @for (item of horarios; track item.id) {
+                <div class="panel-row">
+                  <span>{{ item.descripcion }}</span>
+                  <strong>{{ item.horario }}</strong>
+                </div>
+              }
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</app-page-bg>

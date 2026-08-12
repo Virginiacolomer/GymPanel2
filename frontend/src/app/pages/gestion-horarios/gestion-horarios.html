@@ -1,0 +1,147 @@
+<app-page-bg>
+  <main class="page-with-compact-header">
+    <app-page-header-compact backHref="/menu-admin"></app-page-header-compact>
+    <section class="page-body">
+      <div class="horarios-shell">
+        <h1>Gestion de horarios</h1>
+
+        <div class="horarios-panel">
+          @if (statusMessage) {
+            <p class="status-message" role="status" aria-live="polite">{{ statusMessage }}</p>
+          }
+
+          <div class="table-wrap">
+            <table aria-label="Tabla de gestion de horarios">
+              <thead>
+                <tr>
+                  <th>Descripcion</th>
+                  <th>Horario</th>
+                  <th class="actions-head"></th>
+                </tr>
+              </thead>
+              <tbody>
+                @if (isLoading) {
+                  <tr>
+                    <td class="empty-state" colspan="3">Cargando horarios...</td>
+                  </tr>
+                } @else if (horarios.length === 0) {
+                  <tr>
+                    <td class="empty-state" colspan="3">No hay horarios para mostrar.</td>
+                  </tr>
+                } @else {
+                  @for (row of horarios; track trackHorario($index, row)) {
+                    <tr [class.editing-row]="row.isEditing">
+                      <td>
+                        @if (row.isEditing) {
+                          <input
+                            class="descripcion-input"
+                            type="text"
+                            [(ngModel)]="row.draftDescripcion"
+                            placeholder="Lunes a viernes - Manana"
+                            aria-label="Editar descripcion del horario"
+                          />
+                        } @else {
+                          <span>{{ row.descripcion }}</span>
+                        }
+                      </td>
+                      <td>
+                        <div class="horario-cell">
+                          @if (row.isEditing) {
+                            <input
+                              class="horario-input"
+                              type="text"
+                              [(ngModel)]="row.draftHorario"
+                              placeholder="6:30 - 10:00"
+                              aria-label="Editar rango horario"
+                            />
+                          } @else {
+                            <span>{{ row.horario }}</span>
+                          }
+
+                          @if (!row.isEditing) {
+                            <button
+                              type="button"
+                              class="icon-button"
+                              aria-label="Editar horario"
+                              title="Editar horario"
+                              (click)="startEditing(row.id!)"
+                            >
+                              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path
+                                  d="M4 20L8.2 18.8L18.3 8.7C19.2 7.8 19.2 6.3 18.3 5.4L17.6 4.7C16.7 3.8 15.2 3.8 14.3 4.7L4.2 14.8L3 19L4 20Z"
+                                  stroke="currentColor"
+                                  stroke-width="1.8"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                                <path
+                                  d="M13.5 5.5L17.5 9.5"
+                                  stroke="currentColor"
+                                  stroke-width="1.8"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              </svg>
+                            </button>
+                          }
+                        </div>
+                      </td>
+                      <td class="action-cell">
+                        @if (row.isEditing) {
+                          <div class="action-buttons">
+                            <button
+                              type="button"
+                              class="save-button"
+                              [disabled]="row.isSaving"
+                              (click)="saveHorario(row.id)"
+                            >
+                              {{ row.isSaving ? 'Guardando...' : 'Guardar' }}
+                              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path
+                                  d="M6 3H18L20 5V21L12 17L4 21V5L6 3Z"
+                                  stroke="currentColor"
+                                  stroke-width="1.7"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              </svg>
+                            </button>
+
+                            <button
+                              type="button"
+                              class="cancel-button"
+                              [disabled]="row.isSaving"
+                              (click)="cancelEditing(row.id)"
+                            >
+                              Cancelar
+                            </button>
+                          </div>
+                        } @else {
+                          <div class="action-buttons action-buttons--idle">
+                            <button
+                              type="button"
+                              class="delete-button"
+                              [disabled]="row.isDeleting"
+                              (click)="deleteHorario(row.id!)"
+                            >
+                              {{ row.isDeleting ? 'Eliminando...' : 'Eliminar' }}
+                            </button>
+                          </div>
+                        }
+                      </td>
+                    </tr>
+                  }
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <button type="button" class="add-horario-btn" (click)="addNewHorario()">
+            <i class="fi fi-sr-plus" aria-hidden="true"></i>
+            Agregar horario
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+</app-page-bg>

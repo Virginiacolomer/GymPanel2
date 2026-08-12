@@ -20,6 +20,8 @@ import { MisPagos } from './pages/mis-pagos/mis-pagos';
 import { HistorialDePagos } from './pages/historial-de-pagos/historial-de-pagos';
 import { Reporte } from './pages/reporte/reporte';
 import { DatosGimnasio } from './pages/datos-gimnasio/datos-gimnasio';
+import { GestionHorarios } from './pages/gestion-horarios/gestion-horarios';
+import { MisHorarios } from './pages/mis-horarios/mis-horarios';
 import { authGuard } from './core/guards/auth.guard';
 import { publicGuard } from './core/guards/public.guard';
 
@@ -45,12 +47,14 @@ export const routes: Routes = [
 	{ path: 'ver-plan', component: VerPlan, canActivate: [authGuard], data: { role: 'ADMIN' } },
 	{ path: 'reporte', component: Reporte, canActivate: [authGuard], data: { role: 'ADMIN' } },
 	{ path: 'datos-gimnasio', component: DatosGimnasio, canActivate: [authGuard], data: { role: 'ADMIN' } },
+	{ path: 'gestion-horarios', component: GestionHorarios, canActivate: [authGuard], data: { role: 'ADMIN' } },
 
 	// Rutas exclusivas para CLIENTE.
 	{ path: 'menu-cliente', component: MenuCliente, canActivate: [authGuard], data: { role: 'CLIENTE' } },
 	{ path: 'mi-plan', component: MiPlan, canActivate: [authGuard], data: { role: 'CLIENTE' } },
 	{ path: 'mi-membresia', component: MiMembresia, canActivate: [authGuard], data: { role: 'CLIENTE' } },
 	{ path: 'mis-pagos', component: MisPagos, canActivate: [authGuard], data: { role: 'CLIENTE' } },
+	{ path: 'mis-horarios', component: MisHorarios, canActivate: [authGuard], data: { role: 'CLIENTE' } },
 	// historial-de-pagos solo llama a /membresia/mis-pagos (CLIENTE en el backend),
 	// asi que va con el mismo rol pese al nombre generico.
 	{ path: 'historial-de-pagos', component: HistorialDePagos, canActivate: [authGuard], data: { role: 'CLIENTE' } },
