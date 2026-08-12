@@ -572,7 +572,9 @@ export class MembresiaService {
     }
 
     return {
-      initPoint: preference.sandbox_init_point || preference.init_point,
+      initPoint: this.mercadoPagoService.isSandbox()
+        ? preference.sandbox_init_point || preference.init_point
+        : preference.init_point,
     };
   }
 

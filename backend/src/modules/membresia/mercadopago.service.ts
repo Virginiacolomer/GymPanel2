@@ -7,16 +7,26 @@ export class MercadoPagoService {
   private readonly logger = new Logger(MercadoPagoService.name);
   private readonly client: MercadoPagoConfig | null;
   private readonly currency: string;
+  // Mercado Pago siempre devuelve sandbox_init_point en la respuesta de la
+  // preferencia, sin importar si las credenciales usadas son de prueba o de
+  // produccion, asi que no sirve para detectar el modo. Lo controla esta
+  // variable de entorno en vez de intentar adivinarlo.
+  private readonly sandbox: boolean;
 
   constructor(private readonly configService: ConfigService) {
     const accessToken = this.configService.get<string>('MERCADOPAGO_ACCESS_TOKEN');
     this.currency = this.configService.get<string>('MERCADOPAGO_CURRENCY') || 'ARS';
+    this.sandbox = this.configService.get<string>('MERCADOPAGO_SANDBOX') === 'true';
 
     this.client = accessToken ? new MercadoPagoConfig({ accessToken }) : null;
 
     if (!this.client) {
       this.logger.warn('MERCADOPAGO_ACCESS_TOKEN no configurada. El pago con Mercado Pago fallara.');
     }
+  }
+
+  isSandbox(): boolean {
+    return this.sandbox;
   }
 
   async createPreference(params: {
