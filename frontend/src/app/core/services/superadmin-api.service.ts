@@ -32,7 +32,10 @@ export class SuperAdminApiService {
   }
 
   getGimnasios(): Observable<GimnasioAdminItem[]> {
-    return this.http.get<GimnasioAdminItem[]>(`${this.apiBaseUrl}/gimnasios/admin`);
+    // Parametro anti-cache: evita que el navegador sirva una respuesta 304
+    // cacheada de una request anterior (el backend no varia el cache por
+    // Authorization, asi que dos tokens distintos podian compartir cache).
+    return this.http.get<GimnasioAdminItem[]>(`${this.apiBaseUrl}/gimnasios/admin?_=${Date.now()}`);
   }
 
   updatePlan(gimnasioId: number, plan: PlanGimnasio): Observable<GimnasioAdminItem> {

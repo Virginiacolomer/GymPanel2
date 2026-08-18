@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { finalize } from 'rxjs';
+import { finalize, timeout } from 'rxjs';
 import { PageHeaderCompactComponent } from '../../shared/page-header-compact/page-header-compact';
 import { PageBgComponent } from '../../shared/page-bg/page-bg';
 import { GimnasioAdminItem, PlanGimnasio, SuperAdminApiService } from '../../core/services/superadmin-api.service';
@@ -67,7 +67,15 @@ export class SuperadminPanel implements OnInit {
 
     this.superAdminApiService
       .getGimnasios()
-      .pipe(finalize(() => (this.isLoading = false)))
+      .pipe(
+        // Red de seguridad: si por lo que sea el pedido nunca resuelve,
+        // no se queda trabado para siempre en "Cargando...".
+        timeout(15000),
+        finalize(() => {
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (gimnasios) => {
           this.gimnasios = gimnasios;
@@ -76,8 +84,9 @@ export class SuperadminPanel implements OnInit {
           }
           this.cdr.detectChanges();
         },
-        error: () => {
-          this.statusMessage = 'No se pudieron cargar los gimnasios.';
+        error: (err) => {
+          const detail = err?.name === 'TimeoutError' ? 'la solicitud tardo demasiado' : `status ${err?.status ?? '?'}`;
+          this.statusMessage = `No se pudieron cargar los gimnasios (${detail}).`;
           this.gimnasios = [];
           this.cdr.detectChanges();
         },
