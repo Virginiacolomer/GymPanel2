@@ -87,6 +87,19 @@
 	align-items: center;
 }
 
+/* Funcionalidad no incluida en el plan del gimnasio: visible pero inactiva. */
+.menu-tile-disabled {
+	cursor: not-allowed;
+	filter: grayscale(1);
+	opacity: 0.45;
+	pointer-events: none;
+}
+
+.menu-tile-disabled:hover {
+	transform: none;
+	box-shadow: none;
+}
+
 /* Insignia hexagonal del icono: distinta de la placa redondeada anterior. */
 .icon-badge {
 	flex: none;

@@ -22,6 +22,8 @@ import { Reporte } from './pages/reporte/reporte';
 import { DatosGimnasio } from './pages/datos-gimnasio/datos-gimnasio';
 import { GestionHorarios } from './pages/gestion-horarios/gestion-horarios';
 import { MisHorarios } from './pages/mis-horarios/mis-horarios';
+import { SuperadminLogin } from './pages/superadmin-login/superadmin-login';
+import { SuperadminPanel } from './pages/superadmin-panel/superadmin-panel';
 import { authGuard } from './core/guards/auth.guard';
 import { publicGuard } from './core/guards/public.guard';
 
@@ -34,6 +36,11 @@ export const routes: Routes = [
 	{ path: 'horarios', component: Horarios, canActivate: [publicGuard] },
 	{ path: 'login', component: Login, canActivate: [publicGuard] },
 	{ path: 'register', component: Register, canActivate: [publicGuard] },
+	// Sin link visible en la navegacion publica: solo para el dueno de la plataforma.
+	{ path: 'superadmin/login', component: SuperadminLogin, canActivate: [publicGuard] },
+
+	// Ruta exclusiva para SUPERADMIN.
+	{ path: 'superadmin/panel', component: SuperadminPanel, canActivate: [authGuard], data: { role: 'SUPERADMIN' } },
 
 	// Rutas exclusivas para ADMIN.
 	{ path: 'menu-admin', component: MenuAdmin, canActivate: [authGuard], data: { role: 'ADMIN' } },

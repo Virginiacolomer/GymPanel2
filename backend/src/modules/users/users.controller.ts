@@ -5,6 +5,9 @@ import { UpdateUserStatusDto } from './dto/update-user-status.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
+import { FeatureGuard } from '../auth/feature.guard';
+import { RequireFeature } from '../auth/feature.decorator';
+import { Funcionalidad } from '../gimnasio/funcionalidades';
 import { UserRole } from './enums/user-role.enum';
 import { AuthenticatedRequest } from '../auth/jwt-payload.interface';
 
@@ -17,15 +20,17 @@ export class UsersController {
     return await this.usersService.create(createUserDto);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.GESTION_USUARIOS)
   @Get()
   findAll(@Req() request: AuthenticatedRequest) {
     return this.usersService.findAll(request.user.gimnasioId);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.ALTA_USUARIOS)
   @Get('pendientes')
   async findPending(@Req() request: AuthenticatedRequest) {
     console.log('[UsersController] GET /users/pendientes invocado');
@@ -34,8 +39,9 @@ export class UsersController {
     return users;
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.GESTION_USUARIOS)
   @Get('clientes-activos')
   async findActiveClients(@Req() request: AuthenticatedRequest) {
     console.log('[UsersController] GET /users/clientes-activos invocado');
@@ -44,15 +50,17 @@ export class UsersController {
     return users;
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.GESTION_USUARIOS)
   @Get(':id')
   findOne(@Req() request: AuthenticatedRequest, @Param('id') id: string) {
     return this.usersService.findOne(request.user.gimnasioId, +id);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.ALTA_USUARIOS)
   @Patch(':id/estado')
   updateEstado(
     @Req() request: AuthenticatedRequest,
@@ -62,8 +70,9 @@ export class UsersController {
     return this.usersService.updateEstado(request.user.gimnasioId, +id, body.estado);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.GESTION_USUARIOS)
   @Post(':id/membresia')
   updateMembership(
     @Req() request: AuthenticatedRequest,
@@ -73,8 +82,9 @@ export class UsersController {
     return this.usersService.updateMembershipByAdmin(request.user.gimnasioId, +id, body.membresiaId);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.GESTION_USUARIOS)
   @Delete(':id/membresia/:membresiaId')
   removeMembership(
     @Req() request: AuthenticatedRequest,
@@ -84,8 +94,9 @@ export class UsersController {
     return this.usersService.removeMembershipByAdmin(request.user.gimnasioId, +id, +membresiaId);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.GESTION_USUARIOS)
   @Post(':id/pago/al-dia')
   markPaymentAsUpToDate(
     @Req() request: AuthenticatedRequest,
@@ -95,8 +106,9 @@ export class UsersController {
     return this.usersService.markPaymentAsUpToDateByAdmin(request.user.gimnasioId, +id, body?.membresiaId);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.ALTA_USUARIOS)
   @Delete(':id')
   remove(@Req() request: AuthenticatedRequest, @Param('id') id: string) {
     return this.usersService.remove(request.user.gimnasioId, +id);

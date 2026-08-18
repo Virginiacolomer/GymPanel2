@@ -5,6 +5,9 @@ import { UpdateMembresiaDto } from './dto/update-membresia.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
+import { FeatureGuard } from '../auth/feature.guard';
+import { RequireFeature } from '../auth/feature.decorator';
+import { Funcionalidad } from '../gimnasio/funcionalidades';
 import { UserRole } from '../users/enums/user-role.enum';
 import { AuthenticatedRequest } from '../auth/jwt-payload.interface';
 
@@ -12,8 +15,9 @@ import { AuthenticatedRequest } from '../auth/jwt-payload.interface';
 export class MembresiaController {
   constructor(private readonly membresiaService: MembresiaService) {}
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.GESTION_MEMBRESIAS)
   @Post()
   create(@Req() request: AuthenticatedRequest, @Body() createMembresiaDto: CreateMembresiaDto) {
     return this.membresiaService.create(request.user.gimnasioId, createMembresiaDto);
@@ -88,15 +92,17 @@ export class MembresiaController {
     return this.membresiaService.assignMembershipToUser(request.user.gimnasioId, request.user.sub, body.membresiaId);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.CLIENTE)
+  @RequireFeature(Funcionalidad.PAGO_MERCADOPAGO)
   @Post('checkout')
   async crearCheckout(@Req() request: AuthenticatedRequest) {
     return this.membresiaService.crearCheckoutMercadoPago(request.user.gimnasioId, request.user.sub);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.REPORTE_INGRESOS)
   @Get('pagos/rango')
   findPaymentsByDateRange(
     @Req() request: AuthenticatedRequest,
@@ -106,8 +112,9 @@ export class MembresiaController {
     return this.membresiaService.findPaymentsByDateRange(request.user.gimnasioId, desde, hasta);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.REPORTE_INGRESOS)
   @Get('reporte/metricas-mes-actual')
   getCurrentMonthReportMetrics(@Req() request: AuthenticatedRequest) {
     return this.membresiaService.getCurrentMonthReportMetrics(request.user.gimnasioId);
@@ -132,8 +139,9 @@ export class MembresiaController {
     return this.membresiaService.findEstadoUserMembresiaById(+id);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.GESTION_MEMBRESIAS)
   @Patch(':id')
   update(
     @Req() request: AuthenticatedRequest,
@@ -143,8 +151,9 @@ export class MembresiaController {
     return this.membresiaService.update(request.user.gimnasioId, +id, updateMembresiaDto);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.GESTION_MEMBRESIAS)
   @Delete(':id')
   remove(@Req() request: AuthenticatedRequest, @Param('id') id: string) {
     return this.membresiaService.remove(request.user.gimnasioId, +id);

@@ -7,10 +7,15 @@ import { Pago } from './entities/pago.entity';
 import { UserMembresia } from './entities/userMembresia.entity';
 import { EstadoUserMembresia } from './entities/estadoUserMembresia.entity';
 import { AuthModule } from '../auth/auth.module';
+import { GimnasioModule } from '../gimnasio/gimnasio.module';
 import { MercadoPagoService } from './mercadopago.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Membresia, Pago, UserMembresia, EstadoUserMembresia]), AuthModule],
+  imports: [
+    TypeOrmModule.forFeature([Membresia, Pago, UserMembresia, EstadoUserMembresia]),
+    AuthModule,
+    GimnasioModule,
+  ],
   controllers: [MembresiaController],
   providers: [MembresiaService, MercadoPagoService],
   exports: [TypeOrmModule],

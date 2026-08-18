@@ -7,6 +7,7 @@ import { AuthController } from './auth.controller';
 import { User } from '../users/entities/user.entity';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { RolesGuard } from './roles.guard';
+import { FeatureGuard } from './feature.guard';
 import { GimnasioModule } from '../gimnasio/gimnasio.module';
 
 @Module({
@@ -23,7 +24,7 @@ import { GimnasioModule } from '../gimnasio/gimnasio.module';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtAuthGuard, RolesGuard],
-  exports: [JwtModule, JwtAuthGuard, RolesGuard],
+  providers: [AuthService, JwtAuthGuard, RolesGuard, FeatureGuard],
+  exports: [JwtModule, JwtAuthGuard, RolesGuard, FeatureGuard],
 })
 export class AuthModule {}

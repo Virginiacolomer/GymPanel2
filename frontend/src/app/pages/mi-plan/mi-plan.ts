@@ -69,8 +69,8 @@ export class MiPlan implements OnInit {
     }
 
     this.currentUser = {
-      nombre: currentUser.nombre,
-      apellido: currentUser.apellido,
+      nombre: currentUser.nombre ?? '',
+      apellido: currentUser.apellido ?? '',
     };
 
     this.hasPlan = false;

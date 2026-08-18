@@ -29,7 +29,8 @@ class PublicGuardService {
     }
 
     const role = this.authStateService.getCurrentUser()?.role;
-    const fallbackRoute = role === 'ADMIN' ? '/menu-admin' : '/menu-cliente';
+    const fallbackRoute =
+      role === 'ADMIN' ? '/menu-admin' : role === 'SUPERADMIN' ? '/superadmin/panel' : '/menu-cliente';
     this.router.navigate([fallbackRoute]);
     return false;
   }

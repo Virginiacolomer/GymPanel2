@@ -14,6 +14,8 @@ export interface GimnasioContacto {
   instagram: string | null;
   telefono: string | null;
   direccion: string | null;
+  plan: 'BASICO' | 'PRO' | 'FULL';
+  funcionalidades: string[];
 }
 
 @Injectable({ providedIn: 'root' })

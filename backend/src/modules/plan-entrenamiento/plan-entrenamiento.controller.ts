@@ -24,6 +24,9 @@ import { UpdateGrupoMuscularDto } from './dto/update-grupo-muscular.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
+import { FeatureGuard } from '../auth/feature.guard';
+import { RequireFeature } from '../auth/feature.decorator';
+import { Funcionalidad } from '../gimnasio/funcionalidades';
 import { UserRole } from '../users/enums/user-role.enum';
 import { AuthenticatedRequest } from '../auth/jwt-payload.interface';
 
@@ -31,29 +34,33 @@ import { AuthenticatedRequest } from '../auth/jwt-payload.interface';
 export class PlanEntrenamientoController {
   constructor(private readonly planEntrenamientoService: PlanEntrenamientoService) {}
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.CREACION_PLANES)
   @Post()
   create(@Req() request: AuthenticatedRequest, @Body() createPlanEntrenamientoDto: CreatePlanEntrenamientoDto) {
     return this.planEntrenamientoService.create(request.user.gimnasioId, createPlanEntrenamientoDto);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.CATALOGO_EJERCICIOS)
   @Post('ejercicios')
   createEjercicio(@Req() request: AuthenticatedRequest, @Body() createEjercicioDto: CreateEjercicioDto) {
     return this.planEntrenamientoService.createEjercicio(request.user.gimnasioId, createEjercicioDto);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.CATALOGO_EJERCICIOS)
   @Post('grupos-musculares')
   createGrupoMuscular(@Req() request: AuthenticatedRequest, @Body() createGrupoMuscularDto: CreateGrupoMuscularDto) {
     return this.planEntrenamientoService.createGrupoMuscular(request.user.gimnasioId, createGrupoMuscularDto);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.CATALOGO_EJERCICIOS)
   @Patch('ejercicios/:id')
   updateEjercicio(
     @Req() request: AuthenticatedRequest,
@@ -63,15 +70,17 @@ export class PlanEntrenamientoController {
     return this.planEntrenamientoService.updateEjercicio(request.user.gimnasioId, +id, updateEjercicioDto);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.CATALOGO_EJERCICIOS)
   @Delete('ejercicios/:id')
   removeEjercicio(@Req() request: AuthenticatedRequest, @Param('id') id: string) {
     return this.planEntrenamientoService.removeEjercicio(request.user.gimnasioId, +id);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.CATALOGO_EJERCICIOS)
   @Post('ejercicios/:id/imagen')
   @UseInterceptors(FileInterceptor('imagen', { limits: { fileSize: 5 * 1024 * 1024 } }))
   uploadEjercicioImagen(
@@ -87,8 +96,9 @@ export class PlanEntrenamientoController {
     return this.planEntrenamientoService.uploadEjercicioImagen(request.user.gimnasioId, +id, file);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.CATALOGO_EJERCICIOS)
   @Patch('grupos-musculares/:id')
   updateGrupoMuscular(
     @Req() request: AuthenticatedRequest,
@@ -98,8 +108,9 @@ export class PlanEntrenamientoController {
     return this.planEntrenamientoService.updateGrupoMuscular(request.user.gimnasioId, +id, updateGrupoMuscularDto);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.CREACION_PLANES)
   @Get()
   findAll(@Req() request: AuthenticatedRequest) {
     return this.planEntrenamientoService.findAll(request.user.gimnasioId);
@@ -119,8 +130,9 @@ export class PlanEntrenamientoController {
     };
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.ASIGNACION_PLANES)
   @Get('usuario/:userId')
   async findByUserId(@Req() request: AuthenticatedRequest, @Param('userId') userId: string) {
     // assignPlanToUser/updatePlanForUser ya validan pertenencia al gimnasio;
@@ -131,8 +143,9 @@ export class PlanEntrenamientoController {
     return { plan };
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.CATALOGO_EJERCICIOS)
   @Get('ejercicios/:id')
   findEjercicioById(@Req() request: AuthenticatedRequest, @Param('id') id: string) {
     return this.planEntrenamientoService.findEjercicioById(request.user.gimnasioId, +id);
@@ -166,15 +179,17 @@ export class PlanEntrenamientoController {
     return this.planEntrenamientoService.findGruposMusculares(request.user.gimnasioId);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.CREACION_PLANES)
   @Get(':id')
   findOne(@Req() request: AuthenticatedRequest, @Param('id') id: string) {
     return this.planEntrenamientoService.findOne(request.user.gimnasioId, +id);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.ASIGNACION_PLANES)
   @Patch('usuario/:userId/asignar/:planId')
   assignPlanToUser(
     @Req() request: AuthenticatedRequest,
@@ -184,8 +199,9 @@ export class PlanEntrenamientoController {
     return this.planEntrenamientoService.assignPlanToUser(request.user.gimnasioId, +userId, +planId);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.ASIGNACION_PLANES)
   @Patch('usuario/:userId/editar')
   updatePlanForUser(
     @Req() request: AuthenticatedRequest,
@@ -195,8 +211,9 @@ export class PlanEntrenamientoController {
     return this.planEntrenamientoService.updatePlanForUser(request.user.gimnasioId, +userId, createPlanEntrenamientoDto);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.CREACION_PLANES)
   @Patch(':id')
   update(
     @Req() request: AuthenticatedRequest,
@@ -206,8 +223,9 @@ export class PlanEntrenamientoController {
     return this.planEntrenamientoService.update(request.user.gimnasioId, +id, updatePlanEntrenamientoDto);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.CREACION_PLANES)
   @Delete(':id')
   remove(@Req() request: AuthenticatedRequest, @Param('id') id: string) {
     return this.planEntrenamientoService.remove(request.user.gimnasioId, +id);

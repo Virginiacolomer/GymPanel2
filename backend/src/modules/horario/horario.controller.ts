@@ -5,6 +5,9 @@ import { UpdateHorarioDto } from './dto/update-horario.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
+import { FeatureGuard } from '../auth/feature.guard';
+import { RequireFeature } from '../auth/feature.decorator';
+import { Funcionalidad } from '../gimnasio/funcionalidades';
 import { UserRole } from '../users/enums/user-role.enum';
 import { AuthenticatedRequest } from '../auth/jwt-payload.interface';
 
@@ -21,15 +24,17 @@ export class HorarioController {
     return this.horarioService.findAllByGimnasio(request.user.gimnasioId);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.DATOS_Y_HORARIOS)
   @Post()
   create(@Req() request: AuthenticatedRequest, @Body() createHorarioDto: CreateHorarioDto) {
     return this.horarioService.create(request.user.gimnasioId, createHorarioDto);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.DATOS_Y_HORARIOS)
   @Patch(':id')
   update(
     @Req() request: AuthenticatedRequest,
@@ -39,8 +44,9 @@ export class HorarioController {
     return this.horarioService.update(request.user.gimnasioId, id, updateHorarioDto);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
   @Roles(UserRole.ADMIN)
+  @RequireFeature(Funcionalidad.DATOS_Y_HORARIOS)
   @Delete(':id')
   remove(@Req() request: AuthenticatedRequest, @Param('id', ParseIntPipe) id: number) {
     return this.horarioService.remove(request.user.gimnasioId, id);

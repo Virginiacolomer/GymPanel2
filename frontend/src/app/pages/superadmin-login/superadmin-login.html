@@ -1,0 +1,42 @@
+<app-page-bg>
+  <main class="page-with-compact-header">
+    <app-page-header-compact backHref="/"></app-page-header-compact>
+    <section class="page-body">
+      <div class="login-shell">
+        <h1>Superadmin</h1>
+
+        <form class="login-form" (ngSubmit)="onSubmit()" novalidate>
+          <label class="sr-only" for="superadmin-email">Correo electronico</label>
+          <input
+            id="superadmin-email"
+            type="email"
+            name="email"
+            [(ngModel)]="email"
+            placeholder="correo electronico"
+            autocomplete="email"
+            [disabled]="loading"
+          />
+
+          <label class="sr-only" for="superadmin-password">Contrasena</label>
+          <input
+            id="superadmin-password"
+            type="password"
+            name="password"
+            [(ngModel)]="password"
+            placeholder="contraseña"
+            autocomplete="current-password"
+            [disabled]="loading"
+          />
+
+          <button type="submit" class="primary-action" [disabled]="loading">
+            {{ loading ? 'Iniciando sesión...' : 'Iniciar sesión' }}
+          </button>
+
+          @if (errorMessage) {
+            <p class="feedback-error">{{ errorMessage }}</p>
+          }
+        </form>
+      </div>
+    </section>
+  </main>
+</app-page-bg>

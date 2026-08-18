@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:host {
+	display: block;
+}
+
+.page-with-compact-header {
+	min-height: 100svh;
+}
+
+.page-body {
+	display: flex;
+	justify-content: center;
+	padding: 1rem max(1.25rem, env(safe-area-inset-right)) calc(2.4rem + env(safe-area-inset-bottom)) max(1.25rem, env(safe-area-inset-left));
+}
+
+.panel-shell {
+	width: min(100%, 900px);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	font-family: 'Manrope', sans-serif;
+}
+
+.panel-shell h1 {
+	margin: 0 0 0.75rem;
+	font-family: 'Space Grotesk', sans-serif;
+	font-size: clamp(2.6rem, 7vw, 3.8rem);
+	line-height: 0.9;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	color: #3985f4;
+	text-align: center;
+}
+
+.panel-panel {
+	width: 100%;
+	background: #8f959c;
+	border-radius: 24px;
+	padding: 0.56rem 0.62rem 0.8rem;
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+	overflow: hidden;
+}
+
+.table-wrap {
+	width: 100%;
+	overflow-x: auto;
+	border-radius: 18px;
+}
+
+.status-message {
+	margin: 0 0 0.9rem;
+	padding: 0.7rem 0.9rem;
+	border-radius: 14px;
+	background: rgba(56, 66, 75, 0.78);
+	color: #eef3f6;
+	font-size: 0.95rem;
+	font-weight: 500;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	color: #191c20;
+	table-layout: fixed;
+}
+
+thead th {
+	padding: 0.42rem 0.32rem;
+	background: #4f5660;
+	font-family: 'Space Grotesk', sans-serif;
+	font-size: 1.45rem;
+	line-height: 0.9;
+	text-transform: uppercase;
+	letter-spacing: 0.01em;
+	text-align: left;
+	color: #d8dde1;
+}
+
+thead th:first-child {
+	border-radius: 14px 0 0 14px;
+}
+
+thead th:last-child {
+	border-radius: 0 14px 14px 0;
+}
+
+tbody td {
+	padding: 0.6rem 0.5rem;
+	font-family: 'Space Grotesk', sans-serif;
+	font-size: 1.15rem;
+	line-height: 1.1;
+	letter-spacing: 0.01em;
+	border-bottom: 1px solid rgba(239, 242, 244, 0.36);
+	vertical-align: middle;
+	overflow-wrap: anywhere;
+}
+
+tbody tr:last-child td {
+	border-bottom: 0;
+}
+
+.estado-pill {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.2rem 0.65rem;
+	border-radius: 999px;
+	background: rgba(57, 133, 244, 0.22);
+	color: #123a7a;
+	font-size: 0.85rem;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+.estado-inactivo {
+	background: rgba(140, 47, 54, 0.22);
+	color: #6b1e23;
+}
+
+.plan-select {
+	width: 100%;
+	max-width: 140px;
+	padding: 0.35rem 0.5rem;
+	border: 1px solid rgba(46, 53, 60, 0.58);
+	border-radius: 8px;
+	background: #dce1e5;
+	color: #1d2125;
+	font-family: 'Manrope', sans-serif;
+	font-size: 0.95rem;
+	font-weight: 600;
+	outline: 0;
+	cursor: pointer;
+}
+
+.plan-select:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.empty-state {
+	text-align: center;
+	font-family: 'Manrope', sans-serif;
+	font-size: 1rem;
+	padding: 1.2rem;
+}
+
+@media (max-width: 780px) {
+	.panel-panel {
+		padding: 0.55rem 0.65rem 0.75rem;
+	}
+
+	thead th {
+		font-size: 1.28rem;
+	}
+
+	tbody td {
+		font-size: 1.05rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.page-body {
+		padding-right: max(1rem, env(safe-area-inset-right));
+		padding-left: max(1rem, env(safe-area-inset-left));
+	}
+
+	.panel-shell h1 {
+		font-size: 2.4rem;
+	}
+}

@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { Gimnasio } from './entities/gimnasio.entity';
 import { CreateGimnasioDto } from './dto/create-gimnasio.dto';
 import { UpdateGimnasioContactoDto } from './dto/update-gimnasio-contacto.dto';
+import { PlanGimnasio } from './enums/plan-gimnasio.enum';
+import { FUNCIONALIDADES_POR_PLAN } from './funcionalidades';
 
 @Injectable()
 export class GimnasioService {
@@ -50,20 +52,43 @@ export class GimnasioService {
   }
 
   // Datos de contacto del propio gimnasio del usuario logueado (admin o
-  // cliente), identificado por el gimnasioId embebido en su JWT.
-  async findContactInfo(
-    gimnasioId: number,
-  ): Promise<Pick<Gimnasio, 'nombre' | 'instagram' | 'telefono' | 'direccion'>> {
+  // cliente), identificado por el gimnasioId embebido en su JWT. Incluye el
+  // plan y las funcionalidades habilitadas para que el frontend sepa que
+  // botones del menu de administrador pintar en gris.
+  async findContactInfo(gimnasioId: number): Promise<
+    Pick<Gimnasio, 'nombre' | 'instagram' | 'telefono' | 'direccion' | 'plan'> & { funcionalidades: string[] }
+  > {
     const gimnasio = await this.gimnasioRepository.findOne({
       where: { id: gimnasioId },
-      select: { nombre: true, instagram: true, telefono: true, direccion: true },
+      select: { nombre: true, instagram: true, telefono: true, direccion: true, plan: true },
     });
 
     if (!gimnasio) {
       throw new NotFoundException('No se encontro el gimnasio.');
     }
 
-    return gimnasio;
+    return {
+      ...gimnasio,
+      funcionalidades: FUNCIONALIDADES_POR_PLAN[gimnasio.plan] ?? [],
+    };
+  }
+
+  // Solo para el SUPERADMIN: listado completo de gimnasios (activos e
+  // inactivos) con su plan actual, para la pantalla de administracion de planes.
+  async findAllForSuperAdmin(): Promise<Gimnasio[]> {
+    return this.gimnasioRepository.find({ order: { nombre: 'ASC' } });
+  }
+
+  // Solo para el SUPERADMIN: cambia el plan de un gimnasio puntual.
+  async updatePlan(id: number, plan: PlanGimnasio): Promise<Gimnasio> {
+    const gimnasio = await this.gimnasioRepository.findOne({ where: { id } });
+
+    if (!gimnasio) {
+      throw new NotFoundException(`No se encontro el gimnasio con id ${id}`);
+    }
+
+    gimnasio.plan = plan;
+    return this.gimnasioRepository.save(gimnasio);
   }
 
   async updateContactInfo(

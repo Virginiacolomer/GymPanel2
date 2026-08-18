@@ -52,6 +52,8 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
           router.navigate(['/menu-admin']);
         } else if (role === 'CLIENTE') {
           router.navigate(['/menu-cliente']);
+        } else if (role === 'SUPERADMIN') {
+          router.navigate(['/superadmin/panel']);
         } else {
           router.navigate(['/']);
         }

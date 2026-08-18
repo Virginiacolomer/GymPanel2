@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import { PlanGimnasio } from '../enums/plan-gimnasio.enum';
 
 // Un Gimnasio es un tenant: cada usuario, membresia y plan de entrenamiento
 // pertenece a exactamente uno. Es lo que permite que una sola base de datos
@@ -30,6 +31,12 @@ export class Gimnasio {
   // sus usuarios no pueden iniciar sesion.
   @Column({ default: true })
   activo!: boolean;
+
+  // Determina que funcionalidades del panel de administrador tiene
+  // habilitadas este gimnasio (ver funcionalidades.ts). Solo lo administra
+  // el SUPERADMIN de la plataforma, nunca el propio gimnasio.
+  @Column({ type: 'enum', enum: PlanGimnasio, default: PlanGimnasio.BASICO })
+  plan!: PlanGimnasio;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt!: Date;
