@@ -32,16 +32,16 @@
 	line-height: 0.9;
 	letter-spacing: 0.03em;
 	text-transform: uppercase;
-	color: #3985f4;
+	color: var(--accent);
 }
 
 .panel-card {
 	width: 100%;
 	border-radius: 16px;
-	border: 1px solid rgba(93, 221, 228, 0.28);
+	border: 1px solid var(--accent-border);
 	overflow: hidden;
-	background: #0c111c;
-	box-shadow: 0 24px 60px rgba(2, 4, 10, 0.55);
+	background: var(--bg-card);
+	box-shadow: var(--shadow-soft);
 	text-align: left;
 }
 
@@ -50,25 +50,25 @@
 	align-items: center;
 	gap: 0.4rem;
 	padding: 0.75rem 1.1rem;
-	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-	background: rgba(255, 255, 255, 0.02);
+	border-bottom: 1px solid var(--border);
+	background: var(--bg-elevated);
 }
 
 .panel-dot {
 	width: 8px;
 	height: 8px;
 	border-radius: 50%;
-	background: rgba(217, 218, 221, 0.3);
+	background: var(--border-strong);
 }
 
 .panel-card-title {
 	margin-left: auto;
 	font-family: 'Space Grotesk', sans-serif;
 	font-size: 0.78rem;
-	font-weight: 600;
+	font-weight: 500;
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
-	color: #a7b0b8;
+	color: var(--text-secondary);
 }
 
 .panel-card-body {
@@ -84,9 +84,9 @@
 	justify-content: space-between;
 	gap: 1rem;
 	padding-bottom: 0.9rem;
-	border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+	border-bottom: 1px solid var(--border);
 	font-size: 0.9rem;
-	color: #a7b0b8;
+	color: var(--text-secondary);
 }
 
 .panel-row:last-child {
@@ -97,8 +97,8 @@
 .panel-row strong {
 	font-family: 'Space Grotesk', sans-serif;
 	font-size: 1.1rem;
-	font-weight: 600;
-	color: #eef2f4;
+	font-weight: 500;
+	color: var(--text-primary);
 	white-space: nowrap;
 }
 
@@ -106,7 +106,7 @@
 	margin: 0;
 	padding: 0.5rem 0;
 	text-align: center;
-	color: #a7b0b8;
+	color: var(--text-secondary);
 	font-size: 0.9rem;
 }
 
