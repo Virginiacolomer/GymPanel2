@@ -28,10 +28,10 @@
 	display: block;
 	font-family: 'Space Grotesk', sans-serif;
 	font-size: 0.78rem;
-	font-weight: 600;
+	font-weight: 500;
 	letter-spacing: 0.16em;
 	text-transform: uppercase;
-	color: #5ddde4;
+	color: var(--accent);
 	margin-bottom: 0.4rem;
 }
 
@@ -41,15 +41,16 @@
 	font-size: clamp(2.2rem, 6vw, 3rem);
 	line-height: 1;
 	letter-spacing: 0.01em;
-	color: #eef2f4;
+	color: var(--text-primary);
 }
 
 .load-error {
 	margin: 0 0 1.2rem;
 	padding: 0.65rem 0.9rem;
 	border-radius: 12px;
-	background: rgba(255, 90, 90, 0.14);
-	color: #ffd7d7;
+	background: var(--danger-dim);
+	color: var(--danger);
+	border: 0.5px solid var(--danger-border);
 	font-size: 0.9rem;
 	display: flex;
 	align-items: center;
@@ -59,8 +60,8 @@
 .retry-link {
 	border: 0;
 	background: none;
-	color: #93c5ff;
-	font-weight: 700;
+	color: var(--accent);
+	font-weight: 500;
 	text-decoration: underline;
 	cursor: pointer;
 	padding: 0;
@@ -80,17 +81,18 @@
 	align-items: flex-start;
 	gap: 0.85rem;
 	padding: 1.4rem 1.3rem 1.25rem;
-	border-radius: 4px 22px 4px 22px;
-	background: linear-gradient(165deg, #171d29 0%, #0d121c 100%);
-	border: 1px solid rgba(93, 221, 228, 0.16);
+	border-radius: var(--radius-card);
+	background: var(--bg-card);
+	border: 0.5px solid var(--border);
+	color: var(--text-secondary);
 	text-decoration: none;
-	transition: transform 170ms ease, border-color 170ms ease, box-shadow 170ms ease;
+	transition: transform 170ms ease, border-color 170ms ease, color 170ms ease;
 }
 
 .menu-tile:hover {
 	transform: translateY(-3px);
-	border-color: rgba(93, 221, 228, 0.45);
-	box-shadow: 0 14px 30px rgba(3, 6, 10, 0.5);
+	border-color: var(--accent-border);
+	color: var(--text-primary);
 }
 
 .menu-tile:active {
@@ -132,43 +134,38 @@
 	align-items: center;
 	justify-content: center;
 	clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-	background: linear-gradient(160deg, #565f6b 0%, #4e5863 100%);
+	background: var(--bg-elevated);
 }
 
 .icon-badge .fi {
 	font-size: 1.25rem;
 	line-height: 1;
-	color: #eef4ff;
+	color: currentColor;
 }
 
 .menu-tile--reporte {
-	background: linear-gradient(165deg, #1a243d 0%, #0d121c 100%);
-	border-color: rgba(57, 133, 244, 0.4);
-}
-
-.menu-tile--reporte:hover {
-	border-color: rgba(57, 133, 244, 0.7);
-	box-shadow: 0 14px 30px rgba(57, 133, 244, 0.28);
+	background: var(--bg-card);
+	border: 0.5px solid var(--accent-border);
 }
 
 .icon-badge--reporte {
-	background: linear-gradient(160deg, #3985f4 0%, #1c4fd6 100%);
+	background: var(--accent);
 }
 
 .menu-tile--reporte .menu-label {
-	color: #93c5ff;
+	color: var(--accent);
 }
 
 .menu-label {
-	color: #eef2f4;
+	color: var(--text-primary);
 	font-family: 'Space Grotesk', sans-serif;
 	font-size: 1.05rem;
-	font-weight: 600;
+	font-weight: 500;
 	letter-spacing: 0.01em;
 }
 
 .menu-hint {
-	color: #a7b0b8;
+	color: var(--text-secondary);
 	font-size: 0.8rem;
 	line-height: 1.35;
 }
