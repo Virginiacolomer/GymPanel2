@@ -29,31 +29,31 @@
 	line-height: 0.9;
 	letter-spacing: 0.03em;
 	text-transform: uppercase;
-	color: #3985f4;
+	color: var(--accent);
 	text-align: center;
 }
 
 .panel-panel {
 	width: 100%;
-	background: #8f959c;
-	border-radius: 24px;
+	background: var(--bg-card);
+	border: 0.5px solid var(--border);
+	border-radius: var(--radius-card);
 	padding: 0.56rem 0.62rem 0.8rem;
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
 	overflow: hidden;
 }
 
 .table-wrap {
 	width: 100%;
 	overflow-x: auto;
-	border-radius: 18px;
+	border-radius: var(--radius-card);
 }
 
 .status-message {
 	margin: 0 0 0.9rem;
 	padding: 0.7rem 0.9rem;
-	border-radius: 14px;
-	background: rgba(56, 66, 75, 0.78);
-	color: #eef3f6;
+	border-radius: var(--radius-card);
+	background: var(--bg-elevated);
+	color: var(--text-primary);
 	font-size: 0.95rem;
 	font-weight: 500;
 }
@@ -61,28 +61,28 @@
 table {
 	width: 100%;
 	border-collapse: collapse;
-	color: #191c20;
+	color: var(--text-primary);
 	table-layout: fixed;
 }
 
 thead th {
 	padding: 0.42rem 0.32rem;
-	background: #4f5660;
+	background: var(--bg-elevated);
 	font-family: 'Space Grotesk', sans-serif;
 	font-size: 1.45rem;
 	line-height: 0.9;
 	text-transform: uppercase;
 	letter-spacing: 0.01em;
 	text-align: left;
-	color: #d8dde1;
+	color: var(--text-muted);
 }
 
 thead th:first-child {
-	border-radius: 14px 0 0 14px;
+	border-radius: var(--radius-card) 0 0 var(--radius-card);
 }
 
 thead th:last-child {
-	border-radius: 0 14px 14px 0;
+	border-radius: 0 var(--radius-card) var(--radius-card) 0;
 }
 
 tbody td {
@@ -91,7 +91,7 @@ tbody td {
 	font-size: 1.15rem;
 	line-height: 1.1;
 	letter-spacing: 0.01em;
-	border-bottom: 1px solid rgba(239, 242, 244, 0.36);
+	border-bottom: 1px solid var(--border);
 	vertical-align: middle;
 	overflow-wrap: anywhere;
 }
@@ -104,30 +104,32 @@ tbody tr:last-child td {
 	display: inline-flex;
 	align-items: center;
 	padding: 0.2rem 0.65rem;
-	border-radius: 999px;
-	background: rgba(57, 133, 244, 0.22);
-	color: #123a7a;
+	border-radius: var(--radius-pill);
+	background: var(--success-dim);
+	color: var(--success);
+	border: 0.5px solid var(--success-border);
 	font-size: 0.85rem;
-	font-weight: 700;
+	font-weight: 500;
 	text-transform: uppercase;
 }
 
 .estado-inactivo {
-	background: rgba(140, 47, 54, 0.22);
-	color: #6b1e23;
+	background: var(--danger-dim);
+	color: var(--danger);
+	border: 0.5px solid var(--danger-border);
 }
 
 .plan-select {
 	width: 100%;
 	max-width: 140px;
 	padding: 0.35rem 0.5rem;
-	border: 1px solid rgba(46, 53, 60, 0.58);
+	border: 0.5px solid var(--border-strong);
 	border-radius: 8px;
-	background: #dce1e5;
-	color: #1d2125;
+	background: var(--bg-input);
+	color: var(--text-primary);
 	font-family: 'Manrope', sans-serif;
 	font-size: 0.95rem;
-	font-weight: 600;
+	font-weight: 500;
 	outline: 0;
 	cursor: pointer;
 }
