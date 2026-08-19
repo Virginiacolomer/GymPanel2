@@ -32,7 +32,7 @@
 	line-height: 0.85;
 	letter-spacing: 0.04em;
 	text-transform: uppercase;
-	color: #3985f4;
+	color: var(--accent);
 }
 
 .status-panel {
@@ -48,58 +48,59 @@
 	align-items: center;
 	gap: 1rem;
 	padding: 0.44rem 1.25rem 0.44rem 0.95rem;
-	border-radius: 20px;
-	background: linear-gradient(180deg, #5b626b 0%, #525960 100%);
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+	border-radius: var(--radius-pill);
+	background: var(--bg-elevated);
+	box-shadow: inset 0 1px 0 var(--border);
 }
 
 .status-dot {
 	width: 35px;
 	height: 35px;
 	border-radius: 50%;
-	background: #3c9dff;
-	box-shadow: 0 0 16px rgba(60, 157, 255, 0.18);
+	background: var(--success);
+	box-shadow: var(--success-glow);
 	flex: 0 0 35px;
 }
 
 .status-dot-up-to-date {
-	background: #3c9dff;
-	box-shadow: 0 0 16px rgba(60, 157, 255, 0.18);
+	background: var(--success);
+	box-shadow: var(--success-glow);
 }
 
 .status-dot-due-soon {
-	background: #ffd23f;
-	box-shadow: 0 0 16px rgba(255, 210, 63, 0.18);
+	background: var(--warning);
+	box-shadow: var(--warning-glow);
 }
 
 .status-dot-overdue {
-	background: #ff5a5a;
-	box-shadow: 0 0 16px rgba(255, 90, 90, 0.18);
+	background: var(--danger);
+	box-shadow: var(--danger-glow);
 }
 
 .status-label {
-	color: #eceef0;
+	color: var(--text-primary);
 	font-size: clamp(1.15rem, 2.6vw, 1.45rem);
-	font-weight: 700;
+	font-weight: 500;
 	text-transform: uppercase;
 }
 
 .status-detail {
 	margin: 0;
 	font-size: 1.05rem;
-	color: #f3f4f5;
+	color: var(--text-secondary);
 }
 
 .next-payment {
 	margin: 0;
 	font-size: 1.05rem;
-	color: #f3f4f5;
-	font-weight: 600;
+	color: var(--text-secondary);
+	font-weight: 500;
 }
 
 .next-payment strong {
+	color: var(--text-primary);
 	font-size: 1.12em;
-	font-weight: 800;
+	font-weight: 500;
 }
 
 .redirect-status-banner {
@@ -108,35 +109,39 @@
 	padding: 0.85rem 1.1rem;
 	border-radius: 16px;
 	font-size: 0.95rem;
-	font-weight: 600;
+	font-weight: 500;
 	text-align: center;
 }
 
 .redirect-status-success {
-	background: rgba(60, 157, 255, 0.16);
-	color: #3c9dff;
+	background: var(--success-dim);
+	color: var(--success);
+	border: 0.5px solid var(--success-border);
 }
 
 .redirect-status-info {
-	background: rgba(255, 210, 63, 0.14);
-	color: #ffd23f;
+	background: var(--warning-dim);
+	color: var(--warning);
+	border: 0.5px solid var(--warning-border);
 }
 
 .redirect-status-error {
-	background: rgba(255, 90, 90, 0.14);
-	color: #ff5a5a;
+	background: var(--danger-dim);
+	color: var(--danger);
+	border: 0.5px solid var(--danger-border);
 }
 
 .pay-button {
 	margin-top: 0.6rem;
 	padding: 0.75rem 1.6rem;
 	border: none;
-	border-radius: 3px 14px 3px 14px;
-	background: linear-gradient(180deg, #3c9dff 0%, #2f7fd6 100%);
-	color: #eceef0;
+	border-radius: var(--radius-pill);
+	background: var(--accent);
+	color: var(--accent-contrast);
+	box-shadow: var(--accent-glow);
 	font-family: 'Manrope', sans-serif;
 	font-size: 1rem;
-	font-weight: 700;
+	font-weight: 500;
 	text-transform: uppercase;
 	letter-spacing: 0.02em;
 	cursor: pointer;
@@ -150,16 +155,17 @@
 .checkout-error {
 	margin: 0.6rem 0 0;
 	font-size: 0.9rem;
-	color: #ffd7d7;
+	color: var(--danger);
 }
 
 .current-payments-panel {
 	width: min(100%, 680px);
 	margin-bottom: auto;
 	padding: 1.25rem;
-	border-radius: 28px;
-	background: rgba(82, 89, 96, 0.78);
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+	border-radius: var(--radius-card);
+	background: var(--bg-card);
+	border: 0.5px solid var(--border);
+	box-shadow: inset 0 1px 0 var(--border);
 	text-align: left;
 }
 
@@ -178,13 +184,13 @@
 	line-height: 0.9;
 	letter-spacing: 0.03em;
 	text-transform: uppercase;
-	color: #eceef0;
+	color: var(--text-primary);
 }
 
 .payments-count {
-	color: rgba(236, 238, 240, 0.78);
+	color: var(--text-secondary);
 	font-size: 0.95rem;
-	font-weight: 600;
+	font-weight: 500;
 }
 
 .current-payments-list {
@@ -200,7 +206,7 @@
 	gap: 1rem;
 	padding: 1rem 1.1rem;
 	border-radius: 20px;
-	background: rgba(33, 37, 41, 0.42);
+	background: var(--bg-elevated);
 }
 
 .payment-month,
@@ -208,32 +214,32 @@
 .current-payments-error,
 .current-payments-empty {
 	margin: 0;
-	color: rgba(236, 238, 240, 0.8);
+	color: var(--text-secondary);
 }
 
 .payment-month {
 	font-size: 0.8rem;
-	font-weight: 700;
+	font-weight: 500;
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
-	color: #3985f4;
+	color: var(--accent);
 }
 
 .payment-card h3 {
 	margin: 0.25rem 0 0;
 	font-size: 1.08rem;
-	color: #f3f4f5;
+	color: var(--text-primary);
 }
 
 .payment-date {
 	margin-top: 0.22rem;
 	font-size: 0.88rem;
-	color: rgba(236, 238, 240, 0.68);
+	color: var(--text-secondary);
 }
 
 .payment-amount {
 	font-size: 1rem;
-	color: #f3f4f5;
+	color: var(--text-primary);
 	white-space: nowrap;
 }
 
@@ -245,7 +251,7 @@
 .current-payments-error {
 	padding: 0.95rem 0;
 	text-align: center;
-	color: #ffd7d7;
+	color: var(--danger);
 }
 
 .history-link {
@@ -255,10 +261,12 @@
 	margin-top: 2rem;
 	padding: 0.72rem 1.35rem;
 	border-radius: 3px 14px 3px 14px;
-	background: linear-gradient(180deg, #5b626b 0%, #525960 100%);
-	color: #eceef0;
+	background: transparent;
+	color: var(--text-primary);
+	border: 0.5px solid var(--border-strong);
+	box-shadow: none;
 	font-size: clamp(1rem, 2.5vw, 1.1rem);
-	font-weight: 700;
+	font-weight: 500;
 	text-decoration: underline;
 }
 
