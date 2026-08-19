@@ -15,29 +15,47 @@
 }
 
 .create-plan-shell {
-  width: min(100%, 560px);
+  width: min(100%, 920px);
   font-family: 'Manrope', sans-serif;
 }
 
 .create-plan-shell h1 {
-  margin: 0 0 0.85rem;
+  margin: 0 0 1.4rem;
   font-family: 'Space Grotesk', sans-serif;
-  font-size: clamp(3rem, 8vw, 4.2rem);
-  line-height: 0.85;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--accent);
-  text-align: center;
+  font-size: clamp(1.9rem, 3.2vw, 2.5rem);
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+  text-align: left;
 }
 
 .create-plan-panel {
   display: grid;
   gap: 0.8rem;
-  padding: 1rem;
+  padding: 1.3rem 1.5rem;
   border-radius: 24px;
   background: var(--bg-card);
   border: 0.5px solid var(--border);
   overflow: hidden;
+}
+
+.create-plan-columns {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 2.2rem;
+  align-items: start;
+}
+
+.create-plan-fields {
+  display: grid;
+  gap: 0.9rem;
+  align-content: start;
+}
+
+.create-plan-days {
+  display: grid;
+  gap: 0.9rem;
+  align-content: start;
 }
 
 .create-plan-panel,
@@ -97,17 +115,16 @@
 }
 
 .days-config {
-  margin-top: 0.25rem;
   display: grid;
   gap: 0.7rem;
 }
 
 .days-config h2 {
-  margin: 0.2rem 0 0.15rem;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: clamp(2rem, 4.5vw, 2.7rem);
-  line-height: 0.9;
-  letter-spacing: 0.02em;
+  margin: 0 0 0.2rem;
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--accent);
 }
@@ -136,7 +153,7 @@
   background: transparent;
   color: var(--accent);
   font-family: 'Space Grotesk', sans-serif;
-  font-size: clamp(1.8rem, 4vw, 2.2rem);
+  font-size: 1.05rem;
   font-weight: 500;
   letter-spacing: 0.03em;
   text-transform: uppercase;
@@ -245,9 +262,9 @@
 .submit-section {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   gap: 0.5rem;
-  margin-top: 0.25rem;
+  margin-top: 0.4rem;
 }
 
 .saving-status {
@@ -285,8 +302,8 @@
 }
 
 .create-submit-btn {
-  width: 100%;
-  padding: 0.72rem 1rem;
+  width: auto;
+  padding: 0.72rem 1.6rem;
   font-size: 1rem;
   font-weight: 500;
   text-transform: uppercase;
@@ -302,14 +319,25 @@
   filter: brightness(1.04);
 }
 
+@media (max-width: 760px) {
+  .create-plan-columns {
+    grid-template-columns: 1fr;
+    gap: 1.4rem;
+  }
+
+  .submit-section {
+    align-items: stretch;
+  }
+
+  .create-submit-btn {
+    width: 100%;
+  }
+}
+
 @media (max-width: 480px) {
   .page-body {
     padding-right: max(1rem, env(safe-area-inset-right));
     padding-left: max(1rem, env(safe-area-inset-left));
-  }
-
-  .create-plan-shell h1 {
-    font-size: 3rem;
   }
 
   .create-plan-panel {
@@ -317,14 +345,8 @@
     padding: 0.9rem;
   }
 
-  .day-toggle {
-    font-size: 1.72rem;
-  }
-
   .day-arrow {
     width: 28px;
     height: 21px;
   }
-
-
 }

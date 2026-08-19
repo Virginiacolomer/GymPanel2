@@ -7,137 +7,160 @@
         <h1 id="crear-plan-titulo">Crear plan</h1>
 
         <div class="create-plan-panel">
-          <p>Completá los datos para dar de alta una nueva opcion de plan.</p>
+          <div class="create-plan-columns">
+            <div class="create-plan-fields">
+              <p>Completá los datos para dar de alta una nueva opcion de plan.</p>
 
-          @if (isLoadingCatalog) {
-            <p>Cargando ejercicios...</p>
-          }
+              @if (isLoadingCatalog) {
+                <p>Cargando ejercicios...</p>
+              }
 
-          <label>
-            Titulo
-            <input type="text" placeholder="Ej: Plan fuerza inicial" [(ngModel)]="planTitle" />
-          </label>
+              <label>
+                Titulo
+                <input type="text" placeholder="Ej: Plan fuerza inicial" [(ngModel)]="planTitle" />
+              </label>
 
-          <label>
-            Cantidad de dias
-            <input
-              type="number"
-              min="1"
-              max="7"
-              [ngModel]="frequencyDays"
-              (ngModelChange)="onFrequencyInput($event)"
-              placeholder="Ej: 3"
-            />
-          </label>
+              <label>
+                Cantidad de dias
+                <input
+                  type="number"
+                  min="1"
+                  max="7"
+                  [ngModel]="frequencyDays"
+                  (ngModelChange)="onFrequencyInput($event)"
+                  placeholder="Ej: 3"
+                />
+              </label>
 
-          <label>
-            Descripcion (opcional)
-            <textarea
-              rows="3"
-              placeholder="Ej: Plan orientado a fuerza para nivel inicial."
-              [(ngModel)]="description"
-            ></textarea>
-          </label>
+              <label>
+                Descripcion (opcional)
+                <textarea
+                  rows="3"
+                  placeholder="Ej: Plan orientado a fuerza para nivel inicial."
+                  [(ngModel)]="description"
+                ></textarea>
+              </label>
+            </div>
 
-          @if (canConfigureDays) {
-            <section class="days-config" aria-label="Configuracion de dias del plan">
-              <h2>Configura tus dias</h2>
+            @if (canConfigureDays) {
+              <div class="create-plan-days">
+                <section class="days-config" aria-label="Configuracion de dias del plan">
+                  <h2>Configura tus dias</h2>
 
-              @for (day of configuredDays; track day.label; let index = $index) {
-                <article class="day-block">
-                  <button
-                    type="button"
-                    class="day-toggle"
-                    [attr.aria-expanded]="day.expanded"
-                    (click)="toggleDay(index)"
-                  >
-                    <span class="day-label">{{ day.label }}</span>
-                    <span class="day-arrow" [class.day-arrow-open]="day.expanded" aria-hidden="true"></span>
-                  </button>
+                  @for (day of configuredDays; track day.label; let index = $index) {
+                    <article class="day-block">
+                      <button
+                        type="button"
+                        class="day-toggle"
+                        [attr.aria-expanded]="day.expanded"
+                        (click)="toggleDay(index)"
+                      >
+                        <span class="day-label">{{ day.label }}</span>
+                        <span class="day-arrow" [class.day-arrow-open]="day.expanded" aria-hidden="true"></span>
+                      </button>
 
-                  <input
-                    type="text"
-                    class="day-description-input"
-                    placeholder="Descripción del día (opcional)"
-                    [(ngModel)]="day.descripcion"
-                  />
+                      <input
+                        type="text"
+                        class="day-description-input"
+                        placeholder="Descripción del día (opcional)"
+                        [(ngModel)]="day.descripcion"
+                      />
 
-                  @if (day.expanded) {
-                    <div class="day-fields">
-                      @for (row of day.rows; track $index; let rowIndex = $index) {
-                        <div class="exercise-row">
-                          <label>
-                            Grupo muscular
-                            <select
-                              [(ngModel)]="row.muscleGroupId"
-                              (ngModelChange)="onMuscleGroupChange(index, rowIndex)"
-                            >
-                              <option [ngValue]="null">Seleccionar grupo</option>
-                              @for (group of muscleGroups; track group.id) {
-                                <option [ngValue]="group.id">{{ group.nombre }}</option>
-                              }
-                            </select>
-                          </label>
+                      @if (day.expanded) {
+                        <div class="day-fields">
+                          @for (row of day.rows; track $index; let rowIndex = $index) {
+                            <div class="exercise-row">
+                              <label>
+                                Grupo muscular
+                                <select
+                                  [(ngModel)]="row.muscleGroupId"
+                                  (ngModelChange)="onMuscleGroupChange(index, rowIndex)"
+                                >
+                                  <option [ngValue]="null">Seleccionar grupo</option>
+                                  @for (group of muscleGroups; track group.id) {
+                                    <option [ngValue]="group.id">{{ group.nombre }}</option>
+                                  }
+                                </select>
+                              </label>
 
-                          <label class="exercise-select-with-preview">
-                            Ejercicio
-                            <div class="exercise-select-row">
-                              <select
-                                [(ngModel)]="row.ejercicioId"
-                                [disabled]="!row.muscleGroupId"
-                                (ngModelChange)="onExerciseChange(index, rowIndex)"
+                              <label class="exercise-select-with-preview">
+                                Ejercicio
+                                <div class="exercise-select-row">
+                                  <select
+                                    [(ngModel)]="row.ejercicioId"
+                                    [disabled]="!row.muscleGroupId"
+                                    (ngModelChange)="onExerciseChange(index, rowIndex)"
+                                  >
+                                    <option [ngValue]="null">Seleccionar ejercicio</option>
+                                    @for (ejercicio of getExercisesForGroup(row.muscleGroupId); track ejercicio.id) {
+                                      <option [ngValue]="ejercicio.id">{{ ejercicio.nombre }}</option>
+                                    }
+                                  </select>
+                                  @if (getSelectedExerciseImage(row); as imagenUrl) {
+                                    <app-zoomable-image [src]="imagenUrl" class="exercise-thumb"></app-zoomable-image>
+                                  }
+                                </div>
+                              </label>
+
+                              <label>
+                                Repeticiones
+                                <input type="text" placeholder="Ej: 4x12" [(ngModel)]="row.repeticiones" />
+                              </label>
+
+                              <button
+                                type="button"
+                                class="remove-row-btn"
+                                [disabled]="day.rows.length === 1"
+                                (click)="removeRow(index, rowIndex)"
                               >
-                                <option [ngValue]="null">Seleccionar ejercicio</option>
-                                @for (ejercicio of getExercisesForGroup(row.muscleGroupId); track ejercicio.id) {
-                                  <option [ngValue]="ejercicio.id">{{ ejercicio.nombre }}</option>
-                                }
-                              </select>
-                              @if (getSelectedExerciseImage(row); as imagenUrl) {
-                                <app-zoomable-image [src]="imagenUrl" class="exercise-thumb"></app-zoomable-image>
-                              }
+                                Quitar ejercicio
+                              </button>
                             </div>
-                          </label>
+                          }
 
-                          <label>
-                            Repeticiones
-                            <input type="text" placeholder="Ej: 4x12" [(ngModel)]="row.repeticiones" />
-                          </label>
-
-                          <button
-                            type="button"
-                            class="remove-row-btn"
-                            [disabled]="day.rows.length === 1"
-                            (click)="removeRow(index, rowIndex)"
-                          >
-                            Quitar ejercicio
+                          <button type="button" class="add-row-btn" (click)="addRow(index)">
+                            + Agregar ejercicio
                           </button>
                         </div>
                       }
-
-                      <button type="button" class="add-row-btn" (click)="addRow(index)">
-                        + Agregar ejercicio
-                      </button>
-                    </div>
+                    </article>
                   }
-                </article>
-              }
-            </section>
-          }
+                </section>
 
-          <div class="submit-section">
-            @if (savingStatus) {
-              <span
-                class="saving-status"
-                [class.status-success]="savingStatusType === 'success'"
-                [class.status-error]="savingStatusType === 'error'"
-                role="status"
-                aria-live="polite"
-              >{{ savingStatus }}</span>
+                <div class="submit-section">
+                  @if (savingStatus) {
+                    <span
+                      class="saving-status"
+                      [class.status-success]="savingStatusType === 'success'"
+                      [class.status-error]="savingStatusType === 'error'"
+                      role="status"
+                      aria-live="polite"
+                    >{{ savingStatus }}</span>
+                  }
+                  <button type="button" class="create-submit-btn" [disabled]="isSaving" (click)="savePlan()">
+                    {{ isSaving ? 'Guardando...' : 'Crear plan' }}
+                  </button>
+                </div>
+              </div>
             }
-            <button type="button" class="create-submit-btn" [disabled]="isSaving" (click)="savePlan()">
-              {{ isSaving ? 'Guardando...' : 'Crear plan' }}
-            </button>
           </div>
+
+          @if (!canConfigureDays) {
+            <div class="submit-section">
+              @if (savingStatus) {
+                <span
+                  class="saving-status"
+                  [class.status-success]="savingStatusType === 'success'"
+                  [class.status-error]="savingStatusType === 'error'"
+                  role="status"
+                  aria-live="polite"
+                >{{ savingStatus }}</span>
+              }
+              <button type="button" class="create-submit-btn" [disabled]="isSaving" (click)="savePlan()">
+                {{ isSaving ? 'Guardando...' : 'Crear plan' }}
+              </button>
+            </div>
+          }
         </div>
       </article>
     </section>
