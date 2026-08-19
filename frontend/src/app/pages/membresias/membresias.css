@@ -5,12 +5,8 @@
 }
 
 .members-page {
-  --green: #3985f4;
-  --green-soft: #5ddde4;
-  --text: #e9edf0;
-  --muted: #a7b0b8;
   min-height: 100svh;
-  color: var(--text);
+  color: var(--text-primary);
   font-family: 'Manrope', sans-serif;
 }
 
@@ -46,10 +42,10 @@
 .members-eyebrow {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 0.78rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--green-soft);
+  color: var(--accent);
 }
 
 .members-heading h1 {
@@ -58,17 +54,17 @@
   font-size: clamp(2.1rem, 4vw, 2.9rem);
   line-height: 1.05;
   letter-spacing: 0.01em;
-  color: #eef2f4;
+  color: var(--text-primary);
 }
 
 /* Misma estetica de tarjeta usada en la vista previa del home y en horarios. */
 .panel-card {
   width: min(100%, 500px);
   border-radius: 16px;
-  border: 1px solid rgba(93, 221, 228, 0.28);
+  border: 1px solid var(--accent-border);
   overflow: hidden;
-  background: #0c111c;
-  box-shadow: 0 24px 60px rgba(2, 4, 10, 0.55);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-soft);
   text-align: left;
 }
 
@@ -77,25 +73,25 @@
   align-items: center;
   gap: 0.4rem;
   padding: 0.75rem 1.1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-elevated);
 }
 
 .panel-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: rgba(217, 218, 221, 0.3);
+  background: var(--border-strong);
 }
 
 .panel-card-title {
   margin-left: auto;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 0.78rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--text-secondary);
 }
 
 .panel-card-body {
@@ -111,7 +107,7 @@
   justify-content: space-between;
   gap: 1rem;
   padding-bottom: 0.9rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--border);
 }
 
 .panel-row:last-child {
@@ -121,7 +117,7 @@
 
 .panel-row--loading {
   justify-content: flex-start;
-  color: var(--muted);
+  color: var(--text-secondary);
   font-size: 0.92rem;
 }
 
@@ -133,29 +129,29 @@
 
 .plan-copy span {
   font-family: 'Space Grotesk', sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 1rem;
-  color: #eef2f4;
+  color: var(--text-primary);
 }
 
 .plan-description {
   font-size: 0.78rem;
-  color: var(--muted);
+  color: var(--text-secondary);
   white-space: pre-line;
 }
 
 .panel-row strong {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--green-soft);
+  font-weight: 500;
+  color: var(--accent);
   white-space: nowrap;
 }
 
 .members-note {
   margin: 0;
   font-size: 0.9rem;
-  color: var(--muted);
+  color: var(--text-secondary);
 }
 
 @media (max-width: 900px) {
