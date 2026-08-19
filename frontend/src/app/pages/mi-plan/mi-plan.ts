@@ -337,14 +337,14 @@ export class MiPlan implements OnInit {
 
   private async loadLogoDataUrl(): Promise<string | null> {
     try {
-      const response = await fetch('/images/gympanel-mark.svg');
+      const response = await fetch('/images/gympanel-mark.png');
 
       if (!response.ok) {
         return null;
       }
 
-      const svgText = await response.text();
-      const objectUrl = URL.createObjectURL(new Blob([svgText], { type: 'image/svg+xml' }));
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
 
       try {
         const image = await new Promise<HTMLImageElement>((resolve, reject) => {
