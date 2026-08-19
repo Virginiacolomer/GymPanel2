@@ -31,7 +31,7 @@
 	line-height: 0.85;
 	letter-spacing: 0.04em;
 	text-transform: uppercase;
-	color: #3985f4;
+	color: var(--accent);
 	text-align: center;
 }
 
@@ -39,11 +39,11 @@
 	margin: -0.65rem 0 1.1rem;
 	padding: 0.42rem 0.8rem;
 	border-radius: 10px;
-	border: 1px solid rgba(57, 133, 244, 0.28);
-	background: rgba(21, 22, 28, 0.42);
-	color: #f0f5ff;
+	border: 1px solid var(--accent-border);
+	background: var(--bg-elevated);
+	color: var(--text-primary);
 	font-size: clamp(1.03rem, 2.1vw, 1.2rem);
-	font-weight: 700;
+	font-weight: 500;
 	letter-spacing: 0.01em;
 	text-align: center;
 }
@@ -68,10 +68,10 @@
 	padding: 0;
 	border: 0;
 	background: transparent;
-	color: #3985f4;
+	color: var(--accent);
 	font-family: 'Space Grotesk', sans-serif;
 	font-size: clamp(2rem, 5vw, 2.6rem);
-	font-weight: 700;
+	font-weight: 500;
 	letter-spacing: 0.03em;
 	text-transform: uppercase;
 	cursor: pointer;
@@ -86,7 +86,7 @@
 	width: 30px;
 	height: 22px;
 	border-radius: 8px;
-	background: #0fd9ff;
+	background: var(--accent);
 	box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.12);
 }
 
@@ -99,7 +99,7 @@
 	height: 0;
 	border-left: 5px solid transparent;
 	border-right: 5px solid transparent;
-	border-top: 6px solid #101314;
+	border-top: 6px solid var(--accent-contrast);
 	transform: translate(-50%, -30%);
 	transition: transform 160ms ease;
 }
@@ -112,14 +112,14 @@
 	margin-top: 0.7rem;
 	overflow-x: auto;
 	border-radius: 18px;
-	background: rgba(81, 88, 98, 0.92);
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+	background: var(--bg-card);
+	border: 0.5px solid var(--border);
 }
 
 table {
 	width: 100%;
 	border-collapse: collapse;
-	color: #edf1f3;
+	color: var(--text-primary);
 	font-size: 0.96rem;
 }
 
@@ -130,16 +130,16 @@ td {
 }
 
 thead th {
-	background: rgba(31, 36, 41, 0.44);
+	background: var(--bg-elevated);
 	font-size: 0.87rem;
-	font-weight: 700;
+	font-weight: 500;
 	text-transform: uppercase;
 	letter-spacing: 0.03em;
-	color: #cfd8dc;
+	color: var(--text-muted);
 }
 
 tbody tr:not(:last-child) td {
-	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+	border-bottom: 1px solid var(--border);
 }
 
 tbody td:last-child,
@@ -155,18 +155,18 @@ td input {
 	outline: 0;
 	padding: 0.6rem 0.72rem;
 	border-radius: 10px;
-	background: rgba(213, 220, 224, 0.2);
-	color: #f3f5f6;
+	background: var(--bg-input);
+	color: var(--text-primary);
 	font-size: 0.93rem;
 	font-family: 'Manrope', sans-serif;
 }
 
 td input::placeholder {
-	color: rgba(243, 245, 246, 0.76);
+	color: var(--text-secondary);
 }
 
 td input:focus {
-	box-shadow: 0 0 0 2px rgba(57, 133, 244, 0.35);
+	box-shadow: 0 0 0 2px var(--accent-border);
 }
 
 .confirm-btn {
@@ -176,19 +176,19 @@ td input:focus {
 	margin-top: 2rem;
 	padding: 0.72rem 1.35rem;
 	border-radius: 3px 14px 3px 14px;
-	background: #0043a3;
-	color: #eef2f7;
+	background: var(--accent);
+	color: var(--accent-contrast);
+	box-shadow: var(--accent-glow);
 	font-family: 'Manrope', sans-serif;
 	font-size: 0.95rem;
-	font-weight: 700;
+	font-weight: 500;
 	text-transform: uppercase;
 	text-decoration: underline;
-	transition: transform 170ms ease, box-shadow 170ms ease;
+	transition: transform 170ms ease;
 }
 
 .confirm-btn:hover {
 	transform: translateY(-2px);
-	box-shadow: 0 10px 24px rgba(67, 147, 255, 0.24);
 }
 
 .sr-only {

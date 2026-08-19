@@ -31,7 +31,7 @@
 	line-height: 0.85;
 	letter-spacing: 0.04em;
 	text-transform: uppercase;
-	color: #3985f4;
+	color: var(--accent);
 	text-align: center;
 }
 
@@ -39,11 +39,11 @@
 	margin: -0.65rem 0 1.1rem;
 	padding: 0.42rem 0.8rem;
 	border-radius: 10px;
-	border: 1px solid rgba(57, 133, 244, 0.28);
-	background: rgba(21, 22, 28, 0.42);
-	color: #f0f5ff;
+	border: 1px solid var(--accent-border);
+	background: var(--bg-elevated);
+	color: var(--text-primary);
 	font-size: clamp(1.03rem, 2.1vw, 1.2rem);
-	font-weight: 700;
+	font-weight: 500;
 	letter-spacing: 0.01em;
 	text-align: center;
 }
@@ -68,10 +68,10 @@
 	padding: 0;
 	border: 0;
 	background: transparent;
-	color: #3985f4;
+	color: var(--accent);
 	font-family: 'Space Grotesk', sans-serif;
 	font-size: clamp(2rem, 5vw, 2.6rem);
-	font-weight: 700;
+	font-weight: 500;
 	letter-spacing: 0.03em;
 	text-transform: uppercase;
 	cursor: pointer;
@@ -87,7 +87,7 @@
 	font-weight: 500;
 	text-transform: none;
 	letter-spacing: 0;
-	color: #d7e0e4;
+	color: var(--text-secondary);
 	line-height: 1.35;
 }
 
@@ -96,7 +96,7 @@
 	width: 30px;
 	height: 22px;
 	border-radius: 8px;
-	background: #0fd9ff;
+	background: var(--accent);
 	box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.12);
 }
 
@@ -109,7 +109,7 @@
 	height: 0;
 	border-left: 5px solid transparent;
 	border-right: 5px solid transparent;
-	border-top: 6px solid #101314;
+	border-top: 6px solid var(--accent-contrast);
 	transform: translate(-50%, -30%);
 	transition: transform 160ms ease;
 }
@@ -122,14 +122,14 @@
 	margin-top: 0.7rem;
 	overflow-x: hidden;
 	border-radius: 18px;
-	background: rgba(81, 88, 98, 0.92);
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+	background: var(--bg-card);
+	border: 0.5px solid var(--border);
 }
 
 table {
 	width: 100%;
 	border-collapse: collapse;
-	color: #edf1f3;
+	color: var(--text-primary);
 	font-size: 0.96rem;
 	table-layout: fixed;
 }
@@ -143,16 +143,16 @@ td {
 }
 
 thead th {
-	background: rgba(31, 36, 41, 0.44);
+	background: var(--bg-elevated);
 	font-size: 0.87rem;
-	font-weight: 700;
+	font-weight: 500;
 	text-transform: uppercase;
 	letter-spacing: 0.03em;
-	color: #cfd8dc;
+	color: var(--text-muted);
 }
 
 tbody tr:not(:last-child) td {
-	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+	border-bottom: 1px solid var(--border);
 }
 
 tbody td:last-child,
@@ -176,13 +176,13 @@ thead th:last-child {
 	gap: 0.55rem;
 	margin-top: 2rem;
 	padding: 0.6rem 1rem;
-	border: 0;
+	border: 0.5px solid var(--border-strong);
 	border-radius: 3px 14px 3px 14px;
-	background: #5e646d;
-	color: #f1f3f4;
+	background: transparent;
+	color: var(--text-primary);
 	font-family: 'Manrope', sans-serif;
 	font-size: 0.95rem;
-	font-weight: 700;
+	font-weight: 500;
 	text-transform: uppercase;
 	cursor: pointer;
 }
@@ -191,25 +191,24 @@ thead th:last-child {
 .workload-input {
 	width: 100%;
 	padding: 0.5rem 0.65rem;
-	border: 1px solid rgba(255, 255, 255, 0.15);
+	border: 1px solid var(--border-strong);
 	border-radius: 6px;
-	background: rgba(31, 36, 41, 0.6);
-	color: #f1f3f4;
+	background: var(--bg-input);
+	color: var(--text-primary);
 	font-family: 'Manrope', sans-serif;
 	font-size: 0.96rem;
 	outline: 0;
-	transition: background-color 140ms ease, border-color 140ms ease;
+	transition: border-color 140ms ease;
 }
 
 .exercise-input:focus,
 .workload-input:focus {
-	background: rgba(31, 36, 41, 0.9);
-	border-color: rgba(255, 255, 255, 0.3);
+	border-color: var(--accent-border);
 }
 
 .exercise-input::placeholder,
 .workload-input::placeholder {
-	color: rgba(207, 216, 220, 0.5);
+	color: var(--text-muted);
 }
 
 .exercise-name-cell {
@@ -229,16 +228,16 @@ thead th:last-child {
 	width: 100%;
 	padding: 1rem;
 	border-radius: 16px;
-	background: rgba(81, 88, 98, 0.6);
-	border: 1px solid rgba(255, 255, 255, 0.1);
+	background: var(--bg-card);
+	border: 0.5px solid var(--border);
 }
 
 .assign-db-label {
 	display: block;
 	margin-bottom: 0.75rem;
-	color: #cfd8dc;
+	color: var(--text-muted);
 	font-size: 0.92rem;
-	font-weight: 600;
+	font-weight: 500;
 	text-transform: uppercase;
 	letter-spacing: 0.02em;
 }
@@ -252,10 +251,10 @@ thead th:last-child {
 
 .assign-db-select {
 	padding: 0.65rem 0.75rem;
-	border: 1px solid rgba(255, 255, 255, 0.15);
+	border: 1px solid var(--border-strong);
 	border-radius: 8px;
-	background: rgba(31, 36, 41, 0.7);
-	color: #f1f3f4;
+	background: var(--bg-input);
+	color: var(--text-primary);
 	font-family: 'Manrope', sans-serif;
 	font-size: 0.95rem;
 	cursor: pointer;
@@ -263,13 +262,12 @@ thead th:last-child {
 }
 
 .assign-db-select:focus {
-	border-color: rgba(255, 255, 255, 0.3);
-	background: rgba(31, 36, 41, 0.9);
+	border-color: var(--accent-border);
 }
 
 .assign-db-select option {
-	background: #1f242a;
-	color: #f1f3f4;
+	background: var(--bg-elevated);
+	color: var(--text-primary);
 }
 
 .assign-db-btn {
@@ -278,13 +276,13 @@ thead th:last-child {
 	justify-content: center;
 	gap: 0.5rem;
 	padding: 0.6rem 1rem;
-	border: 0;
+	border: 0.5px solid var(--accent-border);
 	border-radius: 3px 14px 3px 14px;
-	background: #41d2d3;
-	color: #0c111c;
+	background: transparent;
+	color: var(--accent);
 	font-family: 'Manrope', sans-serif;
 	font-size: 0.92rem;
-	font-weight: 700;
+	font-weight: 500;
 	text-transform: uppercase;
 	cursor: pointer;
 	transition: filter 140ms ease, opacity 140ms ease;
@@ -303,16 +301,16 @@ thead th:last-child {
 	width: 100%;
 	padding: 1rem;
 	border-radius: 16px;
-	background: rgba(81, 88, 98, 0.6);
-	border: 1px solid rgba(255, 255, 255, 0.1);
+	background: var(--bg-card);
+	border: 0.5px solid var(--border);
 }
 
 .plans-label {
 	display: block;
 	margin-bottom: 0.75rem;
-	color: #cfd8dc;
+	color: var(--text-muted);
 	font-size: 0.92rem;
-	font-weight: 600;
+	font-weight: 500;
 	text-transform: uppercase;
 	letter-spacing: 0.02em;
 }
@@ -326,10 +324,10 @@ thead th:last-child {
 
 .plans-select {
 	padding: 0.65rem 0.75rem;
-	border: 1px solid rgba(255, 255, 255, 0.15);
+	border: 1px solid var(--border-strong);
 	border-radius: 8px;
-	background: rgba(31, 36, 41, 0.7);
-	color: #f1f3f4;
+	background: var(--bg-input);
+	color: var(--text-primary);
 	font-family: 'Manrope', sans-serif;
 	font-size: 0.95rem;
 	cursor: pointer;
@@ -337,13 +335,12 @@ thead th:last-child {
 }
 
 .plans-select:focus {
-	border-color: rgba(255, 255, 255, 0.3);
-	background: rgba(31, 36, 41, 0.9);
+	border-color: var(--accent-border);
 }
 
 .plans-select option {
-	background: #1f242a;
-	color: #f1f3f4;
+	background: var(--bg-elevated);
+	color: var(--text-primary);
 }
 
 .assign-plan-btn {
@@ -352,13 +349,13 @@ thead th:last-child {
 	justify-content: center;
 	gap: 0.5rem;
 	padding: 0.6rem 1rem;
-	border: 0;
+	border: 0.5px solid var(--accent-border);
 	border-radius: 3px 14px 3px 14px;
-	background: #41d2d3;
-	color: #0c111c;
+	background: transparent;
+	color: var(--accent);
 	font-family: 'Manrope', sans-serif;
 	font-size: 0.92rem;
-	font-weight: 700;
+	font-weight: 500;
 	text-transform: uppercase;
 	cursor: pointer;
 	transition: filter 140ms ease, opacity 140ms ease;
@@ -379,13 +376,13 @@ thead th:last-child {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	border: 0;
+	border: 0.5px solid var(--danger-border);
 	border-radius: 3px 14px 3px 14px;
-	background: #e34d4d;
-	color: #fff7f7;
+	background: var(--danger-dim);
+	color: var(--danger);
 	font-family: 'Manrope', sans-serif;
 	font-size: 1.1rem;
-	font-weight: 800;
+	font-weight: 500;
 	line-height: 1;
 	cursor: pointer;
 	transition: filter 140ms ease;
@@ -401,13 +398,13 @@ thead th:last-child {
 	align-items: center;
 	justify-content: center;
 	padding: 0.55rem 0.9rem;
-	border: 0;
+	border: 0.5px solid var(--accent-border);
 	border-radius: 3px 14px 3px 14px;
-	background: #5ddde4;
-	color: #0c111c;
+	background: transparent;
+	color: var(--accent);
 	font-family: 'Manrope', sans-serif;
 	font-size: 0.88rem;
-	font-weight: 700;
+	font-weight: 500;
 	text-transform: uppercase;
 	cursor: pointer;
 	transition: filter 140ms ease;
@@ -439,18 +436,19 @@ thead th:last-child {
 	padding: 0.6rem 1rem;
 	border: 0;
 	border-radius: 3px 14px 3px 14px;
-	color: #f1f3f4;
+	color: var(--text-primary);
 	font-family: 'Manrope', sans-serif;
 	font-size: 0.95rem;
-	font-weight: 700;
+	font-weight: 500;
 	text-transform: uppercase;
 	cursor: pointer;
 	transition: filter 140ms ease;
 }
 
 .edit-btn {
-	background: #5ddde4;
-	color: #0c111c;
+	background: var(--accent);
+	color: var(--accent-contrast);
+	box-shadow: var(--accent-glow);
 }
 
 .edit-btn:hover {
@@ -458,8 +456,9 @@ thead th:last-child {
 }
 
 .save-btn {
-	background: #3985f4;
-	color: #0c111c;
+	background: var(--accent);
+	color: var(--accent-contrast);
+	box-shadow: var(--accent-glow);
 }
 
 .save-btn:hover {
@@ -467,8 +466,9 @@ thead th:last-child {
 }
 
 .cancel-btn {
-	background: #5e646d;
-	color: #f1f3f4;
+	background: transparent;
+	border: 0.5px solid var(--border-strong);
+	color: var(--text-primary);
 }
 
 .cancel-btn:hover {
@@ -476,7 +476,8 @@ thead th:last-child {
 }
 
 .download-btn {
-	background: #5e646d;
+	background: transparent;
+	border: 0.5px solid var(--border-strong);
 }
 
 .download-btn:hover {
@@ -488,7 +489,7 @@ thead th:last-child {
 	width: 20px;
 	height: 20px;
 	border-radius: 50%;
-	background: #8f949b;
+	background: currentColor;
 }
 
 .download-icon::before,
@@ -497,7 +498,7 @@ thead th:last-child {
 	position: absolute;
 	left: 50%;
 	transform: translateX(-50%);
-	background: #4e545b;
+	background: var(--bg-app);
 }
 
 .download-icon::before {
