@@ -26,6 +26,7 @@ import { SuperadminLogin } from './pages/superadmin-login/superadmin-login';
 import { SuperadminPanel } from './pages/superadmin-panel/superadmin-panel';
 import { authGuard } from './core/guards/auth.guard';
 import { publicGuard } from './core/guards/public.guard';
+import { featureGuard } from './core/guards/feature.guard';
 
 // Configuracion de rutas de toda la aplicacion.
 export const routes: Routes = [
@@ -42,19 +43,76 @@ export const routes: Routes = [
 	// Ruta exclusiva para SUPERADMIN.
 	{ path: 'superadmin/panel', component: SuperadminPanel, canActivate: [authGuard], data: { role: 'SUPERADMIN' } },
 
-	// Rutas exclusivas para ADMIN.
+	// Rutas exclusivas para ADMIN. Ademas del rol, cada funcionalidad valida
+	// contra el backend que el plan del gimnasio la incluya (featureGuard),
+	// asi que escribir la URL a mano no alcanza para saltear el plan pagado.
 	{ path: 'menu-admin', component: MenuAdmin, canActivate: [authGuard], data: { role: 'ADMIN' } },
-	{ path: 'gestion-usuarios', component: GestionUsuarios, canActivate: [authGuard], data: { role: 'ADMIN' } },
-	{ path: 'alta-usuarios', component: AltaUsuarios, canActivate: [authGuard], data: { role: 'ADMIN' } },
-	{ path: 'gestion-membresias', component: GestionMembresias, canActivate: [authGuard], data: { role: 'ADMIN' } },
-	{ path: 'asignar-plan', component: AsignarPlan, canActivate: [authGuard], data: { role: 'ADMIN' } },
-	{ path: 'crear-plan', component: CrearPlan, canActivate: [authGuard], data: { role: 'ADMIN' } },
-	{ path: 'crear-ejercicios', component: CrearEjercicios, canActivate: [authGuard], data: { role: 'ADMIN' } },
-	{ path: 'editar-plan', component: EditarPlan, canActivate: [authGuard], data: { role: 'ADMIN' } },
-	{ path: 'ver-plan', component: VerPlan, canActivate: [authGuard], data: { role: 'ADMIN' } },
-	{ path: 'reporte', component: Reporte, canActivate: [authGuard], data: { role: 'ADMIN' } },
-	{ path: 'datos-gimnasio', component: DatosGimnasio, canActivate: [authGuard], data: { role: 'ADMIN' } },
-	{ path: 'gestion-horarios', component: GestionHorarios, canActivate: [authGuard], data: { role: 'ADMIN' } },
+	{
+		path: 'gestion-usuarios',
+		component: GestionUsuarios,
+		canActivate: [authGuard, featureGuard],
+		data: { role: 'ADMIN', feature: 'gestion_usuarios' },
+	},
+	{
+		path: 'alta-usuarios',
+		component: AltaUsuarios,
+		canActivate: [authGuard, featureGuard],
+		data: { role: 'ADMIN', feature: 'alta_usuarios' },
+	},
+	{
+		path: 'gestion-membresias',
+		component: GestionMembresias,
+		canActivate: [authGuard, featureGuard],
+		data: { role: 'ADMIN', feature: 'gestion_membresias' },
+	},
+	{
+		path: 'asignar-plan',
+		component: AsignarPlan,
+		canActivate: [authGuard, featureGuard],
+		data: { role: 'ADMIN', feature: 'asignacion_planes' },
+	},
+	{
+		path: 'crear-plan',
+		component: CrearPlan,
+		canActivate: [authGuard, featureGuard],
+		data: { role: 'ADMIN', feature: 'creacion_planes' },
+	},
+	{
+		path: 'crear-ejercicios',
+		component: CrearEjercicios,
+		canActivate: [authGuard, featureGuard],
+		data: { role: 'ADMIN', feature: 'catalogo_ejercicios' },
+	},
+	{
+		path: 'editar-plan',
+		component: EditarPlan,
+		canActivate: [authGuard, featureGuard],
+		data: { role: 'ADMIN', feature: 'asignacion_planes' },
+	},
+	{
+		path: 'ver-plan',
+		component: VerPlan,
+		canActivate: [authGuard, featureGuard],
+		data: { role: 'ADMIN', feature: 'asignacion_planes' },
+	},
+	{
+		path: 'reporte',
+		component: Reporte,
+		canActivate: [authGuard, featureGuard],
+		data: { role: 'ADMIN', feature: 'reporte_ingresos' },
+	},
+	{
+		path: 'datos-gimnasio',
+		component: DatosGimnasio,
+		canActivate: [authGuard, featureGuard],
+		data: { role: 'ADMIN', feature: 'datos_y_horarios' },
+	},
+	{
+		path: 'gestion-horarios',
+		component: GestionHorarios,
+		canActivate: [authGuard, featureGuard],
+		data: { role: 'ADMIN', feature: 'datos_y_horarios' },
+	},
 
 	// Rutas exclusivas para CLIENTE.
 	{ path: 'menu-cliente', component: MenuCliente, canActivate: [authGuard], data: { role: 'CLIENTE' } },
