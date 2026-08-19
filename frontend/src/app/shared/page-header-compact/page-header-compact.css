@@ -34,7 +34,7 @@
   justify-content: center;
   width: 30px;
   height: 30px;
-  color: #3985f4;
+  color: var(--accent);
   font-size: 1.45rem;
   text-decoration: none;
 }
@@ -59,14 +59,14 @@
   font-size: clamp(2.25rem, 4.1vw, 4rem);
   line-height: 0.76;
   letter-spacing: 0.02em;
-  font-weight: 700;
-  color: #eef2f4;
+  font-weight: 500;
+  color: var(--text-primary);
   white-space: nowrap;
   min-width: 0;
 }
 
 .compact-text span {
-  color: #3985f4;
+  color: var(--accent);
 }
 
 @media (max-width: 720px) {

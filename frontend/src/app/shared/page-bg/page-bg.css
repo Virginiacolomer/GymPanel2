@@ -5,11 +5,11 @@
   position: relative;
   min-height: 100svh;
   background:
-    linear-gradient(128deg, rgba(57, 133, 244, 0.16) 0%, rgba(6, 8, 14, 0) 38%),
-    repeating-linear-gradient(0deg, rgba(120, 160, 230, 0.05) 0 1px, transparent 1px 42px),
-    repeating-linear-gradient(90deg, rgba(120, 160, 230, 0.05) 0 1px, transparent 1px 42px),
-    #05070c;
-  color: #e9edf0;
+    linear-gradient(128deg, var(--accent-dim) 0%, transparent 38%),
+    repeating-linear-gradient(0deg, var(--accent-grid) 0 1px, transparent 1px 42px),
+    repeating-linear-gradient(90deg, var(--accent-grid) 0 1px, transparent 1px 42px),
+    var(--bg-app);
+  color: var(--text-primary);
   font-family: 'Manrope', sans-serif;
 }
 
@@ -22,7 +22,7 @@
   width: 52vw;
   min-width: 360px;
   aspect-ratio: 2.4;
-  background: linear-gradient(90deg, rgba(57, 133, 244, 0.5) 0%, rgba(57, 133, 244, 0) 100%);
+  background: linear-gradient(90deg, var(--accent-border) 0%, transparent 100%);
   filter: blur(60px);
   opacity: 0.5;
 }
@@ -37,5 +37,5 @@
   right: -18%;
   bottom: -16%;
   transform: rotate(-10deg) scaleX(-1);
-  background: linear-gradient(90deg, rgba(93, 221, 228, 0.45) 0%, rgba(93, 221, 228, 0) 100%);
+  background: linear-gradient(90deg, var(--accent-border) 0%, transparent 100%);
 }

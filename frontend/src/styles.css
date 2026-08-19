@@ -6,9 +6,50 @@
 
 /* You can add global styles to this file, and also import other style files */
 
+:root {
+  /* Superficies */
+  --bg-app: #0A0A12;
+  --bg-card: #14141F;
+  --bg-elevated: #1B1B28;
+  --bg-input: #1B1B28;
+
+  /* Bordes */
+  --border: rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(255, 255, 255, 0.12);
+
+  /* Texto */
+  --text-primary: #F2F4FF;
+  --text-secondary: #7E86A8;
+  --text-muted: #5E668A;
+
+  /* Acento */
+  --accent: #00E5FF;
+  --accent-contrast: #04222B;
+  --accent-dim: rgba(0, 229, 255, 0.14);
+  --accent-border: rgba(0, 229, 255, 0.38);
+  --accent-glow: 0 0 18px rgba(0, 229, 255, 0.55);
+  --accent-grid: rgba(0, 229, 255, 0.045);
+
+  /* Estados */
+  --success: #3DFFB0;
+  --success-dim: rgba(61, 255, 176, 0.12);
+  --success-border: rgba(61, 255, 176, 0.38);
+  --warning: #FFC93D;
+  --danger: #FF2E97;
+  --danger-dim: rgba(255, 46, 151, 0.12);
+  --danger-border: rgba(255, 46, 151, 0.42);
+
+  /* Sombras y radios */
+  --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --radius-card: 12px;
+  --radius-pill: 20px;
+}
+
 /* Reset del margen por defecto del navegador: sin esto, body suma 16px
    (8px arriba + 8px abajo) que rompen cualquier layout pensado a 100vh/100svh. */
 html,
 body {
   margin: 0;
+  background: var(--bg-app);
+  color: var(--text-primary);
 }

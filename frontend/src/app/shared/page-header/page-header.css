@@ -26,7 +26,7 @@
   justify-content: center;
   width: 28px;
   height: 28px;
-  color: #3985f4;
+  color: var(--accent);
   font-size: 1.4rem;
   text-decoration: none;
 }
@@ -50,13 +50,13 @@
   font-size: clamp(2.05rem, 3.7vw, 3.05rem);
   line-height: 0.76;
   letter-spacing: 0.025em;
-  font-weight: 700;
-  color: #eef2f4;
+  font-weight: 500;
+  color: var(--text-primary);
   white-space: nowrap;
 }
 
 .brand-text span {
-  color: #3985f4;
+  color: var(--accent);
 }
 
 .actions {
@@ -71,7 +71,7 @@
   min-width: 112px;
   padding: 0.58rem 1.1rem;
   border-radius: 3px 14px 3px 14px;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 0.9rem;
   color: inherit;
   text-decoration: none;
@@ -84,13 +84,17 @@
 }
 
 .btn-primary {
-  color: #050d23;
-  background: #3985f4;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  box-shadow: var(--accent-glow);
+  border: none;
 }
 
 .btn-light {
-  color: #24262b;
-  background: #d3d5d8;
+  background: transparent;
+  color: var(--text-primary);
+  border: 0.5px solid var(--border-strong);
+  box-shadow: none;
 }
 
 @media (max-width: 720px) {
