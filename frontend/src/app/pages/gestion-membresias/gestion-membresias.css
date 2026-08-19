@@ -29,16 +29,16 @@
 	line-height: 0.85;
 	letter-spacing: 0.04em;
 	text-transform: uppercase;
-	color: #3985f4;
+	color: var(--accent);
 	text-align: center;
 }
 
 .memberships-panel {
 	width: 100%;
-	background: #8f959c;
+	background: var(--bg-card);
+	border: 0.5px solid var(--border);
 	border-radius: 24px;
 	padding: 0.56rem 0.62rem 0.8rem;
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
 	overflow: hidden;
 }
 
@@ -52,8 +52,8 @@
 	margin: 0 0 0.9rem;
 	padding: 0.7rem 0.9rem;
 	border-radius: 14px;
-	background: rgba(56, 66, 75, 0.78);
-	color: #eef3f6;
+	background: var(--bg-elevated);
+	color: var(--text-primary);
 	font-family: 'Manrope', sans-serif;
 	font-size: 0.95rem;
 	font-weight: 500;
@@ -62,20 +62,20 @@
 table {
 	width: 100%;
 	border-collapse: collapse;
-	color: #191c20;
+	color: var(--text-primary);
 	table-layout: fixed;
 }
 
 thead th {
 	padding: 0.42rem 0.32rem;
-	background: #4f5660;
+	background: var(--bg-elevated);
 	font-family: 'Space Grotesk', sans-serif;
 	font-size: 1.55rem;
 	line-height: 0.9;
 	text-transform: uppercase;
 	letter-spacing: 0.01em;
 	text-align: left;
-	color: #d8dde1;
+	color: var(--text-muted);
 }
 
 thead th:first-child {
@@ -96,7 +96,7 @@ tbody td {
 	font-size: 1.42rem;
 	line-height: 0.9;
 	letter-spacing: 0.01em;
-	border-bottom: 1px solid rgba(239, 242, 244, 0.36);
+	border-bottom: 1px solid var(--border);
 	vertical-align: middle;
 	overflow-wrap: anywhere;
 }
@@ -132,7 +132,7 @@ tbody td:nth-child(6) {
 }
 
 .editing-row td {
-	background: rgba(222, 228, 233, 0.18);
+	background: var(--accent-dim);
 }
 
 tbody tr:last-child td {
@@ -153,10 +153,10 @@ tbody tr:last-child td {
 .cost-input {
 	width: 78px;
 	padding: 0.08rem 0.28rem;
-	border: 1px solid rgba(46, 53, 60, 0.58);
+	border: 1px solid var(--border-strong);
 	border-radius: 8px;
-	background: #dce1e5;
-	color: #1d2125;
+	background: var(--bg-input);
+	color: var(--text-primary);
 	font-family: 'Space Grotesk', sans-serif;
 	font-size: 1.28rem;
 	line-height: 1;
@@ -167,10 +167,10 @@ tbody tr:last-child td {
 .name-input {
 	width: 100%;
 	padding: 0.2rem 0.34rem;
-	border: 1px solid rgba(46, 53, 60, 0.58);
+	border: 1px solid var(--border-strong);
 	border-radius: 8px;
-	background: #dce1e5;
-	color: #1d2125;
+	background: var(--bg-input);
+	color: var(--text-primary);
 	font-family: 'Manrope', sans-serif;
 	font-size: 0.95rem;
 	font-weight: 500;
@@ -182,10 +182,10 @@ tbody tr:last-child td {
 .description-input {
 	width: 100%;
 	padding: 0.2rem 0.34rem;
-	border: 1px solid rgba(46, 53, 60, 0.58);
+	border: 1px solid var(--border-strong);
 	border-radius: 8px;
-	background: #dce1e5;
-	color: #1d2125;
+	background: var(--bg-input);
+	color: var(--text-primary);
 	font-family: 'Manrope', sans-serif;
 	font-size: 0.92rem;
 	font-weight: 500;
@@ -197,7 +197,7 @@ tbody tr:last-child td {
 }
 
 .description-input::placeholder {
-	color: rgba(29, 33, 37, 0.6);
+	color: var(--text-secondary);
 	font-weight: 400;
 }
 
@@ -214,7 +214,7 @@ tbody tr:last-child td {
 }
 
 .name-input::placeholder {
-	color: rgba(29, 33, 37, 0.6);
+	color: var(--text-secondary);
 	font-weight: 400;
 }
 
@@ -232,10 +232,10 @@ tbody tr:last-child td {
 .days-input {
 	width: 54px;
 	padding: 0.08rem 0.28rem;
-	border: 1px solid rgba(46, 53, 60, 0.58);
+	border: 1px solid var(--border-strong);
 	border-radius: 8px;
-	background: #dce1e5;
-	color: #1d2125;
+	background: var(--bg-input);
+	color: var(--text-primary);
 	font-family: 'Space Grotesk', sans-serif;
 	font-size: 1.28rem;
 	line-height: 1;
@@ -252,7 +252,7 @@ tbody tr:last-child td {
 	padding: 0;
 	border: 0;
 	background: transparent;
-	color: #22282e;
+	color: var(--text-secondary);
 	cursor: pointer;
 }
 
@@ -288,17 +288,16 @@ tbody tr:last-child td {
 	padding: 0.3rem 0.56rem;
 	font-family: 'Manrope', sans-serif;
 	font-size: 0.74rem;
-	font-weight: 700;
+	font-weight: 500;
 	line-height: 1;
 	text-transform: uppercase;
 	cursor: pointer;
 	transition: filter 140ms ease;
 	border-radius: 4px 18px 4px 4px;
-	background: linear-gradient(180deg, rgba(57, 133, 244, 0.32) 0%, rgba(28, 79, 214, 0.24) 100%);
-	border: 1px solid rgba(93, 221, 228, 0.45);
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -12px 18px -10px rgba(57, 133, 244, 0.25);
-	backdrop-filter: blur(6px);
-	color: #eaf3ff;
+	background: var(--accent);
+	border: none;
+	box-shadow: var(--accent-glow);
+	color: var(--accent-contrast);
 }
 
 .save-button:disabled,
@@ -311,7 +310,6 @@ tbody tr:last-child td {
 
 .save-button:hover {
 	filter: brightness(1.06);
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24), 0 0 22px rgba(57, 133, 244, 0.45);
 }
 
 .save-button svg {
@@ -322,26 +320,26 @@ tbody tr:last-child td {
 
 .cancel-button {
 	padding: 0.3rem 0.56rem;
-	border: 0;
+	border: 0.5px solid var(--border-strong);
 	border-radius: 10px;
-	background: #5d6670;
-	color: #eef3f6;
+	background: transparent;
+	color: var(--text-primary);
 	font-family: 'Manrope', sans-serif;
 	font-size: 0.74rem;
-	font-weight: 700;
+	font-weight: 500;
 	text-transform: uppercase;
 	cursor: pointer;
 }
 
 .delete-button {
 	padding: 0.3rem 0.56rem;
-	border: 0;
+	border: 0.5px solid var(--danger-border);
 	border-radius: 10px;
-	background: #8c2f36;
-	color: #fff4f4;
+	background: var(--danger-dim);
+	color: var(--danger);
 	font-family: 'Manrope', sans-serif;
 	font-size: 0.74rem;
-	font-weight: 700;
+	font-weight: 500;
 	text-transform: uppercase;
 	cursor: pointer;
 	transition: filter 140ms ease;
@@ -366,21 +364,18 @@ tbody tr:last-child td {
 	padding: 0.5rem 1rem;
 	font-family: 'Manrope', sans-serif;
 	font-size: 0.95rem;
-	font-weight: 700;
+	font-weight: 500;
 	text-transform: uppercase;
 	cursor: pointer;
 	transition: filter 140ms ease;
 	border-radius: 4px 18px 4px 4px;
-	background: linear-gradient(180deg, rgba(57, 133, 244, 0.32) 0%, rgba(28, 79, 214, 0.24) 100%);
-	border: 1px solid rgba(93, 221, 228, 0.45);
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -12px 18px -10px rgba(57, 133, 244, 0.25);
-	backdrop-filter: blur(6px);
-	color: #eaf3ff;
+	background: transparent;
+	border: 0.5px solid var(--accent-border);
+	color: var(--accent);
 }
 
 .add-membership-btn:hover {
-	filter: brightness(1.04);
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24), 0 0 22px rgba(57, 133, 244, 0.45);
+	filter: brightness(1.2);
 }
 
 .add-membership-btn .fi {
