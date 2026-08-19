@@ -15,26 +15,33 @@ export class MenuAdmin implements OnInit {
   private readonly gimnasioApiService = inject(GimnasioApiService);
   private readonly cdr = inject(ChangeDetectorRef);
 
-  // null mientras carga: por defecto no se pinta nada en gris hasta saber
-  // realmente que funcionalidades tiene habilitadas el gimnasio.
+  // null mientras no sepamos con certeza que funcionalidades tiene el
+  // gimnasio (cargando o si fallo la carga): por defecto TODO queda
+  // bloqueado, nunca habilitado, para que no haya una ventana donde se
+  // pueda entrar a una pantalla que en realidad no esta pagada.
   private funcionalidades: string[] | null = null;
+  loadError = false;
 
   ngOnInit(): void {
+    this.loadFuncionalidades();
+  }
+
+  loadFuncionalidades(): void {
+    this.loadError = false;
     this.gimnasioApiService.getMiGimnasio().subscribe({
       next: (contacto) => {
         this.funcionalidades = contacto.funcionalidades;
         this.cdr.markForCheck();
       },
       error: () => {
-        // Si falla la carga, no bloqueamos el menu: se comporta como si
-        // todo estuviera habilitado (el backend igual lo va a validar).
         this.funcionalidades = null;
+        this.loadError = true;
         this.cdr.markForCheck();
       },
     });
   }
 
   hasFeature(feature: string): boolean {
-    return this.funcionalidades === null || this.funcionalidades.includes(feature);
+    return this.funcionalidades !== null && this.funcionalidades.includes(feature);
   }
 }
