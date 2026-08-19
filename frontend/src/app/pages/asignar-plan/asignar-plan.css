@@ -29,25 +29,25 @@
 	line-height: 0.85;
 	letter-spacing: 0.04em;
 	text-transform: uppercase;
-	color: #3985f4;
+	color: var(--accent);
 }
 
 .assign-panel {
 	width: 100%;
-	background: #959aa0;
+	background: var(--bg-card);
+	border: 0.5px solid var(--border);
 	border-radius: 24px;
 	padding: 0.65rem 0.8rem 0.9rem;
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .status-message {
 	margin: 0 0 0.6rem;
 	padding: 0.55rem 0.7rem;
 	border-radius: 10px;
-	background: rgba(49, 56, 63, 0.5);
-	color: #f1f5f8;
+	background: var(--bg-elevated);
+	color: var(--text-primary);
 	font-size: 0.9rem;
-	font-weight: 600;
+	font-weight: 500;
 	font-family: 'Manrope', sans-serif;
 }
 
@@ -64,16 +64,16 @@
 	outline: 0;
 	border-radius: 10px;
 	padding: 0.95rem 2.9rem 0.95rem 1.1rem;
-	background: #b6babf;
-	color: #f4f5f6;
+	background: var(--bg-input);
+	color: var(--text-primary);
 	font-size: 0.98rem;
-	font-weight: 700;
+	font-weight: 500;
 	font-style: italic;
 	text-transform: uppercase;
 }
 
 .filter-box input::placeholder {
-	color: rgba(244, 245, 246, 0.92);
+	color: var(--text-secondary);
 }
 
 .filter-box .fi {
@@ -82,7 +82,7 @@
 	top: 50%;
 	transform: translateY(-50%);
 	font-size: 1.25rem;
-	color: #2f3134;
+	color: var(--text-secondary);
 }
 
 .table-wrap {
@@ -90,13 +90,14 @@
 	overflow-y: auto;
 	overflow-x: auto;
 	border-radius: 16px;
+	background: var(--bg-elevated);
 }
 
 table {
 	width: 100%;
 	border-collapse: collapse;
 	min-width: 740px;
-	color: #1f2225;
+	color: var(--text-primary);
 }
 
 thead th {
@@ -104,13 +105,13 @@ thead th {
 	top: 0;
 	z-index: 1;
 	padding: 0.6rem 0.7rem;
-	background: #545b65;
+	background: var(--bg-elevated);
 	font-size: 1.93rem;
 	font-family: 'Space Grotesk', sans-serif;
 	line-height: 0.9;
 	letter-spacing: 0.02em;
 	text-transform: uppercase;
-	color: #e3e7ea;
+	color: var(--text-muted);
 }
 
 thead th:first-child {
@@ -127,7 +128,7 @@ tbody td {
 	font-family: 'Space Grotesk', sans-serif;
 	line-height: 1;
 	letter-spacing: 0.01em;
-	border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+	border-bottom: 1px solid var(--border);
 }
 
 tbody td:last-child,
@@ -151,37 +152,30 @@ tbody tr:last-child td {
 	justify-content: center;
 	min-width: 76px;
 	padding: 0.3rem 0.72rem;
-	
 	text-decoration: underline;
 	font-size: 1.35rem;
 	font-family: 'Space Grotesk', sans-serif;
-	font-weight: 700;
+	font-weight: 500;
 	line-height: 0.9;
 	text-transform: uppercase;
 	border-radius: 4px 18px 4px 4px;
-	background: linear-gradient(180deg, rgba(148, 168, 187, 0.22) 0%, rgba(93, 106, 122, 0.16) 100%);
-	border: 1px solid rgba(200, 212, 224, 0.28);
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), inset 0 -12px 18px -10px rgba(148, 168, 187, 0.18);
-	backdrop-filter: blur(6px);
-	color: #eef2f5;
+	background: transparent;
+	border: 0.5px solid var(--border-strong);
+	color: var(--text-primary);
 }
 
 .view-btn {
 	border-radius: 4px 18px 4px 4px;
-	background: linear-gradient(180deg, rgba(148, 168, 187, 0.22) 0%, rgba(93, 106, 122, 0.16) 100%);
-	border: 1px solid rgba(200, 212, 224, 0.28);
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), inset 0 -12px 18px -10px rgba(148, 168, 187, 0.18);
-	backdrop-filter: blur(6px);
-	color: #eef2f5;
+	background: transparent;
+	border: 0.5px solid var(--border-strong);
+	color: var(--text-primary);
 }
 
 .edit-btn {
 	border-radius: 4px 18px 4px 4px;
-	background: linear-gradient(180deg, rgba(148, 168, 187, 0.22) 0%, rgba(93, 106, 122, 0.16) 100%);
-	border: 1px solid rgba(200, 212, 224, 0.28);
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), inset 0 -12px 18px -10px rgba(148, 168, 187, 0.18);
-	backdrop-filter: blur(6px);
-	color: #eef2f5;
+	background: transparent;
+	border: 0.5px solid var(--border-strong);
+	color: var(--text-primary);
 }
 
 .no-results {
@@ -189,8 +183,8 @@ tbody tr:last-child td {
 	text-align: center;
 	font-size: 1.2rem;
 	font-family: 'Manrope', sans-serif;
-	font-weight: 600;
-	color: #2f3337;
+	font-weight: 500;
+	color: var(--text-secondary);
 }
 
 .sr-only {

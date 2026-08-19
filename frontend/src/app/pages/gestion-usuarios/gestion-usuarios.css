@@ -29,26 +29,26 @@
 	line-height: 0.85;
 	letter-spacing: 0.04em;
 	text-transform: uppercase;
-	color: #3985f4;
+	color: var(--accent);
 	text-align: center;
 }
 
 .users-panel {
 	width: 100%;
-	background: #8f959c;
+	background: var(--bg-card);
+	border: 0.5px solid var(--border);
 	border-radius: 24px;
 	padding: 0.65rem 0.8rem 0.9rem;
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .status-message {
 	margin: 0 0 0.6rem;
 	padding: 0.55rem 0.7rem;
 	border-radius: 10px;
-	background: rgba(49, 56, 63, 0.5);
-	color: #f1f5f8;
+	background: var(--bg-elevated);
+	color: var(--text-primary);
 	font-size: 0.9rem;
-	font-weight: 600;
+	font-weight: 500;
 	font-family: 'Manrope', sans-serif;
 }
 
@@ -65,16 +65,16 @@
 	outline: 0;
 	border-radius: 10px;
 	padding: 0.95rem 2.9rem 0.95rem 1.1rem;
-	background: #b6babf;
-	color: #f4f5f6;
+	background: var(--bg-input);
+	color: var(--text-primary);
 	font-size: 0.98rem;
-	font-weight: 700;
+	font-weight: 500;
 	font-style: italic;
 	text-transform: uppercase;
 }
 
 .filter-box input::placeholder {
-	color: rgba(244, 245, 246, 0.92);
+	color: var(--text-secondary);
 }
 
 .filter-box .fi {
@@ -83,7 +83,7 @@
 	top: 50%;
 	transform: translateY(-50%);
 	font-size: 1.25rem;
-	color: #2f3134;
+	color: var(--text-secondary);
 }
 
 .table-wrap {
@@ -91,14 +91,14 @@
 	overflow-y: auto;
 	overflow-x: auto;
 	border-radius: 16px;
-	background: #9aa0a7;
+	background: var(--bg-elevated);
 }
 
 table {
 	width: 100%;
 	border-collapse: collapse;
 	min-width: 980px;
-	color: #1f2225;
+	color: var(--text-primary);
 }
 
 thead th {
@@ -106,13 +106,13 @@ thead th {
 	top: 0;
 	z-index: 1;
 	padding: 0.6rem 0.7rem;
-	background: #49505a;
+	background: var(--bg-elevated);
 	font-size: 1.65rem;
 	font-family: 'Space Grotesk', sans-serif;
 	line-height: 0.9;
 	letter-spacing: 0.02em;
 	text-transform: uppercase;
-	color: #e3e7ea;
+	color: var(--text-muted);
 }
 
 thead th:first-child {
@@ -125,12 +125,12 @@ thead th:last-child {
 
 tbody td {
 	padding: 0.55rem 0.55rem;
-	background: #9aa0a7;
+	background: var(--bg-elevated);
 	font-size: 1.38rem;
 	font-family: 'Space Grotesk', sans-serif;
 	line-height: 1;
 	letter-spacing: 0.01em;
-	border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+	border-bottom: 1px solid var(--border);
 	vertical-align: top;
 }
 
@@ -171,18 +171,21 @@ tbody tr:last-child td {
 }
 
 .status-pill-ok {
-	background: #345fd5;
-	color: #0d152a;
+	background: var(--success-dim);
+	color: var(--success);
+	border: 0.5px solid var(--success-border);
 }
 
 .status-pill-danger {
-	background: #d86464;
-	color: #2f0f0f;
+	background: var(--danger-dim);
+	color: var(--danger);
+	border: 0.5px solid var(--danger-border);
 }
 
 .membership-pill {
-	background: #d8dde0;
-	color: #25292d;
+	background: var(--bg-elevated);
+	color: var(--text-primary);
+	border: 0.5px solid var(--border);
 }
 
 .mini-action {
@@ -199,11 +202,9 @@ tbody tr:last-child td {
 	cursor: pointer;
 	transition: background-color 160ms ease, border-color 160ms ease;
 	border-radius: 4px 18px 4px 4px;
-	background: linear-gradient(180deg, rgba(148, 168, 187, 0.22) 0%, rgba(93, 106, 122, 0.16) 100%);
-	border: 1px solid rgba(200, 212, 224, 0.28);
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), inset 0 -12px 18px -10px rgba(148, 168, 187, 0.18);
-	backdrop-filter: blur(6px);
-	color: #eef2f5;
+	background: transparent;
+	border: 0.5px solid var(--border-strong);
+	color: var(--text-primary);
 }
 
 .icon-action {
@@ -226,26 +227,18 @@ tbody tr:last-child td {
 }
 
 .mini-action:hover {
-	background: rgba(235, 239, 242, 0.32);
-	border-color: rgba(49, 55, 61, 0.75);
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 0 18px rgba(148, 168, 187, 0.3);
+	border-color: var(--accent-border);
 }
 
 .danger-action {
-	
-	border-color: rgba(166, 44, 44, 0.68);
 	border-radius: 4px 4px 4px 18px;
-	background: linear-gradient(180deg, rgba(255, 90, 90, 0.26) 0%, rgba(150, 35, 35, 0.22) 100%);
-	border: 1px solid rgba(255, 140, 140, 0.4);
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), inset 0 -12px 18px -10px rgba(255, 90, 90, 0.22);
-	backdrop-filter: blur(6px);
-	color: #ffe6e6;
+	background: var(--danger-dim);
+	border: 0.5px solid var(--danger-border);
+	color: var(--danger);
 }
 
 .danger-action:hover {
-	background: rgba(216, 100, 100, 0.34);
-	border-color: rgba(166, 44, 44, 0.9);
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 20px rgba(255, 90, 90, 0.4);
+	filter: brightness(1.15);
 }
 
 .membership-editor {
@@ -260,23 +253,19 @@ tbody tr:last-child td {
 	border: 0;
 	border-radius: 8px;
 	outline: 0;
-	background: #e0e4e7;
-	color: #2a2f34;
+	background: var(--bg-input);
+	color: var(--text-primary);
 	font-size: 0.8rem;
-	font-weight: 700;
+	font-weight: 500;
 	text-transform: uppercase;
 }
 
 .apply-action {
-	
-	border-color: rgba(27, 77, 145, 0.62);
 	text-decoration: none;
 	border-radius: 4px 18px 4px 4px;
-	background: linear-gradient(180deg, rgba(57, 133, 244, 0.32) 0%, rgba(28, 79, 214, 0.24) 100%);
-	border: 1px solid rgba(93, 221, 228, 0.45);
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -12px 18px -10px rgba(57, 133, 244, 0.25);
-	backdrop-filter: blur(6px);
-	color: #eaf3ff;
+	background: transparent;
+	border: 0.5px solid var(--accent-border);
+	color: var(--accent);
 }
 
 .no-results {
@@ -284,8 +273,8 @@ tbody tr:last-child td {
 	text-align: center;
 	font-size: 1.2rem;
 	font-family: 'Manrope', sans-serif;
-	font-weight: 600;
-	color: #2f3337;
+	font-weight: 500;
+	color: var(--text-secondary);
 }
 
 .sr-only {
