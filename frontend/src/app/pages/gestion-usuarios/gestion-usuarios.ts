@@ -2,31 +2,23 @@ import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { finalize } from 'rxjs';
 import { PageHeaderCompactComponent } from '../../shared/page-header-compact/page-header-compact';
 import { PageBgComponent } from '../../shared/page-bg/page-bg';
-import { ActiveClientUserItem, UsersApiService } from '../../core/services/users-api.service';
-
-type ManagedUser = {
-  id: number;
-  firstName: string;
-  lastName: string;
-  dni: string;
-};
+import { ActiveClientUserItem, UsuarioService } from '../../core/services/usuario.service';
 
 @Component({
-  
   standalone: true,
   imports: [PageHeaderCompactComponent, PageBgComponent],
   templateUrl: './gestion-usuarios.html',
   styleUrl: './gestion-usuarios.css',
 })
 export class GestionUsuarios implements OnInit {
-  private readonly usersApiService = inject(UsersApiService);
+  private readonly usuarioService = inject(UsuarioService);
   private readonly cdr = inject(ChangeDetectorRef);
 
   filterTerm = '';
   isLoading = false;
   statusMessage = '';
 
-  users: ManagedUser[] = [];
+  users: ActiveClientUserItem[] = [];
 
   ngOnInit(): void {
     this.loadUsers();
@@ -36,7 +28,7 @@ export class GestionUsuarios implements OnInit {
     this.filterTerm = value;
   }
 
-  get filteredUsers(): ManagedUser[] {
+  get filteredUsers(): ActiveClientUserItem[] {
     const normalizedQuery = this.normalizeText(this.filterTerm);
 
     if (!normalizedQuery) {
@@ -44,10 +36,10 @@ export class GestionUsuarios implements OnInit {
     }
 
     return this.users.filter((user) => {
-      const fullName = `${user.firstName} ${user.lastName}`;
+      const fullName = `${user.nombre} ${user.apellido}`;
       return (
-        this.normalizeText(user.firstName).includes(normalizedQuery) ||
-        this.normalizeText(user.lastName).includes(normalizedQuery) ||
+        this.normalizeText(user.nombre).includes(normalizedQuery) ||
+        this.normalizeText(user.apellido).includes(normalizedQuery) ||
         this.normalizeText(fullName).includes(normalizedQuery) ||
         this.normalizeText(user.dni).includes(normalizedQuery)
       );
@@ -59,7 +51,7 @@ export class GestionUsuarios implements OnInit {
     this.statusMessage = '';
     this.cdr.markForCheck();
 
-    this.usersApiService
+    this.usuarioService
       .getClientesActivos()
       .pipe(
         finalize(() => {
@@ -69,7 +61,7 @@ export class GestionUsuarios implements OnInit {
       )
       .subscribe({
         next: (users) => {
-          this.users = users.map((user) => this.mapActiveClientToManagedUser(user));
+          this.users = users;
           if (this.users.length === 0) {
             this.statusMessage = 'No hay usuarios para mostrar.';
           }
@@ -82,15 +74,6 @@ export class GestionUsuarios implements OnInit {
       });
   }
 
-  private mapActiveClientToManagedUser(user: ActiveClientUserItem): ManagedUser {
-    return {
-      id: user.id,
-      firstName: user.nombre,
-      lastName: user.apellido,
-      dni: user.dni,
-    };
-  }
-
   private normalizeText(value: string): string {
     return value
       .normalize('NFD')
@@ -99,4 +82,3 @@ export class GestionUsuarios implements OnInit {
       .trim();
   }
 }
-
