@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { finalize } from 'rxjs';
 import { PageHeaderCompactComponent } from '../../shared/page-header-compact/page-header-compact';
 import { PageBgComponent } from '../../shared/page-bg/page-bg';
-import { ActiveClientUserItem, UsuarioService } from '../../core/services/usuario.service';
+import { ActiveClientUserItem, UsuarioService } from '../../features/usuarios/services/usuario.service';
 
 @Component({
   standalone: true,

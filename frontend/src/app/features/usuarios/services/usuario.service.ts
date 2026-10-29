@@ -1,26 +1,14 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
+import {
+  ActiveClientUserItem,
+  AdminUserItem,
+  UserStatus,
+} from '../models/usuario.model';
 
-export type UserStatus = 'creado' | 'activo' | 'inactivo';
-
-export interface AdminUserItem {
-  id: number;
-  nombre: string;
-  apellido: string;
-  dni: string;
-  estado: UserStatus;
-}
-
-export interface ActiveClientUserItem {
-  id: number;
-  nombre: string;
-  apellido: string;
-  dni: string;
-  email: string;
-  estado: UserStatus;
-}
+export type { UserStatus, AdminUserItem, ActiveClientUserItem };
 
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {
@@ -43,4 +31,3 @@ export class UsuarioService {
     return this.http.delete<{ message: string }>(`${this.apiBaseUrl}/users/${userId}`);
   }
 }
-
