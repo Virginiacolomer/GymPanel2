@@ -15,14 +15,14 @@ import {
   UpdateEjercicioResponse,
   DeleteEjercicioResponse,
   UploadEjercicioImagenResponse,
-} from './ejercicio.service';
+} from '../../features/ejercicios/services/ejercicio.service';
 import {
   PlanService,
   CreatePlanEntrenamientoRequest,
   PlanEntrenamientoResponse,
   UserPlanResponse,
   UserEditedPlanResponse,
-} from './plan.service';
+} from '../../features/planes/services/plan.service';
 
 export type {
   CatalogoEjercicio,
@@ -45,7 +45,7 @@ export type {
 };
 
 /**
- * @deprecated Este servicio fue dividido en EjercicioService y PlanService.
+ * @deprecated Este servicio fue dividido en EjercicioService (features/ejercicios) y PlanService (features/planes).
  * Se mantiene temporalmente para compatibilidad hacia atrás con las pantallas de Ejercicios y Planes.
  */
 @Injectable({ providedIn: 'root' })

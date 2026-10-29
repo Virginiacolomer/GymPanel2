@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { finalize } from 'rxjs';
 import { PageHeaderCompactComponent } from '../../shared/page-header-compact/page-header-compact';
 import { PageBgComponent } from '../../shared/page-bg/page-bg';
-import { AdminUserItem, UsuarioService } from '../../core/services/usuario.service';
+import { AdminUserItem, UsuarioService } from '../../features/usuarios/services/usuario.service';
 
 @Component({
   standalone: true,

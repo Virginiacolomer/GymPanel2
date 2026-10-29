@@ -2,42 +2,20 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { timeout } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
+import {
+  CreatePlanEntrenamientoRequest,
+  PlanEntrenamientoResponse,
+  UserEditedPlanResponse,
+  UserPlanResponse,
+} from '../models/plan.model';
 
-export interface CreatePlanEntrenamientoRequest {
-  nombre: string;
-  descripcion?: string;
-  cantidadDias: number;
-  ejercicios: Array<number[] | null>;
-  repeticiones: Array<string[] | null>;
-  descripcionesDias?: Array<string | null>;
-}
-
-export interface PlanEntrenamientoResponse {
-  id: number;
-  nombre: string;
-  descripcion?: string | null;
-  descripcionesDias?: Array<string | null>;
-  descripciones_dias?: Array<string | null>;
-  tipo?: 'predeterminado' | 'editado';
-  cantidadDias: number;
-  ejercicios: Array<number[] | null>;
-  repeticiones: Array<string[] | null>;
-  ejerciciosVisibles: number[][];
-  repeticionesVisibles: string[][];
-}
-
-export interface UserPlanResponse {
-  userId?: number;
-  planEntrenamientoId?: number | null;
-  plan: PlanEntrenamientoResponse | null;
-}
-
-export interface UserEditedPlanResponse {
-  id: number;
-  tipo: 'editado';
-  message: string;
-}
+export type {
+  CreatePlanEntrenamientoRequest,
+  PlanEntrenamientoResponse,
+  UserEditedPlanResponse,
+  UserPlanResponse,
+};
 
 @Injectable({ providedIn: 'root' })
 export class PlanService {
@@ -81,4 +59,3 @@ export class PlanService {
       .pipe(timeout(15000));
   }
 }
-
