@@ -1,24 +1,10 @@
-import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { configureApp } from './app.setup';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  // CORS para frontend (Vercel) y pruebas locales.
-  app.enableCors({
-    origin: true,
-    credentials: true,
-  });
-
-  // Activa validaciones de class-validator en todos los DTOs.
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }),
-  );
+  configureApp(app);
 
   const port = Number(process.env.PORT) || 3000;
   await app.listen(port);

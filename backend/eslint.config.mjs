@@ -35,4 +35,15 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    // Tests e2e de caja negra: el cuerpo de las respuestas HTTP es JSON sin
+    // tipo, y tiparlo en cada assert solo agrega ruido.
+    files: ['test/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+    },
+  },
 );
