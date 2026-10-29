@@ -5,6 +5,7 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { PlanEntrenamientoModule } from './modules/plan-entrenamiento/plan-entrenamiento.module';
 import { AppController } from './app.controller';
+import { databaseOptions } from './database/database-options';
 @Module({
   controllers: [AppController],
   providers: [],
@@ -19,16 +20,14 @@ import { AppController } from './app.controller';
           configService.get<string>('NODE_ENV') === 'production';
 
         return {
-          type: 'postgres' as const,
-          url: configService.get<string>('DATABASE_URL'),
+          ...databaseOptions(
+            configService.get<string>('DATABASE_URL'),
+            isProduction,
+          ),
           autoLoadEntities: true,
-          synchronize: !isProduction,
-          ssl: isProduction ? { rejectUnauthorized: false } : false,
-          extra: {
-            keepAlive: true,
-            connectionTimeoutMillis: 10000,
-            idleTimeoutMillis: 30000,
-          },
+          // Aplica las migraciones pendientes al arrancar (Railway no tiene
+          // un paso de deploy aparte para correrlas).
+          migrationsRun: true,
         };
       },
       inject: [ConfigService],
