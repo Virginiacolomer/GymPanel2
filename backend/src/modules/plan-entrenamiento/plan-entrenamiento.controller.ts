@@ -29,7 +29,9 @@ import { AuthenticatedRequest } from '../auth/jwt-payload.interface';
 
 @Controller('plan-entrenamiento')
 export class PlanEntrenamientoController {
-  constructor(private readonly planEntrenamientoService: PlanEntrenamientoService) {}
+  constructor(
+    private readonly planEntrenamientoService: PlanEntrenamientoService,
+  ) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
@@ -49,7 +51,9 @@ export class PlanEntrenamientoController {
   @Roles(UserRole.ADMIN)
   @Post('grupos-musculares')
   createGrupoMuscular(@Body() createGrupoMuscularDto: CreateGrupoMuscularDto) {
-    return this.planEntrenamientoService.createGrupoMuscular(createGrupoMuscularDto);
+    return this.planEntrenamientoService.createGrupoMuscular(
+      createGrupoMuscularDto,
+    );
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -59,7 +63,10 @@ export class PlanEntrenamientoController {
     @Param('id') id: string,
     @Body() updateEjercicioDto: UpdateEjercicioDto,
   ) {
-    return this.planEntrenamientoService.updateEjercicio(+id, updateEjercicioDto);
+    return this.planEntrenamientoService.updateEjercicio(
+      +id,
+      updateEjercicioDto,
+    );
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -72,13 +79,18 @@ export class PlanEntrenamientoController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   @Post('ejercicios/:id/imagen')
-  @UseInterceptors(FileInterceptor('imagen', { limits: { fileSize: 5 * 1024 * 1024 } }))
+  @UseInterceptors(
+    FileInterceptor('imagen', { limits: { fileSize: 5 * 1024 * 1024 } }),
+  )
   uploadEjercicioImagen(
     @Param('id') id: string,
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({ fileType: /^image\/(jpeg|png|webp)$/ })
-        .build({ errorHttpStatusCode: HttpStatus.BAD_REQUEST, fileIsRequired: true }),
+        .build({
+          errorHttpStatusCode: HttpStatus.BAD_REQUEST,
+          fileIsRequired: true,
+        }),
     )
     file: Express.Multer.File,
   ) {
@@ -92,7 +104,10 @@ export class PlanEntrenamientoController {
     @Param('id') id: string,
     @Body() updateGrupoMuscularDto: UpdateGrupoMuscularDto,
   ) {
-    return this.planEntrenamientoService.updateGrupoMuscular(+id, updateGrupoMuscularDto);
+    return this.planEntrenamientoService.updateGrupoMuscular(
+      +id,
+      updateGrupoMuscularDto,
+    );
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -106,8 +121,13 @@ export class PlanEntrenamientoController {
   @Roles(UserRole.CLIENTE)
   @Get('mio')
   async findMine(@Req() request: AuthenticatedRequest) {
-    const assignment = await this.planEntrenamientoService.findAssignmentByUserId(request.user.sub);
-    const plan = await this.planEntrenamientoService.findByUserId(request.user.sub);
+    const assignment =
+      await this.planEntrenamientoService.findAssignmentByUserId(
+        request.user.sub,
+      );
+    const plan = await this.planEntrenamientoService.findByUserId(
+      request.user.sub,
+    );
 
     return {
       userId: request.user.sub,
@@ -185,7 +205,10 @@ export class PlanEntrenamientoController {
     @Param('userId') userId: string,
     @Body() createPlanEntrenamientoDto: CreatePlanEntrenamientoDto,
   ) {
-    return this.planEntrenamientoService.updatePlanForUser(+userId, createPlanEntrenamientoDto);
+    return this.planEntrenamientoService.updatePlanForUser(
+      +userId,
+      createPlanEntrenamientoDto,
+    );
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -195,7 +218,10 @@ export class PlanEntrenamientoController {
     @Param('id') id: string,
     @Body() updatePlanEntrenamientoDto: UpdatePlanEntrenamientoDto,
   ) {
-    return this.planEntrenamientoService.update(+id, updatePlanEntrenamientoDto);
+    return this.planEntrenamientoService.update(
+      +id,
+      updatePlanEntrenamientoDto,
+    );
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

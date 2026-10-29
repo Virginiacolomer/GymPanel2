@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserStatusDto } from './dto/update-user-status.dto';
@@ -11,7 +20,7 @@ import { UserRole } from './enums/user-role.enum';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
- @Post()
+  @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     return await this.usersService.create(createUserDto);
   }
@@ -29,7 +38,9 @@ export class UsersController {
   async findPending() {
     console.log('[UsersController] GET /users/pendientes invocado');
     const users = await this.usersService.findCreatedUsers();
-    console.log(`[UsersController] GET /users/pendientes devolvio ${users.length} usuarios`);
+    console.log(
+      `[UsersController] GET /users/pendientes devolvio ${users.length} usuarios`,
+    );
     return users;
   }
 
@@ -39,7 +50,9 @@ export class UsersController {
   async findActiveClients() {
     console.log('[UsersController] GET /users/clientes-activos invocado');
     const users = await this.usersService.findActiveClients();
-    console.log(`[UsersController] GET /users/clientes-activos devolvio ${users.length} usuarios`);
+    console.log(
+      `[UsersController] GET /users/clientes-activos devolvio ${users.length} usuarios`,
+    );
     return users;
   }
 
@@ -53,10 +66,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   @Patch(':id/estado')
-  updateEstado(
-    @Param('id') id: string,
-    @Body() body: UpdateUserStatusDto,
-  ) {
+  updateEstado(@Param('id') id: string, @Body() body: UpdateUserStatusDto) {
     return this.usersService.updateEstado(+id, body.estado);
   }
 

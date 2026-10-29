@@ -10,7 +10,15 @@ import { User } from '../users/entities/user.entity';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PlanEntrenamiento, Ejercicio, GrupoMuscular, User]), AuthModule],
+  imports: [
+    TypeOrmModule.forFeature([
+      PlanEntrenamiento,
+      Ejercicio,
+      GrupoMuscular,
+      User,
+    ]),
+    AuthModule,
+  ],
   controllers: [PlanEntrenamientoController],
   providers: [PlanEntrenamientoService, SupabaseStorageService],
   exports: [TypeOrmModule],

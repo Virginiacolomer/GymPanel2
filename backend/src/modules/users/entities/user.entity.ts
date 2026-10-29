@@ -1,5 +1,12 @@
 import { PlanEntrenamiento } from '../../plan-entrenamiento/entities/plan-entrenamiento.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Index } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+  Index,
+} from 'typeorm';
 import { UserRole } from '../enums/user-role.enum';
 import { UserStatus } from '../enums/user-status.enum';
 
@@ -25,10 +32,10 @@ export class User {
   @Column({ name: 'password_hash' })
   password_hash!: string;
 
-  @Column({ 
-    type: 'enum', 
-    enum: UserRole, 
-    default: UserRole.CLIENTE 
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.CLIENTE,
   })
   role!: UserRole;
 

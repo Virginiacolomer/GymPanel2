@@ -16,7 +16,9 @@ export class JwtAuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const authorizationHeader = request.headers.authorization as string | undefined;
+    const authorizationHeader = request.headers.authorization as
+      | string
+      | undefined;
 
     if (!authorizationHeader?.startsWith('Bearer ')) {
       throw new UnauthorizedException('Token no provisto.');
@@ -26,7 +28,8 @@ export class JwtAuthGuard implements CanActivate {
 
     try {
       request.user = await this.jwtService.verifyAsync(token, {
-        secret: this.configService.get<string>('JWT_SECRET') || 'gympanel-dev-secret',
+        secret:
+          this.configService.get<string>('JWT_SECRET') || 'gympanel-dev-secret',
       });
       return true;
     } catch {

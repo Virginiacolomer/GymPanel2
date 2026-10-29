@@ -3,7 +3,9 @@ import { IsInt, IsOptional, IsString, MaxLength, Min } from 'class-validator';
 export class UpdateEjercicioDto {
   @IsOptional()
   @IsString({ message: 'El nombre del ejercicio debe ser texto.' })
-  @MaxLength(120, { message: 'El nombre del ejercicio no puede superar los 120 caracteres.' })
+  @MaxLength(120, {
+    message: 'El nombre del ejercicio no puede superar los 120 caracteres.',
+  })
   nombre?: string;
 
   @IsOptional()

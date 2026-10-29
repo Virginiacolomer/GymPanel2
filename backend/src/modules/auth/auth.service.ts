@@ -1,4 +1,9 @@
-import { ForbiddenException, Injectable, UnauthorizedException, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+  NotFoundException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -40,7 +45,9 @@ export class AuthService {
     }
 
     if (user.estado !== UserStatus.ACTIVO) {
-      throw new ForbiddenException('Espera que tu entrenador habilite tu cuenta!');
+      throw new ForbiddenException(
+        'Espera que tu entrenador habilite tu cuenta!',
+      );
     }
 
     // RESPUESTA: Devolver usuario SIN password_hash
@@ -52,7 +59,8 @@ export class AuthService {
         role: user.role,
       },
       {
-        secret: this.configService.get<string>('JWT_SECRET') || 'gympanel-dev-secret',
+        secret:
+          this.configService.get<string>('JWT_SECRET') || 'gympanel-dev-secret',
       },
     );
 

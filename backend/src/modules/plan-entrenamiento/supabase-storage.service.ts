@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
@@ -22,7 +26,9 @@ export class SupabaseStorageService {
     const secretKey =
       this.configService.get<string>('SUPABASE_SECRET_KEY') ||
       this.configService.get<string>('SUPABASE_SERVICE_ROLE_KEY');
-    this.bucket = this.configService.get<string>('SUPABASE_STORAGE_BUCKET') || 'ejercicios-imagenes';
+    this.bucket =
+      this.configService.get<string>('SUPABASE_STORAGE_BUCKET') ||
+      'ejercicios-imagenes';
 
     this.client =
       supabaseUrl && secretKey
@@ -38,7 +44,10 @@ export class SupabaseStorageService {
     }
   }
 
-  async uploadEjercicioImage(ejercicioId: number, file: Express.Multer.File): Promise<string> {
+  async uploadEjercicioImage(
+    ejercicioId: number,
+    file: Express.Multer.File,
+  ): Promise<string> {
     if (!this.client) {
       throw new InternalServerErrorException(
         'El almacenamiento de imagenes no esta configurado en el servidor.',
@@ -48,14 +57,20 @@ export class SupabaseStorageService {
     const extension = EXTENSION_BY_MIMETYPE[file.mimetype] ?? 'jpg';
     const path = `ejercicios/${ejercicioId}-${Date.now()}.${extension}`;
 
-    const { error } = await this.client.storage.from(this.bucket).upload(path, file.buffer, {
-      contentType: file.mimetype,
-      upsert: true,
-    });
+    const { error } = await this.client.storage
+      .from(this.bucket)
+      .upload(path, file.buffer, {
+        contentType: file.mimetype,
+        upsert: true,
+      });
 
     if (error) {
-      this.logger.error(`Error al subir imagen de ejercicio ${ejercicioId} a Supabase Storage: ${error.message}`);
-      throw new InternalServerErrorException('No se pudo subir la imagen. Intenta de nuevo.');
+      this.logger.error(
+        `Error al subir imagen de ejercicio ${ejercicioId} a Supabase Storage: ${error.message}`,
+      );
+      throw new InternalServerErrorException(
+        'No se pudo subir la imagen. Intenta de nuevo.',
+      );
     }
 
     const { data } = this.client.storage.from(this.bucket).getPublicUrl(path);
@@ -72,10 +87,14 @@ export class SupabaseStorageService {
       return;
     }
 
-    const { error } = await this.client.storage.from(this.bucket).remove([path]);
+    const { error } = await this.client.storage
+      .from(this.bucket)
+      .remove([path]);
 
     if (error) {
-      this.logger.warn(`No se pudo borrar la imagen anterior (${path}) de Supabase Storage: ${error.message}`);
+      this.logger.warn(
+        `No se pudo borrar la imagen anterior (${path}) de Supabase Storage: ${error.message}`,
+      );
     }
   }
 

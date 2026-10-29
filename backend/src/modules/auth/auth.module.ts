@@ -15,7 +15,8 @@ import { RolesGuard } from './roles.guard';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET') || 'gympanel-dev-secret',
+        secret:
+          configService.get<string>('JWT_SECRET') || 'gympanel-dev-secret',
         signOptions: { expiresIn: '12h' },
       }),
     }),

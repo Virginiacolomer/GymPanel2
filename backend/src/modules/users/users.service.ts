@@ -1,4 +1,8 @@
-import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt'; //Librería para hashear password
@@ -9,7 +13,6 @@ import { UserStatus } from './enums/user-status.enum';
 
 @Injectable()
 export class UsersService {
-
   constructor(
     @InjectRepository(User) // Inyecta el repositorio de TypeORM y permite hacer Querys
     private readonly userRepository: Repository<User>,
@@ -29,14 +32,20 @@ export class UsersService {
 
     // En desarrollo local usamos menos rondas para mejorar tiempos de respuesta.
     const defaultRounds = process.env.NODE_ENV === 'production' ? 10 : 8;
-    const configuredRounds = Number(process.env.BCRYPT_SALT_ROUNDS ?? defaultRounds);
-    const saltRounds = Number.isFinite(configuredRounds) && configuredRounds > 3
-      ? configuredRounds
-      : defaultRounds;
+    const configuredRounds = Number(
+      process.env.BCRYPT_SALT_ROUNDS ?? defaultRounds,
+    );
+    const saltRounds =
+      Number.isFinite(configuredRounds) && configuredRounds > 3
+        ? configuredRounds
+        : defaultRounds;
 
     //HASHEAR PASSWORD: NUNCA guardes contraseña en plano
     //bcrypt genera un hash + salt
-    const hashedPassword = await bcrypt.hash(createUserDto.password, saltRounds);
+    const hashedPassword = await bcrypt.hash(
+      createUserDto.password,
+      saltRounds,
+    );
 
     //CREAR OBJETO USER para guardar en BD
     const newUser = this.userRepository.create({
@@ -57,8 +66,13 @@ export class UsersService {
       userSaved = await this.userRepository.save(newUser);
     } catch (error) {
       // Maneja conflictos de unicidad en DB (ej. dos registros concurrentes con el mismo email)
-      if (error instanceof QueryFailedError && (error as any).driverError?.code === '23505') {
-        throw new ConflictException('El correo electronico ya esta registrado.');
+      if (
+        error instanceof QueryFailedError &&
+        (error as any).driverError?.code === '23505'
+      ) {
+        throw new ConflictException(
+          'El correo electronico ya esta registrado.',
+        );
       }
       throw error;
     }
@@ -77,7 +91,9 @@ export class UsersService {
   }
 
   async findCreatedUsers() {
-    console.log('[UsersService.findCreatedUsers] Iniciando busqueda de usuarios pendientes');
+    console.log(
+      '[UsersService.findCreatedUsers] Iniciando busqueda de usuarios pendientes',
+    );
 
     const users = await this.userRepository.find({
       select: {
@@ -91,9 +107,14 @@ export class UsersService {
       order: { id: 'ASC' },
     });
 
-    console.log(`[UsersService.findCreatedUsers] Usuarios leidos desde DB: ${users.length}`);
+    console.log(
+      `[UsersService.findCreatedUsers] Usuarios leidos desde DB: ${users.length}`,
+    );
 
-    const normalize = (value: unknown): string => String(value ?? '').trim().toLowerCase();
+    const normalize = (value: unknown): string =>
+      String(value ?? '')
+        .trim()
+        .toLowerCase();
 
     const pendingUsers = users
       .filter((user) => {
@@ -101,18 +122,23 @@ export class UsersService {
         const normalizedEstado = normalize(user.estado);
 
         const isClient = normalizedRole === normalize(UserRole.CLIENTE);
-        const isCreated = normalizedEstado === '' || normalizedEstado === normalize(UserStatus.CREADO);
+        const isCreated =
+          normalizedEstado === '' ||
+          normalizedEstado === normalize(UserStatus.CREADO);
 
         if (!isClient || !isCreated) {
-          console.log('[UsersService.findCreatedUsers] Usuario descartado por filtro', {
-            id: user.id,
-            roleOriginal: user.role,
-            estadoOriginal: user.estado,
-            roleNormalizado: normalizedRole,
-            estadoNormalizado: normalizedEstado,
-            isClient,
-            isCreated,
-          });
+          console.log(
+            '[UsersService.findCreatedUsers] Usuario descartado por filtro',
+            {
+              id: user.id,
+              roleOriginal: user.role,
+              estadoOriginal: user.estado,
+              roleNormalizado: normalizedRole,
+              estadoNormalizado: normalizedEstado,
+              isClient,
+              isCreated,
+            },
+          );
         }
 
         return isClient && isCreated;
@@ -127,7 +153,11 @@ export class UsersService {
 
     console.log(
       '[UsersService.findCreatedUsers] Usuarios pendientes devueltos:',
-      pendingUsers.map((user) => ({ id: user.id, dni: user.dni, estado: user.estado })),
+      pendingUsers.map((user) => ({
+        id: user.id,
+        dni: user.dni,
+        estado: user.estado,
+      })),
     );
 
     return pendingUsers;
@@ -139,7 +169,7 @@ export class UsersService {
     const users = await this.userRepository
       .createQueryBuilder('user')
       .where('user.role = :role', { role: UserRole.CLIENTE })
-      .andWhere("LOWER(TRIM(COALESCE(user.estado, :fallback))) = :estado", {
+      .andWhere('LOWER(TRIM(COALESCE(user.estado, :fallback))) = :estado', {
         fallback: UserStatus.CREADO,
         estado: UserStatus.ACTIVO,
       })
@@ -148,7 +178,7 @@ export class UsersService {
 
     console.log(
       '[UsersService.findActiveClients] Usuarios encontrados:',
-      users.map((u) => ({ id: u.id, email: u.email, estado: u.estado }))
+      users.map((u) => ({ id: u.id, email: u.email, estado: u.estado })),
     );
 
     const response = users.map((user) => ({
@@ -160,7 +190,10 @@ export class UsersService {
       estado: user.estado,
     }));
 
-    console.log('[UsersService.findActiveClients] Respuesta final clientes-activos:', response);
+    console.log(
+      '[UsersService.findActiveClients] Respuesta final clientes-activos:',
+      response,
+    );
 
     return response;
   }
