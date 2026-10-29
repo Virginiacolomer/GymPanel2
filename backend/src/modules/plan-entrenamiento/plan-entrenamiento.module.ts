@@ -7,7 +7,7 @@ import { PlanEntrenamiento } from './entities/plan-entrenamiento.entity';
 import { Ejercicio } from './entities/ejercicio.entity';
 import { GrupoMuscular } from './entities/grupoMuscular.entity';
 import { User } from '../users/entities/user.entity';
-import { AuthModule } from '../auth/auth.module';
+import { AuthGuardsModule } from '../../contexts/auth';
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import { AuthModule } from '../auth/auth.module';
       GrupoMuscular,
       User,
     ]),
-    AuthModule,
+    AuthGuardsModule,
   ],
   controllers: [PlanEntrenamientoController],
   providers: [PlanEntrenamientoService, SupabaseStorageService],

@@ -1,4 +1,4 @@
-import { UserRole } from '../users/enums/user-role.enum';
+import { UserRole } from '../../../modules/users/enums/user-role.enum';
 
 // Forma del payload decodificado que JwtAuthGuard deja en request.user.
 export interface JwtPayload {

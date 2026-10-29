@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './modules/users/users.module';
-import { AuthModule } from './modules/auth/auth.module';
+import { AuthModule } from './contexts/auth/auth.module';
 import { PlanEntrenamientoModule } from './modules/plan-entrenamiento/plan-entrenamiento.module';
 import { AppController } from './app.controller';
 import { databaseOptions } from './database/database-options';

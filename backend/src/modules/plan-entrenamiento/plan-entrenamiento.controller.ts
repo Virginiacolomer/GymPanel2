@@ -21,11 +21,13 @@ import { CreateEjercicioDto } from './dto/create-ejercicio.dto';
 import { CreateGrupoMuscularDto } from './dto/create-grupo-muscular.dto';
 import { UpdateEjercicioDto } from './dto/update-ejercicio.dto';
 import { UpdateGrupoMuscularDto } from './dto/update-grupo-muscular.dto';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { RolesGuard } from '../auth/roles.guard';
-import { Roles } from '../auth/roles.decorator';
 import { UserRole } from '../users/enums/user-role.enum';
-import { AuthenticatedRequest } from '../auth/jwt-payload.interface';
+import {
+  AuthenticatedRequest,
+  JwtAuthGuard,
+  Roles,
+  RolesGuard,
+} from '../../contexts/auth';
 
 @Controller('plan-entrenamiento')
 export class PlanEntrenamientoController {
