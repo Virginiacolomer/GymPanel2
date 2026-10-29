@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { PageHeaderCompactComponent } from '../../shared/page-header-compact/page-header-compact';
 import { PageBgComponent } from '../../shared/page-bg/page-bg';
 import { AuthApiService } from '../../core/services/auth-api.service';
-import { Gimnasio, GimnasioApiService } from '../../core/services/gimnasio-api.service';
 
 @Component({
 
@@ -14,16 +13,14 @@ import { Gimnasio, GimnasioApiService } from '../../core/services/gimnasio-api.s
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
-export class Register implements OnInit {
+export class Register {
   constructor(
     private readonly authApiService: AuthApiService,
-    private readonly gimnasioApiService: GimnasioApiService,
     private readonly router: Router,
     private readonly cdr: ChangeDetectorRef,
   ) {}
 
   form = {
-    gimnasioId: null as number | null,
     email: '',
     nombre: '',
     apellido: '',
@@ -32,27 +29,9 @@ export class Register implements OnInit {
     passwordConfirm: '',
   };
 
-  gimnasios: Gimnasio[] = [];
-  loadingGimnasios = false;
   loading = false;
   errorMessage = '';
   successMessage = '';
-
-  ngOnInit(): void {
-    this.loadingGimnasios = true;
-    this.gimnasioApiService.findAllActive().subscribe({
-      next: (gimnasios) => {
-        this.gimnasios = gimnasios;
-        this.loadingGimnasios = false;
-        this.cdr.markForCheck();
-      },
-      error: () => {
-        this.loadingGimnasios = false;
-        this.errorMessage = 'No se pudo cargar la lista de gimnasios. Intenta de nuevo mas tarde.';
-        this.cdr.markForCheck();
-      },
-    });
-  }
 
   private isValidEmail(email: string): boolean {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -108,11 +87,6 @@ export class Register implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    if (!this.form.gimnasioId) {
-      this.errorMessage = 'Selecciona tu gimnasio.';
-      return;
-    }
-
     if (
       !this.form.email.trim() ||
       !this.form.nombre.trim() ||
@@ -139,7 +113,6 @@ export class Register implements OnInit {
 
     this.authApiService
       .register({
-        gimnasioId: this.form.gimnasioId,
         email: this.form.email.trim().toLowerCase(),
         nombre: this.form.nombre.trim(),
         apellido: this.form.apellido.trim(),
@@ -151,7 +124,6 @@ export class Register implements OnInit {
           this.loading = false;
           this.successMessage = 'Registro exitoso. Ahora podes iniciar sesion.';
           this.form = {
-            gimnasioId: null,
             email: '',
             nombre: '',
             apellido: '',

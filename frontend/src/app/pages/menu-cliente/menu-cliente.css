@@ -123,39 +123,6 @@
 	line-height: 1.35;
 }
 
-.gym-contact {
-	margin-top: 1.75rem;
-	padding: 1.25rem 1.4rem;
-	border-radius: 4px 22px 4px 22px;
-	background: var(--bg-card);
-	border: 0.5px solid var(--border);
-}
-
-.gym-contact h2 {
-	margin: 0 0 0.75rem;
-	font-family: 'Space Grotesk', sans-serif;
-	font-size: 1.1rem;
-	font-weight: 500;
-	letter-spacing: 0.01em;
-	color: var(--accent);
-}
-
-.gym-contact-details {
-	display: flex;
-	flex-direction: column;
-	gap: 0.4rem;
-}
-
-.gym-contact-details span {
-	color: var(--text-primary);
-	font-size: 0.92rem;
-}
-
-.gym-contact-details strong {
-	color: var(--text-secondary);
-	font-weight: 500;
-}
-
 @media (max-width: 620px) {
 	.menu-grid {
 		grid-template-columns: 1fr 1fr;

@@ -44,30 +44,6 @@
 	color: var(--text-primary);
 }
 
-.load-error {
-	margin: 0 0 1.2rem;
-	padding: 0.65rem 0.9rem;
-	border-radius: 12px;
-	background: var(--danger-dim);
-	color: var(--danger);
-	border: 0.5px solid var(--danger-border);
-	font-size: 0.9rem;
-	display: flex;
-	align-items: center;
-	gap: 0.6rem;
-}
-
-.retry-link {
-	border: 0;
-	background: none;
-	color: var(--accent);
-	font-weight: 500;
-	text-decoration: underline;
-	cursor: pointer;
-	padding: 0;
-	font-size: inherit;
-}
-
 /* Grilla de accesos: reemplaza la lista vertical de filas apiladas. */
 .menu-grid {
 	display: grid;
@@ -112,19 +88,6 @@
 	align-items: center;
 }
 
-/* Funcionalidad no incluida en el plan del gimnasio: visible pero inactiva. */
-.menu-tile-disabled {
-	cursor: not-allowed;
-	filter: grayscale(1);
-	opacity: 0.45;
-	pointer-events: none;
-}
-
-.menu-tile-disabled:hover {
-	transform: none;
-	box-shadow: none;
-}
-
 /* Insignia hexagonal del icono: distinta de la placa redondeada anterior. */
 .icon-badge {
 	flex: none;
@@ -143,16 +106,7 @@
 	color: currentColor;
 }
 
-.menu-tile--reporte {
-	background: var(--bg-card);
-	border: 0.5px solid var(--accent-border);
-}
-
-.icon-badge--reporte {
-	background: var(--accent);
-}
-
-.menu-tile--reporte .menu-label {
+.menu-label {
 	color: var(--accent);
 }
 

@@ -6,22 +6,6 @@
         <h1>Registrate</h1>
 
         <form class="register-form" novalidate (ngSubmit)="onSubmit()">
-          <label class="sr-only" for="register-gimnasio">Gimnasio</label>
-          <select
-            id="register-gimnasio"
-            name="gimnasioId"
-            required
-            [(ngModel)]="form.gimnasioId"
-            [disabled]="loading || loadingGimnasios"
-          >
-            <option [ngValue]="null" disabled>
-              {{ loadingGimnasios ? 'Cargando gimnasios...' : 'Selecciona tu gimnasio' }}
-            </option>
-            @for (gimnasio of gimnasios; track gimnasio.id) {
-              <option [ngValue]="gimnasio.id">{{ gimnasio.nombre }}</option>
-            }
-          </select>
-
           <label class="sr-only" for="register-email">Correo electronico</label>
           <input
             id="register-email"

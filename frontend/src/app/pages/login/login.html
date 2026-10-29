@@ -6,21 +6,6 @@
         <h1>Inicia sesión</h1>
 
         <form class="login-form" (ngSubmit)="onSubmit()" novalidate>
-          <label class="sr-only" for="gimnasioId">Gimnasio</label>
-          <select
-            id="gimnasioId"
-            name="gimnasioId"
-            [(ngModel)]="form.gimnasioId"
-            [disabled]="loading || loadingGimnasios"
-          >
-            <option [ngValue]="null" disabled>
-              {{ loadingGimnasios ? 'Cargando gimnasios...' : 'Selecciona tu gimnasio' }}
-            </option>
-            @for (gimnasio of gimnasios; track gimnasio.id) {
-              <option [ngValue]="gimnasio.id">{{ gimnasio.nombre }}</option>
-            }
-          </select>
-
           <label class="sr-only" for="email">Correo electronico</label>
           <input
             id="email"

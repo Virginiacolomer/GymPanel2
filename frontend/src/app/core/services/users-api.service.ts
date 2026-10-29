@@ -13,15 +13,6 @@ export interface AdminUserItem {
   estado: UserStatus;
 }
 
-export type PaymentState = 'alDia' | 'cuotaPendiente';
-
-export interface UserMembershipSummary {
-  membresiaId: number;
-  nombre: string;
-  dias: number | null;
-  estadoPago: PaymentState;
-}
-
 export interface ActiveClientUserItem {
   id: number;
   nombre: string;
@@ -29,11 +20,6 @@ export interface ActiveClientUserItem {
   dni: string;
   email: string;
   estado: UserStatus;
-  membresiaId: number | null;
-  membresia: string;
-  frecuenciaDias: number | null;
-  estadoPago: PaymentState;
-  membresias?: UserMembershipSummary[];
 }
 
 @Injectable({ providedIn: 'root' })
@@ -47,18 +33,6 @@ export class UsersApiService {
 
   getClientesActivos(): Observable<ActiveClientUserItem[]> {
     return this.http.get<ActiveClientUserItem[]>(`${this.apiBaseUrl}/users/clientes-activos`);
-  }
-
-  updateUserMembership(userId: number, membresiaId: number): Observable<unknown> {
-    return this.http.post(`${this.apiBaseUrl}/users/${userId}/membresia`, { membresiaId });
-  }
-
-  removeUserMembership(userId: number, membresiaId: number): Observable<unknown> {
-    return this.http.delete(`${this.apiBaseUrl}/users/${userId}/membresia/${membresiaId}`);
-  }
-
-  markUserPaymentUpToDate(userId: number, membresiaId: number | null): Observable<unknown> {
-    return this.http.post(`${this.apiBaseUrl}/users/${userId}/pago/al-dia`, { membresiaId });
   }
 
   updateEstado(userId: number, estado: UserStatus): Observable<AdminUserItem> {

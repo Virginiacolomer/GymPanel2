@@ -8,129 +8,45 @@
           <h1>Administracion</h1>
         </header>
 
-        @if (loadError) {
-          <p class="load-error">
-            No se pudo verificar tu plan.
-            <button type="button" class="retry-link" (click)="loadFuncionalidades()">Reintentar</button>
-          </p>
-        }
-
         <nav class="menu-grid" aria-label="Menu del administrador">
-          <a
-            class="menu-tile"
-            [class.menu-tile-disabled]="!hasFeature('asignacion_planes')"
-            [routerLink]="hasFeature('asignacion_planes') ? '/asignar-plan' : null"
-            [attr.aria-disabled]="!hasFeature('asignacion_planes')"
-          >
+          <a class="menu-tile" routerLink="/asignar-plan">
             <span class="icon-badge" aria-hidden="true">
               <i class="fi fi-sr-list-check" aria-hidden="true"></i>
             </span>
             <span class="menu-label">Asignar plan</span>
-            <span class="menu-hint">{{ hasFeature('asignacion_planes') ? 'A un usuario existente' : 'No incluido en tu plan' }}</span>
+            <span class="menu-hint">A un usuario existente</span>
           </a>
 
-          <a
-            class="menu-tile"
-            [class.menu-tile-disabled]="!hasFeature('gestion_usuarios')"
-            [routerLink]="hasFeature('gestion_usuarios') ? '/gestion-usuarios' : null"
-            [attr.aria-disabled]="!hasFeature('gestion_usuarios')"
-          >
+          <a class="menu-tile" routerLink="/gestion-usuarios">
             <span class="icon-badge" aria-hidden="true">
               <i class="fi fi-sr-user-add" aria-hidden="true"></i>
             </span>
             <span class="menu-label">Gestion de usuarios</span>
-            <span class="menu-hint">{{ hasFeature('gestion_usuarios') ? 'Aprobar y administrar cuentas' : 'No incluido en tu plan' }}</span>
+            <span class="menu-hint">Aprobar y administrar cuentas</span>
           </a>
 
-          <a
-            class="menu-tile"
-            [class.menu-tile-disabled]="!hasFeature('gestion_membresias')"
-            [routerLink]="hasFeature('gestion_membresias') ? '/gestion-membresias' : null"
-            [attr.aria-disabled]="!hasFeature('gestion_membresias')"
-          >
-            <span class="icon-badge" aria-hidden="true">
-              <i class="fi fi-sr-calendar-lines" aria-hidden="true"></i>
-            </span>
-            <span class="menu-label">Gestion de membresias</span>
-            <span class="menu-hint">{{ hasFeature('gestion_membresias') ? 'Tipos y precios' : 'No incluido en tu plan' }}</span>
-          </a>
-
-          <a
-            class="menu-tile"
-            [class.menu-tile-disabled]="!hasFeature('creacion_planes')"
-            [routerLink]="hasFeature('creacion_planes') ? '/crear-plan' : null"
-            [attr.aria-disabled]="!hasFeature('creacion_planes')"
-          >
+          <a class="menu-tile" routerLink="/crear-plan">
             <span class="icon-badge" aria-hidden="true">
               <i class="fi fi-sr-add" aria-hidden="true"></i>
             </span>
             <span class="menu-label">Crear plan</span>
-            <span class="menu-hint">{{ hasFeature('creacion_planes') ? 'Nuevo plan de entrenamiento' : 'No incluido en tu plan' }}</span>
+            <span class="menu-hint">Nuevo plan de entrenamiento</span>
           </a>
 
-          <a
-            class="menu-tile"
-            [class.menu-tile-disabled]="!hasFeature('catalogo_ejercicios')"
-            [routerLink]="hasFeature('catalogo_ejercicios') ? '/crear-ejercicios' : null"
-            [attr.aria-disabled]="!hasFeature('catalogo_ejercicios')"
-          >
+          <a class="menu-tile" routerLink="/crear-ejercicios">
             <span class="icon-badge" aria-hidden="true">
               <i class="fi fi-sr-gym" aria-hidden="true"></i>
             </span>
             <span class="menu-label">Crear ejercicios</span>
-            <span class="menu-hint">{{ hasFeature('catalogo_ejercicios') ? 'Catalogo de ejercicios' : 'No incluido en tu plan' }}</span>
+            <span class="menu-hint">Catalogo de ejercicios</span>
           </a>
 
-          <a
-            class="menu-tile"
-            [class.menu-tile-disabled]="!hasFeature('alta_usuarios')"
-            [routerLink]="hasFeature('alta_usuarios') ? '/alta-usuarios' : null"
-            [attr.aria-disabled]="!hasFeature('alta_usuarios')"
-          >
+          <a class="menu-tile" routerLink="/alta-usuarios">
             <span class="icon-badge" aria-hidden="true">
               <i class="fi fi-sr-users" aria-hidden="true"></i>
             </span>
             <span class="menu-label">Alta de usuarios</span>
-            <span class="menu-hint">{{ hasFeature('alta_usuarios') ? 'Aceptar nuevas cuentas' : 'No incluido en tu plan' }}</span>
-          </a>
-
-          <a
-            class="menu-tile menu-tile-wide menu-tile--reporte"
-            [class.menu-tile-disabled]="!hasFeature('reporte_ingresos')"
-            [routerLink]="hasFeature('reporte_ingresos') ? '/reporte' : null"
-            [attr.aria-disabled]="!hasFeature('reporte_ingresos')"
-          >
-            <span class="icon-badge icon-badge--reporte" aria-hidden="true">
-              <i class="fi fi-sr-file-chart-line" aria-hidden="true"></i>
-            </span>
-            <span class="menu-label">Generar reporte</span>
-            <span class="menu-hint">{{ hasFeature('reporte_ingresos') ? 'Ingresos y gastos del mes' : 'No incluido en tu plan' }}</span>
-          </a>
-
-          <a
-            class="menu-tile"
-            [class.menu-tile-disabled]="!hasFeature('datos_y_horarios')"
-            [routerLink]="hasFeature('datos_y_horarios') ? '/datos-gimnasio' : null"
-            [attr.aria-disabled]="!hasFeature('datos_y_horarios')"
-          >
-            <span class="icon-badge" aria-hidden="true">
-              <i class="fi fi-sr-settings" aria-hidden="true"></i>
-            </span>
-            <span class="menu-label">Datos del gimnasio</span>
-            <span class="menu-hint">{{ hasFeature('datos_y_horarios') ? 'Instagram, celular y direccion' : 'No incluido en tu plan' }}</span>
-          </a>
-
-          <a
-            class="menu-tile"
-            [class.menu-tile-disabled]="!hasFeature('datos_y_horarios')"
-            [routerLink]="hasFeature('datos_y_horarios') ? '/gestion-horarios' : null"
-            [attr.aria-disabled]="!hasFeature('datos_y_horarios')"
-          >
-            <span class="icon-badge" aria-hidden="true">
-              <i class="fi fi-sr-calendar-clock" aria-hidden="true"></i>
-            </span>
-            <span class="menu-label">Gestion de horarios</span>
-            <span class="menu-hint">{{ hasFeature('datos_y_horarios') ? 'Horarios de clases' : 'No incluido en tu plan' }}</span>
+            <span class="menu-hint">Aceptar nuevas cuentas</span>
           </a>
         </nav>
       </div>

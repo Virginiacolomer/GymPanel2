@@ -10,7 +10,6 @@ type UserPlanRow = {
   firstName: string;
   lastName: string;
   dni: string;
-  membershipFrequency: string;
 };
 
 @Component({
@@ -94,7 +93,6 @@ export class AsignarPlan implements OnInit {
       firstName: user.nombre,
       lastName: user.apellido,
       dni: user.dni,
-      membershipFrequency: user.frecuenciaDias !== null ? String(user.frecuenciaDias) : '',
     };
   }
 

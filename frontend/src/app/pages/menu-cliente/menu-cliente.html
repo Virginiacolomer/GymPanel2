@@ -16,48 +16,7 @@
             <span class="menu-label">Mi plan</span>
             <span class="menu-hint">Rutina de entrenamiento</span>
           </a>
-
-          <a class="menu-tile" routerLink="/mi-membresia">
-            <span class="icon-badge" aria-hidden="true">
-              <i class="fi fi-sr-calendar-lines"></i>
-            </span>
-            <span class="menu-label">Mi membresia</span>
-            <span class="menu-hint">Estado y vencimiento</span>
-          </a>
-
-          <a class="menu-tile menu-tile-wide" routerLink="/mis-pagos">
-            <span class="icon-badge" aria-hidden="true">
-              <i class="fi fi-sr-credit-card"></i>
-            </span>
-            <span class="menu-label">Mis pagos</span>
-            <span class="menu-hint">Historial y proximo vencimiento</span>
-          </a>
-
-          <a class="menu-tile menu-tile-wide" routerLink="/mis-horarios">
-            <span class="icon-badge" aria-hidden="true">
-              <i class="fi fi-sr-calendar-clock"></i>
-            </span>
-            <span class="menu-label">Horarios</span>
-            <span class="menu-hint">Horarios de clases del gimnasio</span>
-          </a>
         </nav>
-
-        @if (gimnasioContacto && (gimnasioContacto.instagram || gimnasioContacto.telefono || gimnasioContacto.direccion)) {
-          <section class="gym-contact" aria-label="Informacion de contacto del gimnasio">
-            <h2>{{ gimnasioContacto.nombre }}</h2>
-            <div class="gym-contact-details">
-              @if (gimnasioContacto.instagram) {
-                <span><strong>Instagram:</strong> {{ gimnasioContacto.instagram }}</span>
-              }
-              @if (gimnasioContacto.telefono) {
-                <span><strong>Celular:</strong> {{ gimnasioContacto.telefono }}</span>
-              }
-              @if (gimnasioContacto.direccion) {
-                <span><strong>Direccion:</strong> {{ gimnasioContacto.direccion }}</span>
-              }
-            </div>
-          </section>
-        }
       </div>
     </section>
   </main>

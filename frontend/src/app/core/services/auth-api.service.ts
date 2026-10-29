@@ -5,7 +5,6 @@ import { environment } from '../../../environments/environment';
 import { CurrentUser } from './auth-state.service';
 
 export interface RegisterUserRequest {
-  gimnasioId: number;
   email: string;
   nombre: string;
   apellido: string;
@@ -14,7 +13,6 @@ export interface RegisterUserRequest {
 }
 
 export interface LoginRequest {
-  gimnasioId: number;
   email: string;
   password: string;
 }

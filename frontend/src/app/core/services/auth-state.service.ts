@@ -3,12 +3,10 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface CurrentUser {
   id: string;
-  // El superadmin no pertenece a ningun gimnasio.
-  gimnasioId?: number;
   email: string;
   nombre?: string;
   apellido?: string;
-  role: 'CLIENTE' | 'ADMIN' | 'SUPERADMIN';
+  role: 'CLIENTE' | 'ADMIN';
   dni?: string;
 }
 
