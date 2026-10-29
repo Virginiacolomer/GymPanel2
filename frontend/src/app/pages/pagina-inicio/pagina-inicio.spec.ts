@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 
 import { PaginaInicio } from './pagina-inicio';
 
@@ -9,6 +10,7 @@ describe('PaginaInicio', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [PaginaInicio],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PaginaInicio);
