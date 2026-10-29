@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, signal, computed } from '@angular/core';
 
 export interface CurrentUser {
   id: string;
@@ -10,22 +9,25 @@ export interface CurrentUser {
   dni?: string;
 }
 
+// Service de estado de sesion. Unica fuente de verdad sobre el usuario
+// autenticado. Expuesto como readonly para que nadie mute el estado desde afuera.
 @Injectable({
   providedIn: 'root',
 })
 export class AuthStateService {
-  private token: string | null = this.loadTokenFromStorage();
-  private currentUserSubject = new BehaviorSubject<CurrentUser | null>(
-    this.loadUserFromStorage()
-  );
-  public currentUser$ = this.currentUserSubject.asObservable();
+  private readonly _token = signal<string | null>(this.loadTokenFromStorage());
+  private readonly _currentUser = signal<CurrentUser | null>(this.loadUserFromStorage());
 
-  constructor() {}
+  // Solo lectura para los consumidores.
+  readonly currentUser = this._currentUser.asReadonly();
+  readonly isLoggedIn = computed(
+    () => this._currentUser() !== null && this._token() !== null,
+  );
 
   private loadUserFromStorage(): CurrentUser | null {
     try {
       const userJson = localStorage.getItem('currentUser');
-      return userJson ? JSON.parse(userJson) : null;
+      return userJson ? (JSON.parse(userJson) as CurrentUser) : null;
     } catch {
       return null;
     }
@@ -39,33 +41,25 @@ export class AuthStateService {
     }
   }
 
-  setCurrentUser(user: CurrentUser): void {
-    this.currentUserSubject.next(user);
+  setSession(user: CurrentUser, token: string): void {
+    this._token.set(token);
+    this._currentUser.set(user);
+    localStorage.setItem('accessToken', token);
     localStorage.setItem('currentUser', JSON.stringify(user));
   }
 
-  setSession(user: CurrentUser, token: string): void {
-    this.token = token;
-    localStorage.setItem('accessToken', token);
-    this.setCurrentUser(user);
-  }
-
   getCurrentUser(): CurrentUser | null {
-    return this.currentUserSubject.value;
+    return this._currentUser();
   }
 
   getToken(): string | null {
-    return this.token;
+    return this._token();
   }
 
   logout(): void {
-    this.token = null;
-    this.currentUserSubject.next(null);
-    localStorage.removeItem('currentUser');
+    this._token.set(null);
+    this._currentUser.set(null);
     localStorage.removeItem('accessToken');
-  }
-
-  isLoggedIn(): boolean {
-    return this.currentUserSubject.value !== null && this.token !== null;
+    localStorage.removeItem('currentUser');
   }
 }
