@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      # Base propia del CI para los e2e: se crea vacia en cada corrida y la
+      # app aplica las migraciones al arrancar.
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: gympanel
+          POSTGRES_PASSWORD: gympanel
+          POSTGRES_DB: gympanel_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U gympanel"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgresql://gympanel:gympanel@localhost:5432/gympanel_test
+      JWT_SECRET: ci-secret
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+      - name: Lint (incluye fronteras entre contextos)
+        run: npm run lint:check
+      - run: npm run build
+      - name: Tests unitarios
+        run: npm test
+      - name: Tests e2e
+        run: npm run test:e2e
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npx ng build
+      - name: Tests unitarios
+        run: npx ng test --watch=false
