@@ -86,7 +86,8 @@ Routes (`app.routes.ts`) are gated by two guards: `authGuard` (`data: { role: 'A
 
 ## CI and deployment
 
-- CI: `.github/workflows/ci.yml` runs backend lint/build/unit/e2e (with a Postgres service) and frontend build/tests on every PR and push to `main`.
+- CI: `.github/workflows/ci.yml` runs backend lint/build/unit/e2e (with a Postgres service) and frontend build/tests on every PR and on pushes to `develop` and `main`.
+- Branches: feature branches start from `develop` and merge into it by PR; `main` only receives merges from `develop` and is what gets deployed.
 - Backend → Railway, root directory `backend`, config in `backend/railway.json`, healthcheck at `/health`. Env vars: see `backend/.env.example`.
 - Frontend → Vercel, root directory `frontend`, config in `frontend/vercel.json`, build output `dist/frontend/browser`.
 - If the Railway backend URL changes, update `frontend/src/environments/environment.prod.ts` and redeploy the frontend — it is not read from an env var at runtime.

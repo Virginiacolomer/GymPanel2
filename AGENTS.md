@@ -327,8 +327,8 @@ Impacto y riesgo actual (tabla solo si hace falta)
 ## 11. Git, commits y deploy
 
 - Commits **pequeños y atómicos**, un cambio lógico, mensajes claros, frecuentes, **no commitear código roto**. Conventional Commits: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`. Relacionar con issue/ticket. Usar `.gitignore`.
-- Nunca una sola rama. Ramas cortas (1–3 días): `chore/limpieza-<qué>`, `refactor/<contexto>-<qué>`, o una por historia de usuario. Se mergean por PR a `main`. `git pull --rebase origin main` todos los días. Importa más **quién mergea** que quién crea ramas.
-- Deploy actual: backend en **Railway** (`backend/railway.json`, healthcheck `/health`) y frontend en **Vercel** (`frontend/vercel.json`), ambos desde `main`. **Al arrancar, el backend aplica las migraciones pendientes**: no mergear a `main` una migración destructiva sin avisar al equipo. El esquema con Docker (build → tag con versión → push → `pull` y `up -d --force-recreate`) es el que propone la cátedra; adoptarlo es decisión del equipo.
+- Nunca una sola rama. Ramas cortas (1–3 días): `chore/limpieza-<qué>`, `refactor/<contexto>-<qué>`, o una por historia de usuario. Salen de **`develop`** y se mergean por PR a `develop` (rama de integración). `git pull --rebase origin develop` todos los días. `main` es lo que se deploya: solo recibe merges de `develop` cuando el equipo lo decide. Importa más **quién mergea** que quién crea ramas.
+- Deploy actual: backend en **Railway** (`backend/railway.json`, healthcheck `/health`) y frontend en **Vercel** (`frontend/vercel.json`), ambos desde `main`. **Al arrancar, el backend aplica las migraciones pendientes**: no mergear a `main` una migración destructiva sin avisar al equipo. `develop` no se deploya. El esquema con Docker (build → tag con versión → push → `pull` y `up -d --force-recreate`) es el que propone la cátedra; adoptarlo es decisión del equipo.
 - Cambios de BD **solo por migración**.
 
 ---
@@ -500,12 +500,12 @@ Los bloques se generan solos leyendo las carpetas de `src/contexts`: al crear un
 
 ### 16.5 Checklist de cada PR (Definition of Done de la Fase 2)
 
-- [ ] Rama corta `refactor/<contexto>-<qué>` desde `main` actualizado; commits Conventional Commits.
+- [ ] Rama corta `refactor/<contexto>-<qué>` desde `develop` actualizado y PR contra `develop` (no contra `main`); commits Conventional Commits.
 - [ ] `npm run lint:check`, `npm test`, `npm run build` y `npm run test:e2e` en verde (backend); `ng build` y `ng test --watch=false` en verde (frontend).
 - [ ] Ningún e2e modificado para "hacerlo pasar". Si un e2e estaba mal, se discute aparte y se cambia en su propio commit `test:`.
 - [ ] Mismas rutas, mismos JSON, mismos códigos y mensajes de error.
 - [ ] Reglas nuevas en dominio con su test unitario; casos de uso sin reglas de negocio.
-- [ ] Si tocaste entidades TypeORM: `migration:generate` sin cambios reales (16.2, paso 9). Si el esquema cambia **a propósito**, migración nueva en `src/database/migrations` y aviso al equipo (se aplica sola al deployar `main`).
+- [ ] Si tocaste entidades TypeORM: `migration:generate` sin cambios reales (16.2, paso 9). Si el esquema cambia **a propósito**, migración nueva en `src/database/migrations` y aviso al equipo (se aplica sola al arrancar el backend: en la base compartida le cambia el esquema a todos, y en producción al deployar `main`).
 - [ ] Si tocaste un archivo de otra sección (`app.module.ts`, `app.routes.ts`, `shared/`, API pública de otro contexto), lo aprueba su dueño.
 - [ ] Deuda técnica nueva registrada (sección 17) y justificación del cambio en el PR: qué, por qué, alternativas, huella (+/−).
 
