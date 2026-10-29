@@ -6,6 +6,8 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { Request } from 'express';
+import { JwtPayload } from './jwt-payload.interface';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -15,10 +17,10 @@ export class JwtAuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
-    const authorizationHeader = request.headers.authorization as
-      | string
-      | undefined;
+    const request = context
+      .switchToHttp()
+      .getRequest<Request & { user?: JwtPayload }>();
+    const authorizationHeader = request.headers.authorization;
 
     if (!authorizationHeader?.startsWith('Bearer ')) {
       throw new UnauthorizedException('Token no provisto.');
@@ -27,7 +29,7 @@ export class JwtAuthGuard implements CanActivate {
     const token = authorizationHeader.slice('Bearer '.length).trim();
 
     try {
-      request.user = await this.jwtService.verifyAsync(token, {
+      request.user = await this.jwtService.verifyAsync<JwtPayload>(token, {
         secret:
           this.configService.get<string>('JWT_SECRET') || 'gympanel-dev-secret',
       });

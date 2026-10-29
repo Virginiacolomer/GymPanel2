@@ -26,7 +26,11 @@ export class PlanEntrenamientoService {
 
   private isTransientDbConnectionError(error: unknown): boolean {
     const message =
-      error instanceof Error ? error.message : String(error ?? '');
+      error instanceof Error
+        ? error.message
+        : typeof error === 'string'
+          ? error
+          : '';
     return (
       message.includes('Connection terminated unexpectedly') ||
       message.includes('ECONNRESET') ||

@@ -68,7 +68,7 @@ export class UsersService {
       // Maneja conflictos de unicidad en DB (ej. dos registros concurrentes con el mismo email)
       if (
         error instanceof QueryFailedError &&
-        (error as any).driverError?.code === '23505'
+        (error.driverError as { code?: string } | undefined)?.code === '23505'
       ) {
         throw new ConflictException(
           'El correo electronico ya esta registrado.',
@@ -111,7 +111,7 @@ export class UsersService {
       `[UsersService.findCreatedUsers] Usuarios leidos desde DB: ${users.length}`,
     );
 
-    const normalize = (value: unknown): string =>
+    const normalize = (value: string | null | undefined): string =>
       String(value ?? '')
         .trim()
         .toLowerCase();
