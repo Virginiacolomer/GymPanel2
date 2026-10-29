@@ -1,12 +1,6 @@
-import { IsEmail, IsInt, IsNotEmpty, Min, MinLength } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 
 export class LoginDto {
-  @Type(() => Number)
-  @IsInt({ message: 'Selecciona un gimnasio valido.' })
-  @Min(1, { message: 'Selecciona un gimnasio valido.' })
-  gimnasioId: number;
-
   @IsNotEmpty({ message: 'El correo electronico es obligatorio.' })
   @IsEmail({}, { message: 'Ingresa un correo electronico valido.' })
   email: string;

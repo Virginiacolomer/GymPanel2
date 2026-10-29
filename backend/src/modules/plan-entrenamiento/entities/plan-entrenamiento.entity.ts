@@ -1,18 +1,10 @@
-﻿import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
+﻿import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { Gimnasio } from '../../gimnasio/entities/gimnasio.entity';
 
 @Entity({ name: 'plan_entrenamiento', schema: 'public' })
 export class PlanEntrenamiento {
     @PrimaryGeneratedColumn({ type: 'bigint' })
     id!: number;
-
-    @Column({ name: 'gimnasio_id', type: 'int' })
-    gimnasioId!: number;
-
-    @ManyToOne(() => Gimnasio)
-    @JoinColumn({ name: 'gimnasio_id' })
-    gimnasio!: Gimnasio;
 
     @Column()
     nombre!: string;

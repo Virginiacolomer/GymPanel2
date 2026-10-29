@@ -93,10 +93,9 @@ export class PlanEntrenamientoService {
     await this.planEntrenamientoRepository.delete(planId);
   }
 
-  // Trae un usuario admin-objetivo verificando que pertenezca al gimnasio del
-  // admin que hace la operacion (asignar/editar plan por userId).
-  private async getUserWithinGimnasio(gimnasioId: number, userId: number): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { id: userId, gimnasioId } });
+  // Trae el usuario objetivo (asignar/editar plan por userId) o tira 404.
+  private async getUserById(userId: number): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
 
     if (!user) {
       throw new NotFoundException(`No se encontro el usuario con id ${userId}`);
@@ -231,7 +230,7 @@ export class PlanEntrenamientoService {
     };
   }
 
-  async create(gimnasioId: number, createPlanEntrenamientoDto: CreatePlanEntrenamientoDto) {
+  async create(createPlanEntrenamientoDto: CreatePlanEntrenamientoDto) {
     const ejercicios = this.normalizeEjercicios(
       createPlanEntrenamientoDto.cantidadDias,
       createPlanEntrenamientoDto.ejercicios,
@@ -244,7 +243,6 @@ export class PlanEntrenamientoService {
     this.validateAlignedData(ejercicios, repeticiones);
 
     const insertPayload = {
-      gimnasioId,
       nombre: createPlanEntrenamientoDto.nombre.trim(),
       descripcion: createPlanEntrenamientoDto.descripcion?.trim() ?? null,
       tipo: 'predeterminado' as const,
@@ -263,9 +261,9 @@ export class PlanEntrenamientoService {
     };
   }
 
-  async findAll(gimnasioId: number) {
+  async findAll() {
     const planes = await this.planEntrenamientoRepository.find({
-      where: { tipo: 'predeterminado', gimnasioId },
+      where: { tipo: 'predeterminado' },
       order: {
         id: 'ASC',
       },
@@ -274,13 +272,13 @@ export class PlanEntrenamientoService {
     return planes.map((plan) => this.formatPlanForResponse(plan));
   }
 
-  async findOne(gimnasioId: number, id: number) {
-    return this.findPlanEntrenamientoById(gimnasioId, id);
+  async findOne(id: number) {
+    return this.findPlanEntrenamientoById(id);
   }
 
-  async findPlanEntrenamientoById(gimnasioId: number, id: number) {
+  async findPlanEntrenamientoById(id: number) {
     const plan = await this.planEntrenamientoRepository.findOne({
-      where: { id, gimnasioId },
+      where: { id },
     });
 
     if (!plan) {
@@ -290,9 +288,8 @@ export class PlanEntrenamientoService {
     return this.formatPlanForResponse(plan);
   }
 
-  async findGruposMusculares(gimnasioId: number) {
+  async findGruposMusculares() {
     return this.grupoMuscularRepository.find({
-      where: { gimnasioId },
       relations: ['ejercicios'],
       order: {
         nombre: 'ASC',
@@ -300,9 +297,8 @@ export class PlanEntrenamientoService {
     });
   }
 
-  async findGruposMuscularesResumen(gimnasioId: number) {
+  async findGruposMuscularesResumen() {
     return this.grupoMuscularRepository.find({
-      where: { gimnasioId },
       select: {
         id: true,
         nombre: true,
@@ -313,7 +309,7 @@ export class PlanEntrenamientoService {
     });
   }
 
-  async findEjerciciosByGrupoMuscularId(gimnasioId: number, grupoMuscularId: number) {
+  async findEjerciciosByGrupoMuscularId(grupoMuscularId: number) {
     const normalizedGroupId = Number(grupoMuscularId);
 
     if (!Number.isInteger(normalizedGroupId) || normalizedGroupId <= 0) {
@@ -321,7 +317,7 @@ export class PlanEntrenamientoService {
     }
 
     const grupoMuscular = await this.grupoMuscularRepository.findOne({
-      where: { id: normalizedGroupId, gimnasioId },
+      where: { id: normalizedGroupId },
       select: { id: true },
     });
 
@@ -338,8 +334,8 @@ export class PlanEntrenamientoService {
       .getRawMany<{ id: number; nombre: string; imagenUrl: string | null }>();
   }
 
-  async findEjercicioById(gimnasioId: number, id: number) {
-    const ejercicio = await this.ejercicioRepository.findOne({ where: { id, gimnasioId } });
+  async findEjercicioById(id: number) {
+    const ejercicio = await this.ejercicioRepository.findOne({ where: { id } });
 
     if (!ejercicio) {
       throw new NotFoundException(`No se encontro el ejercicio con id ${id}`);
@@ -348,7 +344,7 @@ export class PlanEntrenamientoService {
     return ejercicio;
   }
 
-  async createEjercicio(gimnasioId: number, createEjercicioDto: CreateEjercicioDto) {
+  async createEjercicio(createEjercicioDto: CreateEjercicioDto) {
     const grupoMuscularId = Number(createEjercicioDto.grupoMuscularId);
     const normalizedNombre = this.normalizeExerciseName(createEjercicioDto.nombre);
 
@@ -357,7 +353,7 @@ export class PlanEntrenamientoService {
     }
 
     const grupoMuscular = await this.grupoMuscularRepository.findOne({
-      where: { id: grupoMuscularId, gimnasioId },
+      where: { id: grupoMuscularId },
     });
 
     if (!grupoMuscular) {
@@ -365,7 +361,6 @@ export class PlanEntrenamientoService {
     }
 
     const ejerciciosExistentes = await this.ejercicioRepository.find({
-      where: { gimnasioId },
       select: {
         id: true,
         nombre: true,
@@ -381,7 +376,6 @@ export class PlanEntrenamientoService {
     }
 
     const created = this.ejercicioRepository.create({
-      gimnasioId,
       nombre: normalizedNombre,
       grupoMuscular,
     });
@@ -396,7 +390,7 @@ export class PlanEntrenamientoService {
     };
   }
 
-  async createGrupoMuscular(gimnasioId: number, createGrupoMuscularDto: CreateGrupoMuscularDto) {
+  async createGrupoMuscular(createGrupoMuscularDto: CreateGrupoMuscularDto) {
     const normalizedNombre = this.normalizeExerciseName(createGrupoMuscularDto.nombre);
 
     if (!normalizedNombre) {
@@ -404,7 +398,6 @@ export class PlanEntrenamientoService {
     }
 
     const gruposExistentes = await this.grupoMuscularRepository.find({
-      where: { gimnasioId },
       select: {
         id: true,
         nombre: true,
@@ -420,7 +413,6 @@ export class PlanEntrenamientoService {
     }
 
     const created = this.grupoMuscularRepository.create({
-      gimnasioId,
       nombre: normalizedNombre,
     });
 
@@ -433,9 +425,9 @@ export class PlanEntrenamientoService {
     };
   }
 
-  async updateEjercicio(gimnasioId: number, id: number, updateEjercicioDto: UpdateEjercicioDto) {
+  async updateEjercicio(id: number, updateEjercicioDto: UpdateEjercicioDto) {
     const ejercicio = await this.ejercicioRepository.findOne({
-      where: { id, gimnasioId },
+      where: { id },
       relations: {
         grupoMuscular: true,
       },
@@ -460,7 +452,6 @@ export class PlanEntrenamientoService {
       }
 
       const ejerciciosExistentes = await this.ejercicioRepository.find({
-        where: { gimnasioId },
         select: {
           id: true,
           nombre: true,
@@ -481,7 +472,7 @@ export class PlanEntrenamientoService {
     if (hasGrupoMuscularId) {
       const grupoMuscularId = Number(updateEjercicioDto.grupoMuscularId);
       const grupoMuscular = await this.grupoMuscularRepository.findOne({
-        where: { id: grupoMuscularId, gimnasioId },
+        where: { id: grupoMuscularId },
       });
 
       if (!grupoMuscular) {
@@ -501,8 +492,8 @@ export class PlanEntrenamientoService {
     };
   }
 
-  async uploadEjercicioImagen(gimnasioId: number, id: number, file: Express.Multer.File) {
-    const ejercicio = await this.ejercicioRepository.findOne({ where: { id, gimnasioId } });
+  async uploadEjercicioImagen(id: number, file: Express.Multer.File) {
+    const ejercicio = await this.ejercicioRepository.findOne({ where: { id } });
 
     if (!ejercicio) {
       throw new NotFoundException(`No se encontro el ejercicio con id ${id}`);
@@ -529,8 +520,8 @@ export class PlanEntrenamientoService {
     };
   }
 
-  async updateGrupoMuscular(gimnasioId: number, id: number, updateGrupoMuscularDto: UpdateGrupoMuscularDto) {
-    const grupoMuscular = await this.grupoMuscularRepository.findOne({ where: { id, gimnasioId } });
+  async updateGrupoMuscular(id: number, updateGrupoMuscularDto: UpdateGrupoMuscularDto) {
+    const grupoMuscular = await this.grupoMuscularRepository.findOne({ where: { id } });
 
     if (!grupoMuscular) {
       throw new NotFoundException(`No se encontro el grupo muscular con id ${id}`);
@@ -549,7 +540,6 @@ export class PlanEntrenamientoService {
     }
 
     const gruposExistentes = await this.grupoMuscularRepository.find({
-      where: { gimnasioId },
       select: {
         id: true,
         nombre: true,
@@ -574,8 +564,8 @@ export class PlanEntrenamientoService {
     };
   }
 
-  async removeEjercicio(gimnasioId: number, id: number) {
-    const ejercicio = await this.ejercicioRepository.findOne({ where: { id, gimnasioId } });
+  async removeEjercicio(id: number) {
+    const ejercicio = await this.ejercicioRepository.findOne({ where: { id } });
 
     if (!ejercicio) {
       throw new NotFoundException(`No se encontro el ejercicio con id ${id}`);
@@ -589,9 +579,9 @@ export class PlanEntrenamientoService {
     };
   }
 
-  async findGrupoMuscularById(gimnasioId: number, id: number) {
+  async findGrupoMuscularById(id: number) {
     const grupoMuscular = await this.grupoMuscularRepository.findOne({
-      where: { id, gimnasioId },
+      where: { id },
       relations: {
         ejercicios: true,
       },
@@ -638,20 +628,19 @@ export class PlanEntrenamientoService {
   }
 
   // Variante para el admin (GET /plan-entrenamiento/usuario/:userId): valida
-  // que el usuario consultado pertenezca al gimnasio del admin antes de
-  // exponer su plan asignado.
-  async findAssignmentByUserIdWithinGimnasio(gimnasioId: number, userId: number) {
-    await this.getUserWithinGimnasio(gimnasioId, userId);
+  // que el usuario consultado exista antes de exponer su plan asignado.
+  async findAssignmentByExistingUserId(userId: number) {
+    await this.getUserById(userId);
     return this.findAssignmentByUserId(userId);
   }
 
-  async assignPlanToUser(gimnasioId: number, userId: number, planId: number): Promise<{ message: string }> {
+  async assignPlanToUser(userId: number, planId: number): Promise<{ message: string }> {
     return this.executeWithDbRetry('assignPlanToUser', async () => {
-      const user = await this.getUserWithinGimnasio(gimnasioId, userId);
+      const user = await this.getUserById(userId);
 
       const previousPlanId = user.planEntrenamientoId;
 
-      const planExists = await this.planEntrenamientoRepository.existsBy({ id: planId, gimnasioId });
+      const planExists = await this.planEntrenamientoRepository.existsBy({ id: planId });
       if (!planExists) {
         throw new NotFoundException(`No se encontro el plan de entrenamiento con id ${planId}`);
       }
@@ -667,8 +656,8 @@ export class PlanEntrenamientoService {
     });
   }
 
-  async updatePlanForUser(gimnasioId: number, userId: number, createPlanEntrenamientoDto: CreatePlanEntrenamientoDto) {
-    const user = await this.getUserWithinGimnasio(gimnasioId, userId);
+  async updatePlanForUser(userId: number, createPlanEntrenamientoDto: CreatePlanEntrenamientoDto) {
+    const user = await this.getUserById(userId);
 
     const previousPlanId = user.planEntrenamientoId;
 
@@ -684,7 +673,6 @@ export class PlanEntrenamientoService {
     this.validateAlignedData(ejercicios, repeticiones);
 
     const insertPayload = {
-      gimnasioId,
       nombre: createPlanEntrenamientoDto.nombre.trim(),
       descripcion: createPlanEntrenamientoDto.descripcion?.trim() ?? null,
       tipo: 'editado' as const,
@@ -715,8 +703,8 @@ export class PlanEntrenamientoService {
     };
   }
 
-  async update(gimnasioId: number, id: number, updatePlanEntrenamientoDto: UpdatePlanEntrenamientoDto) {
-    const plan = await this.planEntrenamientoRepository.findOne({ where: { id, gimnasioId } });
+  async update(id: number, updatePlanEntrenamientoDto: UpdatePlanEntrenamientoDto) {
+    const plan = await this.planEntrenamientoRepository.findOne({ where: { id } });
 
     if (!plan) {
       throw new NotFoundException(`No se encontro el plan de entrenamiento con id ${id}`);
@@ -751,8 +739,8 @@ export class PlanEntrenamientoService {
     return this.formatPlanForResponse(savedPlan);
   }
 
-  async remove(gimnasioId: number, id: number) {
-    const plan = await this.planEntrenamientoRepository.findOne({ where: { id, gimnasioId } });
+  async remove(id: number) {
+    const plan = await this.planEntrenamientoRepository.findOne({ where: { id } });
 
     if (!plan) {
       throw new NotFoundException(`No se encontro el plan de entrenamiento con id ${id}`);
