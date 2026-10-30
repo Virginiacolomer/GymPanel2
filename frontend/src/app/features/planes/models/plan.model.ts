@@ -32,3 +32,4 @@ export interface UserEditedPlanResponse {
   tipo: 'editado';
   message: string;
 }
+

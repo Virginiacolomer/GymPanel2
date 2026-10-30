@@ -69,3 +69,4 @@ export interface UploadEjercicioImagenResponse {
   imagenUrl: string;
   message: string;
 }
+
