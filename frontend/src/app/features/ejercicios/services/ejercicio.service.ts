@@ -109,3 +109,4 @@ export class EjercicioService {
       .pipe(timeout(20000));
   }
 }
+

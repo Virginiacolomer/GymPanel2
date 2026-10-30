@@ -31,3 +31,4 @@ export class UsuarioService {
     return this.http.delete<{ message: string }>(`${this.apiBaseUrl}/users/${userId}`);
   }
 }
+
