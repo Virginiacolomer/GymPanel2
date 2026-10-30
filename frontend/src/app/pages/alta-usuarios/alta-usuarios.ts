@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { finalize, timeout } from 'rxjs';
+import { finalize } from 'rxjs';
 import { PageHeaderCompactComponent } from '../../shared/page-header-compact/page-header-compact';
 import { PageBgComponent } from '../../shared/page-bg/page-bg';
-import { AdminUserItem, UsersApiService } from '../../core/services/users-api.service';
+import { AdminUserItem, UsuarioService } from '../../features/usuarios/services/usuario.service';
 
 @Component({
   standalone: true,
@@ -12,9 +12,9 @@ import { AdminUserItem, UsersApiService } from '../../core/services/users-api.se
   styleUrl: './alta-usuarios.css',
 })
 export class AltaUsuarios implements OnInit {
-  private readonly usersApiService = inject(UsersApiService);
+  private readonly usuarioService = inject(UsuarioService);
   private readonly cdr = inject(ChangeDetectorRef);
-  private loadingGuardTimer: ReturnType<typeof setTimeout> | null = null;
+
 
   pendingAccounts: AdminUserItem[] = [];
   isLoading = false;
@@ -22,12 +22,10 @@ export class AltaUsuarios implements OnInit {
   statusMessage = '';
 
   ngOnInit(): void {
-    console.log('[AltaUsuarios] ngOnInit - cargando usuarios pendientes');
     this.loadPendingUsers();
   }
 
   reloadPendingUsers(): void {
-    console.log('[AltaUsuarios] reloadPendingUsers - recargando usuarios pendientes');
     this.loadPendingUsers();
   }
 
@@ -57,7 +55,7 @@ export class AltaUsuarios implements OnInit {
     );
     this.cdr.detectChanges();
 
-    this.usersApiService
+    this.usuarioService
       .deleteUsuario(accountId)
       .pipe(finalize(() => (this.processingUserId = null)))
       .subscribe({
@@ -78,30 +76,12 @@ export class AltaUsuarios implements OnInit {
       this.isLoading = true;
       this.statusMessage = '';
       this.cdr.detectChanges();
-
-      if (this.loadingGuardTimer) {
-        clearTimeout(this.loadingGuardTimer);
-      }
-
-      this.loadingGuardTimer = setTimeout(() => {
-        if (this.isLoading) {
-          console.warn('[AltaUsuarios] Se forzo cierre de estado de carga por timeout de seguridad');
-          this.isLoading = false;
-          this.cdr.detectChanges();
-        }
-      }, 8000);
     }
 
-    this.usersApiService
+    this.usuarioService
       .getUsuariosPendientes()
       .pipe(
-        timeout(5000),
         finalize(() => {
-          if (this.loadingGuardTimer) {
-            clearTimeout(this.loadingGuardTimer);
-            this.loadingGuardTimer = null;
-          }
-
           if (!silent) {
             this.isLoading = false;
           }
@@ -110,27 +90,14 @@ export class AltaUsuarios implements OnInit {
       )
       .subscribe({
         next: (users) => {
-          console.log('[AltaUsuarios] Respuesta users/pendientes:', users);
           this.pendingAccounts = users;
-          console.log(
-            `[AltaUsuarios] pendingAccounts actualizados: ${this.pendingAccounts.length}`,
-            this.pendingAccounts.map((account) => ({ id: account.id, dni: account.dni, estado: account.estado })),
-          );
-
-          // Confirmamos cuantas filas quedaron renderizadas en el DOM.
-          queueMicrotask(() => {
-            const domRows = document.querySelectorAll('table tbody tr').length;
-            console.log(`[AltaUsuarios] Filas renderizadas en tabla: ${domRows}`);
-          });
-
           this.cdr.detectChanges();
 
           if (!silent && users.length === 0) {
             this.statusMessage = 'No hay usuarios pendientes por aprobar.';
           }
         },
-        error: (error) => {
-          console.error('[AltaUsuarios] Error cargando users/pendientes:', error);
+        error: () => {
           if (!silent) {
             this.statusMessage = 'No se pudieron cargar los usuarios pendientes. Verifica que el backend este levantado.';
           }
@@ -151,7 +118,7 @@ export class AltaUsuarios implements OnInit {
       this.cdr.detectChanges();
     }
 
-    this.usersApiService
+    this.usuarioService
       .updateEstado(accountId, status)
       .pipe(finalize(() => (this.processingUserId = null)))
       .subscribe({

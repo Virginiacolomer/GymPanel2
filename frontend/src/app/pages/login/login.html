@@ -5,16 +5,16 @@
       <div class="login-shell">
         <h1>Inicia sesión</h1>
 
-        <form class="login-form" (ngSubmit)="onSubmit()" novalidate>
+        <form class="login-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
           <label class="sr-only" for="email">Correo electronico</label>
           <input
             id="email"
             type="email"
             name="email"
-            [(ngModel)]="form.email"
+            formControlName="email"
             placeholder="correo electronico"
             autocomplete="email"
-            [disabled]="loading"
+
           />
 
           <label class="sr-only" for="password">Contrasena</label>
@@ -22,16 +22,16 @@
             id="password"
             type="password"
             name="password"
-            [(ngModel)]="form.password"
+            formControlName="password"
             placeholder="contraseña"
             autocomplete="current-password"
-            [disabled]="loading"
+
           />
 
           <button 
             type="submit" 
             class="primary-action" 
-            [disabled]="loading"
+
           >
             {{ loading ? 'Iniciando sesión...' : 'Iniciar sesión' }}
           </button>
