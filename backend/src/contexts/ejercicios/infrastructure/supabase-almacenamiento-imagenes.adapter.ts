@@ -5,6 +5,10 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import {
+  AlmacenamientoImagenes,
+  ArchivoImagen,
+} from '../domain/almacenamiento-imagenes';
 
 const EXTENSION_BY_MIMETYPE: Record<string, string> = {
   'image/jpeg': 'jpg',
@@ -13,8 +17,10 @@ const EXTENSION_BY_MIMETYPE: Record<string, string> = {
 };
 
 @Injectable()
-export class SupabaseStorageService {
-  private readonly logger = new Logger(SupabaseStorageService.name);
+export class SupabaseAlmacenamientoImagenesAdapter implements AlmacenamientoImagenes {
+  private readonly logger = new Logger(
+    SupabaseAlmacenamientoImagenesAdapter.name,
+  );
   private readonly client: SupabaseClient | null;
   private readonly bucket: string;
 
@@ -44,9 +50,9 @@ export class SupabaseStorageService {
     }
   }
 
-  async uploadEjercicioImage(
+  async subirImagen(
     ejercicioId: number,
-    file: Express.Multer.File,
+    archivo: ArchivoImagen,
   ): Promise<string> {
     if (!this.client) {
       throw new InternalServerErrorException(
@@ -54,13 +60,13 @@ export class SupabaseStorageService {
       );
     }
 
-    const extension = EXTENSION_BY_MIMETYPE[file.mimetype] ?? 'jpg';
+    const extension = EXTENSION_BY_MIMETYPE[archivo.mimetype] ?? 'jpg';
     const path = `ejercicios/${ejercicioId}-${Date.now()}.${extension}`;
 
     const { error } = await this.client.storage
       .from(this.bucket)
-      .upload(path, file.buffer, {
-        contentType: file.mimetype,
+      .upload(path, archivo.buffer, {
+        contentType: archivo.mimetype,
         upsert: true,
       });
 
@@ -77,7 +83,7 @@ export class SupabaseStorageService {
     return data.publicUrl;
   }
 
-  async deleteEjercicioImage(imageUrl: string): Promise<void> {
+  async eliminarImagen(imageUrl: string): Promise<void> {
     if (!this.client) {
       return;
     }
@@ -109,3 +115,5 @@ export class SupabaseStorageService {
     return decodeURIComponent(imageUrl.slice(markerIndex + marker.length));
   }
 }
+
+export { SupabaseAlmacenamientoImagenesAdapter as SupabaseStorageService };

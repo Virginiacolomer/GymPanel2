@@ -3,9 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './contexts/auth/auth.module';
+import { EjerciciosModule } from './contexts/ejercicios';
 import { PlanEntrenamientoModule } from './modules/plan-entrenamiento/plan-entrenamiento.module';
 import { AppController } from './app.controller';
 import { databaseOptions } from './database/database-options';
+
 @Module({
   controllers: [AppController],
   providers: [],
@@ -34,6 +36,10 @@ import { databaseOptions } from './database/database-options';
     }),
     UsersModule,
     AuthModule,
+    // EjerciciosModule debe registrarse antes que PlanEntrenamientoModule para
+    // que las rutas estaticas (/grupos-musculares, /ejercicios) no sean tapadas
+    // por GET /plan-entrenamiento/:id.
+    EjerciciosModule,
     PlanEntrenamientoModule,
   ],
 })

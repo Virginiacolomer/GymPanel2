@@ -8,19 +8,10 @@ import {
   Delete,
   Req,
   UseGuards,
-  UseInterceptors,
-  UploadedFile,
-  ParseFilePipeBuilder,
-  HttpStatus,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { PlanEntrenamientoService } from './plan-entrenamiento.service';
 import { CreatePlanEntrenamientoDto } from './dto/create-plan-entrenamiento.dto';
 import { UpdatePlanEntrenamientoDto } from './dto/update-plan-entrenamiento.dto';
-import { CreateEjercicioDto } from './dto/create-ejercicio.dto';
-import { CreateGrupoMuscularDto } from './dto/create-grupo-muscular.dto';
-import { UpdateEjercicioDto } from './dto/update-ejercicio.dto';
-import { UpdateGrupoMuscularDto } from './dto/update-grupo-muscular.dto';
 import { UserRole } from '../users/enums/user-role.enum';
 import {
   AuthenticatedRequest,
@@ -40,76 +31,6 @@ export class PlanEntrenamientoController {
   @Post()
   create(@Body() createPlanEntrenamientoDto: CreatePlanEntrenamientoDto) {
     return this.planEntrenamientoService.create(createPlanEntrenamientoDto);
-  }
-
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
-  @Post('ejercicios')
-  createEjercicio(@Body() createEjercicioDto: CreateEjercicioDto) {
-    return this.planEntrenamientoService.createEjercicio(createEjercicioDto);
-  }
-
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
-  @Post('grupos-musculares')
-  createGrupoMuscular(@Body() createGrupoMuscularDto: CreateGrupoMuscularDto) {
-    return this.planEntrenamientoService.createGrupoMuscular(
-      createGrupoMuscularDto,
-    );
-  }
-
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
-  @Patch('ejercicios/:id')
-  updateEjercicio(
-    @Param('id') id: string,
-    @Body() updateEjercicioDto: UpdateEjercicioDto,
-  ) {
-    return this.planEntrenamientoService.updateEjercicio(
-      +id,
-      updateEjercicioDto,
-    );
-  }
-
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
-  @Delete('ejercicios/:id')
-  removeEjercicio(@Param('id') id: string) {
-    return this.planEntrenamientoService.removeEjercicio(+id);
-  }
-
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
-  @Post('ejercicios/:id/imagen')
-  @UseInterceptors(
-    FileInterceptor('imagen', { limits: { fileSize: 5 * 1024 * 1024 } }),
-  )
-  uploadEjercicioImagen(
-    @Param('id') id: string,
-    @UploadedFile(
-      new ParseFilePipeBuilder()
-        .addFileTypeValidator({ fileType: /^image\/(jpeg|png|webp)$/ })
-        .build({
-          errorHttpStatusCode: HttpStatus.BAD_REQUEST,
-          fileIsRequired: true,
-        }),
-    )
-    file: Express.Multer.File,
-  ) {
-    return this.planEntrenamientoService.uploadEjercicioImagen(+id, file);
-  }
-
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
-  @Patch('grupos-musculares/:id')
-  updateGrupoMuscular(
-    @Param('id') id: string,
-    @Body() updateGrupoMuscularDto: UpdateGrupoMuscularDto,
-  ) {
-    return this.planEntrenamientoService.updateGrupoMuscular(
-      +id,
-      updateGrupoMuscularDto,
-    );
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -146,41 +67,6 @@ export class PlanEntrenamientoController {
     await this.planEntrenamientoService.findAssignmentByExistingUserId(+userId);
     const plan = await this.planEntrenamientoService.findByUserId(+userId);
     return { plan };
-  }
-
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
-  @Get('ejercicios/:id')
-  findEjercicioById(@Param('id') id: string) {
-    return this.planEntrenamientoService.findEjercicioById(+id);
-  }
-
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.CLIENTE)
-  @Get('grupos-musculares/:id')
-  findGrupoMuscularById(@Param('id') id: string) {
-    return this.planEntrenamientoService.findGrupoMuscularById(+id);
-  }
-
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.CLIENTE)
-  @Get('grupos-musculares/:id/ejercicios')
-  findEjerciciosByGrupoMuscularId(@Param('id') id: string) {
-    return this.planEntrenamientoService.findEjerciciosByGrupoMuscularId(+id);
-  }
-
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.CLIENTE)
-  @Get('grupos-musculares-resumen')
-  findGruposMuscularesResumen() {
-    return this.planEntrenamientoService.findGruposMuscularesResumen();
-  }
-
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.CLIENTE)
-  @Get('grupos-musculares')
-  findGruposMusculares() {
-    return this.planEntrenamientoService.findGruposMusculares();
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
