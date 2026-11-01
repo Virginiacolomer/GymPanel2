@@ -138,7 +138,10 @@
             (click)="openPreview(ejercicio.imagenUrl, ejercicio.nombre, $event)"
           />
           <div *ngIf="!ejercicio.imagenUrl" class="exercise-placeholder">
-            <i class="fi fi-rs-gym placeholder-icon" aria-hidden="true"></i>
+            <div class="placeholder-badge">
+              <i class="fi fi-rs-gym" aria-hidden="true"></i>
+            </div>
+            <span class="placeholder-text">Sin fotografía</span>
           </div>
 
           <!-- Indicador de favorito interactivo -->
