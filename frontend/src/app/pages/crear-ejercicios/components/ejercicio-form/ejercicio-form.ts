@@ -12,6 +12,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 })
 export class EjercicioFormComponent {
   readonly selectedGrupoId = input<number | null>(null);
+  readonly selectedGrupoNombre = input<string>('');
   readonly isCreatingEjercicio = input<boolean>(false);
   readonly feedbackMessage = input<string>('');
   readonly feedbackType = input<'success' | 'error' | 'info'>('info');

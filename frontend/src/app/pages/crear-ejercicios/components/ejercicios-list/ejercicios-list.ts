@@ -16,6 +16,7 @@ export class EjerciciosListComponent {
   // Inputs
   readonly ejercicios = input<CatalogoEjercicio[]>([]);
   readonly selectedGrupoId = input<number | null>(null);
+  readonly selectedGrupoNombre = input<string>('');
   readonly isLoadingGrupoDetalle = input<boolean>(false);
   readonly hasLoadedGrupoDetalle = input<boolean>(false);
   readonly isUpdatingEjercicio = input<boolean>(false);

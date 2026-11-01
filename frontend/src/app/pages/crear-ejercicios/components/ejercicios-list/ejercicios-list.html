@@ -6,12 +6,23 @@
 
 <!-- Display existing exercises in selected group -->
 <div *ngIf="isLoadingGrupoDetalle()" class="ejercicios-list">
-  <h3>Ejercicios en este grupo:</h3>
+  <div class="ejercicios-list-header">
+    <h3>Ejercicios en este grupo</h3>
+  </div>
   <p class="empty-state">⏳ Cargando ejercicios...</p>
 </div>
 
 <div *ngIf="selectedGrupoId() && !isLoadingGrupoDetalle()" class="ejercicios-list">
-  <h3>Ejercicios en este grupo:</h3>
+  <div class="ejercicios-list-header">
+    <h3>
+      Ejercicios de:
+      <span class="highlight-grupo">{{ selectedGrupoNombre() || 'este grupo' }}</span>
+    </h3>
+    <span class="badge-count" title="Total de ejercicios en este grupo">{{
+      ejercicios().length
+    }}</span>
+  </div>
+
   <div *ngIf="ejercicios().length > 0; else noEjercicios">
     <ul>
       <li *ngFor="let ejercicio of ejercicios(); trackBy: trackByEjercicioId">
@@ -40,10 +51,10 @@
                 isUploadingImagenEjercicioId() === ejercicio.id
                   ? 'Subiendo...'
                   : recentlyUploadedImagenEjercicioId() === ejercicio.id
-                    ? '✓ Imagen subida'
+                    ? '✓ Subida'
                     : ejercicio.imagenUrl
-                      ? 'Reemplazar imagen'
-                      : 'Subir imagen'
+                      ? 'Cambiar foto'
+                      : 'Foto'
               }}
             </button>
             <button
@@ -68,7 +79,7 @@
             >
               {{
                 isDeletingEjercicio() && pendingDeleteEjercicioId() === ejercicio.id
-                  ? 'Eliminando...'
+                  ? 'Borrando...'
                   : 'Borrar'
               }}
             </button>
@@ -81,7 +92,12 @@
             (ngSubmit)="submitEdit(ejercicio.id)"
             class="ejercicio-edit-row"
           >
-            <input type="text" formControlName="nombre" placeholder="Nombre del ejercicio" />
+            <input
+              type="text"
+              formControlName="nombre"
+              placeholder="Nombre del ejercicio"
+              autocomplete="off"
+            />
             <button
               type="submit"
               class="btn btn-secondary btn-small"

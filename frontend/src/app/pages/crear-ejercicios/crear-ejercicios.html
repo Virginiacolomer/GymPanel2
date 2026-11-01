@@ -41,6 +41,7 @@
             <app-ejercicios-list
               [ejercicios]="selectedEjercicios"
               [selectedGrupoId]="selectedGrupoId"
+              [selectedGrupoNombre]="selectedGrupoNombre"
               [isLoadingGrupoDetalle]="isLoadingGrupoDetalle"
               [hasLoadedGrupoDetalle]="hasLoadedGrupoDetalle"
               [isUpdatingEjercicio]="isUpdatingEjercicio"
@@ -56,6 +57,7 @@
 
             <app-ejercicio-form
               [selectedGrupoId]="selectedGrupoId"
+              [selectedGrupoNombre]="selectedGrupoNombre"
               [isCreatingEjercicio]="isCreatingEjercicio"
               [feedbackMessage]="ejercicioFeedbackMessage"
               [feedbackType]="ejercicioFeedbackType"
