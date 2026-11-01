@@ -1,0 +1,102 @@
+<div
+  *ngIf="isOpen()"
+  class="modal-backdrop"
+  (click)="onBackdropClick($event)"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="isEditing() ? 'Editar ejercicio' : 'Crear nuevo ejercicio'"
+>
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-title-wrap">
+        <div class="modal-icon-badge">
+          <i class="fi fi-rs-gym" aria-hidden="true"></i>
+        </div>
+        <div>
+          <h3>{{ isEditing() ? 'Editar Ejercicio' : 'Crear Ejercicio' }}</h3>
+          <p class="modal-subtitle">
+            <span *ngIf="selectedGrupoNombre()" class="grupo-pill">
+              {{ selectedGrupoNombre() }}
+            </span>
+            {{
+              isEditing()
+                ? 'Modificá el nombre del ejercicio'
+                : 'Agregá un nuevo ejercicio al grupo'
+            }}
+          </p>
+        </div>
+      </div>
+      <button
+        type="button"
+        class="btn-close"
+        (click)="close.emit()"
+        aria-label="Cerrar modal"
+        [disabled]="isSubmitting()"
+      >
+        <i class="fi fi-rr-cross-small" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="modal-body">
+      <div class="form-field">
+        <label for="ejercicio-modal-nombre">Nombre del ejercicio</label>
+        <div class="input-wrapper">
+          <i class="fi fi-rs-gym input-icon" aria-hidden="true"></i>
+          <input
+            id="ejercicio-modal-nombre"
+            type="text"
+            formControlName="nombre"
+            placeholder="Ej: Press de banca, Sentadilla, Curl con barra..."
+            autocomplete="off"
+            autofocus
+          />
+        </div>
+        <span
+          *ngIf="form.controls.nombre.invalid && form.controls.nombre.touched"
+          class="field-error"
+        >
+          El nombre del ejercicio es obligatorio.
+        </span>
+      </div>
+
+      <p
+        *ngIf="feedbackMessage()"
+        class="form-feedback"
+        [ngClass]="'form-feedback-' + feedbackType()"
+        aria-live="polite"
+      >
+        {{ feedbackMessage() }}
+      </p>
+
+      <div class="modal-actions">
+        <button
+          type="button"
+          class="btn btn-ghost"
+          (click)="close.emit()"
+          [disabled]="isSubmitting()"
+        >
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid || isSubmitting()">
+          <i
+            *ngIf="!isSubmitting()"
+            class="fi"
+            [ngClass]="isEditing() ? 'fi-rr-disk' : 'fi-rr-plus'"
+            aria-hidden="true"
+          ></i>
+          <span>
+            {{
+              isSubmitting()
+                ? isEditing()
+                  ? 'Guardando...'
+                  : 'Creando...'
+                : isEditing()
+                  ? 'Guardar Cambios'
+                  : 'Crear Ejercicio'
+            }}
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

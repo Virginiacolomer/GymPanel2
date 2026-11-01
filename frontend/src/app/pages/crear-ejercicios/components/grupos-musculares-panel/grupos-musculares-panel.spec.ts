@@ -1,8 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentRef } from '@angular/core';
 import { GruposMuscularesPanelComponent } from './grupos-musculares-panel';
 
 describe('GruposMuscularesPanelComponent', () => {
   let component: GruposMuscularesPanelComponent;
+  let componentRef: ComponentRef<GruposMuscularesPanelComponent>;
   let fixture: ComponentFixture<GruposMuscularesPanelComponent>;
 
   beforeEach(async () => {
@@ -12,6 +14,7 @@ describe('GruposMuscularesPanelComponent', () => {
 
     fixture = TestBed.createComponent(GruposMuscularesPanelComponent);
     component = fixture.componentInstance;
+    componentRef = fixture.componentRef;
     fixture.detectChanges();
   });
 
@@ -19,41 +22,49 @@ describe('GruposMuscularesPanelComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should emit createGrupo with valid trimmed name', () => {
-    let emittedName: string | undefined;
-    component.createGrupo.subscribe((name) => {
-      emittedName = name;
-    });
+  it('should emit grupoSelected when selectGrupo is called', () => {
+    let selectedId: number | null = null;
+    component.grupoSelected.subscribe((id) => (selectedId = id));
 
-    component.createGrupoForm.setValue({ nombre: '  Espalda  ' });
-    component.submitCreate();
-
-    expect(emittedName).toBe('Espalda');
-    expect(component.createGrupoForm.getRawValue().nombre).toBe('');
+    component.selectGrupo(5);
+    expect(selectedId).toBe(5);
   });
 
-  it('should not emit createGrupo when form is empty or whitespace', () => {
-    let emitted = false;
-    component.createGrupo.subscribe(() => {
-      emitted = true;
-    });
+  it('should filter grupos according to searchQuery', () => {
+    componentRef.setInput('gruposMusculares', [
+      { id: 1, nombre: 'PECHO' },
+      { id: 2, nombre: 'ESPALDA' },
+      { id: 3, nombre: 'PIERNAS' },
+    ]);
+    fixture.detectChanges();
 
-    component.createGrupoForm.setValue({ nombre: '   ' });
-    component.submitCreate();
+    expect(component.filteredGrupos().length).toBe(3);
 
-    expect(emitted).toBe(false);
+    component.onSearchChange('pech');
+    expect(component.filteredGrupos().length).toBe(1);
+    expect(component.filteredGrupos()[0].nombre).toBe('PECHO');
+
+    component.clearSearch();
+    expect(component.filteredGrupos().length).toBe(3);
   });
 
-  it('should emit updateGrupo with valid trimmed name', () => {
-    let emittedName: string | undefined;
-    component.updateGrupo.subscribe((name) => {
-      emittedName = name;
-    });
+  it('should emit openCreateGrupo when openCreateGrupo is called', () => {
+    let triggered = false;
+    component.openCreateGrupo.subscribe(() => (triggered = true));
 
-    component.editGrupoForm.setValue({ nombre: 'Pecho Alto' });
-    component.submitUpdate();
+    component.openCreateGrupo.emit();
+    expect(triggered).toBe(true);
+  });
 
-    expect(emittedName).toBe('Pecho Alto');
+  it('should emit openEditGrupo when onEditClick is called', () => {
+    let editedGrupo: any = null;
+    component.openEditGrupo.subscribe((g) => (editedGrupo = g));
+
+    const mockEvent = new MouseEvent('click');
+    const mockGrupo = { id: 2, nombre: 'ESPALDA' };
+    component.onEditClick(mockEvent, mockGrupo);
+
+    expect(editedGrupo).toEqual(mockGrupo);
   });
 
   it('should emit retryLoadGrupos when button clicked', () => {

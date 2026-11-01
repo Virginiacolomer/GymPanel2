@@ -3,41 +3,33 @@
     <app-page-header-compact backHref="/menu-admin"></app-page-header-compact>
     <section class="page-body">
       <div class="crear-ejercicios-container">
-        <h1>
-          <i class="fi fi-rs-gym" aria-hidden="true"></i>
-          Crear Ejercicios
-        </h1>
-
-        <!-- Status Message -->
+        <!-- Status Message general -->
         <div *ngIf="statusMessage" class="status-message" [ngClass]="'status-' + statusType">
           {{ statusMessage }}
         </div>
 
         <div class="ejercicios-columns">
           <!-- Columna 1: Panel de Grupos Musculares -->
-          <app-grupos-musculares-panel
-            [gruposMusculares]="gruposMusculares"
-            [selectedGrupoId]="selectedGrupoId"
-            [selectedGrupoNombre]="selectedGrupoNombre"
-            [isLoadingGrupos]="isLoadingGrupos"
-            [isUpdatingGrupo]="isUpdatingGrupo"
-            [isCreatingGrupo]="isCreatingGrupo"
-            [loadingError]="loadingError"
-            [feedbackMessage]="grupoFeedbackMessage"
-            [feedbackType]="grupoFeedbackType"
-            (grupoSelected)="onGrupoChange($event)"
-            (createGrupo)="createGrupoMuscular($event)"
-            (updateGrupo)="updateGrupoMuscular($event)"
-            (retryLoadGrupos)="loadGruposMusculares()"
-          ></app-grupos-musculares-panel>
+          <div class="column-grupos-wrapper">
+            <app-grupos-musculares-panel
+              [gruposMusculares]="gruposMusculares"
+              [selectedGrupoId]="selectedGrupoId"
+              [selectedGrupoNombre]="selectedGrupoNombre"
+              [isLoadingGrupos]="isLoadingGrupos"
+              [isUpdatingGrupo]="isUpdatingGrupo"
+              [isCreatingGrupo]="isCreatingGrupo"
+              [loadingError]="loadingError"
+              [feedbackMessage]="grupoFeedbackMessage"
+              [feedbackType]="grupoFeedbackType"
+              (grupoSelected)="onGrupoChange($event)"
+              (openCreateGrupo)="openCreateGrupoModal()"
+              (openEditGrupo)="openEditGrupoModal($event)"
+              (retryLoadGrupos)="loadGruposMusculares()"
+            ></app-grupos-musculares-panel>
+          </div>
 
           <!-- Columna 2: Ejercicios del grupo seleccionado -->
-          <div class="section column-ejercicios">
-            <h2>
-              <i class="fi fi-rs-gym" aria-hidden="true"></i>
-              Ejercicios
-            </h2>
-
+          <div class="column-ejercicios-wrapper">
             <app-ejercicios-list
               [ejercicios]="selectedEjercicios"
               [selectedGrupoId]="selectedGrupoId"
@@ -50,22 +42,40 @@
               [pendingDeleteEjercicioId]="pendingDeleteEjercicioId"
               [isUploadingImagenEjercicioId]="isUploadingImagenEjercicioId"
               [recentlyUploadedImagenEjercicioId]="recentlyUploadedImagenEjercicioId"
+              (openCreateEjercicio)="openCreateEjercicioModal()"
+              (openEditEjercicio)="openEditEjercicioModal($event)"
               (uploadImage)="triggerImageUpload($event)"
-              (saveEdit)="saveEditEjercicio($event)"
               (deleteEjercicio)="removeEjercicio($event)"
             ></app-ejercicios-list>
-
-            <app-ejercicio-form
-              [selectedGrupoId]="selectedGrupoId"
-              [selectedGrupoNombre]="selectedGrupoNombre"
-              [isCreatingEjercicio]="isCreatingEjercicio"
-              [feedbackMessage]="ejercicioFeedbackMessage"
-              [feedbackType]="ejercicioFeedbackType"
-              (create)="createEjercicio($event)"
-            ></app-ejercicio-form>
           </div>
         </div>
 
+        <!-- Modal para Crear / Editar Grupo Muscular -->
+        <app-grupo-modal
+          [isOpen]="isGrupoModalOpen"
+          [isEditing]="isEditingGrupoModal"
+          [initialNombre]="editingGrupoNombre"
+          [isSubmitting]="isCreatingGrupo || isUpdatingGrupo"
+          [feedbackMessage]="grupoFeedbackMessage"
+          [feedbackType]="grupoFeedbackType"
+          (save)="onSaveGrupoModal($event)"
+          (close)="closeGrupoModal()"
+        ></app-grupo-modal>
+
+        <!-- Modal para Crear / Editar Ejercicio -->
+        <app-ejercicio-modal
+          [isOpen]="isEjercicioModalOpen"
+          [isEditing]="isEditingEjercicioModal"
+          [initialNombre]="editingEjercicioNombre"
+          [selectedGrupoNombre]="selectedGrupoNombre"
+          [isSubmitting]="isCreatingEjercicio || isUpdatingEjercicio"
+          [feedbackMessage]="ejercicioFeedbackMessage"
+          [feedbackType]="ejercicioFeedbackType"
+          (save)="onSaveEjercicioModal($event)"
+          (close)="closeEjercicioModal()"
+        ></app-ejercicio-modal>
+
+        <!-- Input oculto para subida de imagen de ejercicio -->
         <input
           #imagenFileInput
           type="file"

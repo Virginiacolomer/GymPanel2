@@ -16,7 +16,8 @@ import {
 } from '../../core/services/plan-entrenamiento-api.service';
 import { GruposMuscularesPanelComponent } from './components/grupos-musculares-panel/grupos-musculares-panel';
 import { EjerciciosListComponent } from './components/ejercicios-list/ejercicios-list';
-import { EjercicioFormComponent } from './components/ejercicio-form/ejercicio-form';
+import { GrupoModalComponent } from './components/grupo-modal/grupo-modal';
+import { EjercicioModalComponent } from './components/ejercicio-modal/ejercicio-modal';
 
 const MAX_IMAGEN_SIZE_BYTES = 5 * 1024 * 1024;
 
@@ -29,7 +30,8 @@ const MAX_IMAGEN_SIZE_BYTES = 5 * 1024 * 1024;
     PageBgComponent,
     GruposMuscularesPanelComponent,
     EjerciciosListComponent,
-    EjercicioFormComponent,
+    GrupoModalComponent,
+    EjercicioModalComponent,
   ],
   templateUrl: './crear-ejercicios.html',
   styleUrl: './crear-ejercicios.css',
@@ -40,7 +42,7 @@ export class CrearEjercicios implements OnInit {
   private readonly planEntrenamientoApiService = inject(PlanEntrenamientoApiService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly ejerciciosPorGrupoCache = new Map<number, CatalogoEjercicio[]>();
-  private readonly requestTimeoutMs = 2500;
+  private readonly requestTimeoutMs = 10000;
 
   private statusTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private createEjercicioUnlockTimeoutId: ReturnType<typeof setTimeout> | null = null;
@@ -77,6 +79,16 @@ export class CrearEjercicios implements OnInit {
   ejercicioFeedbackMessage = '';
   ejercicioFeedbackType: 'success' | 'error' | 'info' = 'info';
 
+  isGrupoModalOpen = false;
+  isEditingGrupoModal = false;
+  editingGrupoNombre = '';
+  editingGrupoId: number | null = null;
+
+  isEjercicioModalOpen = false;
+  isEditingEjercicioModal = false;
+  editingEjercicioId: number | null = null;
+  editingEjercicioNombre = '';
+
   get selectedGrupoNombre(): string {
     if (!this.selectedGrupoId) {
       return '';
@@ -109,41 +121,63 @@ export class CrearEjercicios implements OnInit {
   loadGruposMusculares(): void {
     this.isLoadingGrupos = true;
     this.loadingError = false;
+    this.cdr.detectChanges();
+
     this.planEntrenamientoApiService
-      .getCatalogoGruposMuscularesResumen()
+      .getCatalogoGruposMusculares()
       .pipe(
         timeout(this.requestTimeoutMs),
-        catchError((errorResumen) => {
-          console.warn('Fallo o timeout en grupos resumen. Se usa fallback:', errorResumen);
-          return this.planEntrenamientoApiService.getCatalogoGruposMusculares().pipe(
+        catchError((errFull) => {
+          console.warn('Fallo o timeout en grupos completos. Se usa fallback a resumen:', errFull);
+          return this.planEntrenamientoApiService.getCatalogoGruposMuscularesResumen().pipe(
             timeout(this.requestTimeoutMs),
-            map((gruposCompletos) =>
-              gruposCompletos.map((grupo) => ({
+            map((gruposResumen) =>
+              gruposResumen.map((grupo) => ({
                 id: grupo.id,
                 nombre: grupo.nombre,
+                ejercicios: [],
               })),
             ),
           );
         }),
-        finalize(() => (this.isLoadingGrupos = false)),
+        finalize(() => {
+          this.isLoadingGrupos = false;
+          this.cdr.detectChanges();
+        }),
       )
       .subscribe({
         next: (grupos) => {
           this.clearEjercicioActionFlags();
-          this.gruposMusculares = grupos;
           this.loadingError = false;
-          if (grupos.length > 0) {
+
+          this.gruposMusculares = grupos.map((g) => {
+            if (Array.isArray(g.ejercicios) && g.ejercicios.length > 0) {
+              this.ejerciciosPorGrupoCache.set(g.id, g.ejercicios);
+            }
+            return { id: g.id, nombre: g.nombre };
+          });
+
+          if (this.gruposMusculares.length > 0) {
             if (
               !this.selectedGrupoId ||
-              !grupos.some((grupo) => grupo.id === this.selectedGrupoId)
+              !this.gruposMusculares.some((grupo) => grupo.id === this.selectedGrupoId)
             ) {
-              this.selectedGrupoId = grupos[0].id;
+              this.selectedGrupoId = this.gruposMusculares[0].id;
             }
-            this.loadSelectedGrupoDetalle();
+
+            const cached = this.ejerciciosPorGrupoCache.get(this.selectedGrupoId);
+            if (cached && cached.length > 0) {
+              this.selectedEjercicios = cached;
+              this.hasLoadedGrupoDetalle = true;
+              this.isLoadingGrupoDetalle = false;
+            } else {
+              this.loadSelectedGrupoDetalle();
+            }
           } else {
             this.selectedGrupoId = null;
             this.selectedEjercicios = [];
           }
+          this.cdr.detectChanges();
         },
         error: (err) => {
           this.clearEjercicioActionFlags();
@@ -152,27 +186,97 @@ export class CrearEjercicios implements OnInit {
             this.setStatus('Error al cargar los grupos musculares. Intenta de nuevo.', 'error');
           }
           console.error('Error al cargar grupos:', err);
+          this.cdr.detectChanges();
         },
       });
+  }
+
+  openCreateGrupoModal(): void {
+    this.grupoFeedbackMessage = '';
+    this.isEditingGrupoModal = false;
+    this.editingGrupoNombre = '';
+    this.editingGrupoId = null;
+    this.isGrupoModalOpen = true;
+  }
+
+  openEditGrupoModal(grupo: CatalogoGrupoMuscularResumen): void {
+    this.grupoFeedbackMessage = '';
+    this.isEditingGrupoModal = true;
+    this.editingGrupoNombre = grupo.nombre;
+    this.editingGrupoId = grupo.id;
+    this.selectedGrupoId = grupo.id;
+    this.isGrupoModalOpen = true;
+  }
+
+  closeGrupoModal(): void {
+    this.isGrupoModalOpen = false;
+    this.isEditingGrupoModal = false;
+    this.editingGrupoNombre = '';
+    this.editingGrupoId = null;
+  }
+
+  onSaveGrupoModal(nombre: string): void {
+    if (this.isEditingGrupoModal) {
+      this.updateGrupoMuscular(nombre);
+    } else {
+      this.createGrupoMuscular(nombre);
+    }
+  }
+
+  openCreateEjercicioModal(): void {
+    if (!this.selectedGrupoId) {
+      this.setStatus('Selecciona un grupo muscular primero', 'error');
+      return;
+    }
+    this.ejercicioFeedbackMessage = '';
+    this.isEditingEjercicioModal = false;
+    this.editingEjercicioNombre = '';
+    this.editingEjercicioId = null;
+    this.isEjercicioModalOpen = true;
+  }
+
+  openEditEjercicioModal(ejercicio: CatalogoEjercicio): void {
+    this.ejercicioFeedbackMessage = '';
+    this.isEditingEjercicioModal = true;
+    this.editingEjercicioNombre = ejercicio.nombre;
+    this.editingEjercicioId = ejercicio.id;
+    this.isEjercicioModalOpen = true;
+  }
+
+  closeEjercicioModal(): void {
+    this.isEjercicioModalOpen = false;
+    this.isEditingEjercicioModal = false;
+    this.editingEjercicioNombre = '';
+    this.editingEjercicioId = null;
+  }
+
+  onSaveEjercicioModal(nombre: string): void {
+    if (this.isEditingEjercicioModal && this.editingEjercicioId) {
+      this.saveEditEjercicio({ id: this.editingEjercicioId, nombre });
+    } else {
+      this.createEjercicio(nombre);
+    }
   }
 
   onGrupoChange(grupoId: number | null): void {
     this.selectedGrupoId = grupoId;
     this.loadSelectedGrupoDetalle();
+    this.cdr.detectChanges();
   }
 
   private loadSelectedGrupoDetalle(options?: { silent?: boolean }): void {
     if (!this.selectedGrupoId) {
       this.selectedEjercicios = [];
       this.hasLoadedGrupoDetalle = false;
+      this.cdr.detectChanges();
       return;
     }
 
     const requestedGroupId = this.selectedGrupoId;
     const cached = this.ejerciciosPorGrupoCache.get(requestedGroupId);
-    const hasCachedData = Array.isArray(cached);
+    const hasCachedData = Array.isArray(cached) && cached.length > 0;
 
-    if (cached) {
+    if (hasCachedData) {
       this.selectedEjercicios = cached;
       this.hasLoadedGrupoDetalle = true;
     } else {
@@ -181,6 +285,8 @@ export class CrearEjercicios implements OnInit {
     }
 
     this.isLoadingGrupoDetalle = options?.silent ? false : !hasCachedData;
+    this.cdr.detectChanges();
+
     this.planEntrenamientoApiService
       .getEjerciciosByGrupoMuscularId(requestedGroupId)
       .pipe(
@@ -199,6 +305,7 @@ export class CrearEjercicios implements OnInit {
           if (!hasCachedData && !options?.silent) {
             this.isLoadingGrupoDetalle = false;
           }
+          this.cdr.detectChanges();
         }),
       )
       .subscribe({
@@ -210,6 +317,7 @@ export class CrearEjercicios implements OnInit {
           this.selectedEjercicios = ejercicios;
           this.hasLoadedGrupoDetalle = true;
           this.isLoadingGrupoDetalle = false;
+          this.cdr.detectChanges();
         },
         error: (err) => {
           if (this.selectedGrupoId !== requestedGroupId) {
@@ -219,6 +327,7 @@ export class CrearEjercicios implements OnInit {
           if (cachedForGroup.length > 0) {
             this.selectedEjercicios = cachedForGroup;
             this.hasLoadedGrupoDetalle = true;
+            this.cdr.detectChanges();
             return;
           }
           this.selectedEjercicios = [];
@@ -226,6 +335,7 @@ export class CrearEjercicios implements OnInit {
           this.isLoadingGrupoDetalle = false;
           this.setStatus('No se pudo cargar el detalle del grupo muscular seleccionado.', 'error');
           console.error('Error al cargar detalle de grupo:', err);
+          this.cdr.detectChanges();
         },
       });
   }
@@ -313,6 +423,7 @@ export class CrearEjercicios implements OnInit {
           this.ejerciciosPorGrupoCache.delete(optimisticId);
           this.ejerciciosPorGrupoCache.set(response.id, []);
 
+          this.closeGrupoModal();
           this.loadGruposMusculares();
         },
         error: (err) => {
@@ -399,6 +510,7 @@ export class CrearEjercicios implements OnInit {
             .sort((a, b) => a.nombre.localeCompare(b.nombre));
           this.grupoFeedbackMessage = `Grupo muscular "${response.nombre}" actualizado correctamente`;
           this.grupoFeedbackType = 'success';
+          this.closeGrupoModal();
           this.loadGruposMusculares();
         },
         error: (err) => {
@@ -500,6 +612,7 @@ export class CrearEjercicios implements OnInit {
             this.selectedEjercicios = synced;
           }
 
+          this.closeEjercicioModal();
           this.loadGruposMusculares();
         },
         error: (err) => {
@@ -592,6 +705,7 @@ export class CrearEjercicios implements OnInit {
           this.ejerciciosPorGrupoCache.set(grupoId, syncedList);
           this.ejercicioFeedbackMessage = `Ejercicio "${response.nombre}" actualizado correctamente`;
           this.ejercicioFeedbackType = 'success';
+          this.closeEjercicioModal();
           this.loadGruposMusculares();
         },
         error: (err) => {

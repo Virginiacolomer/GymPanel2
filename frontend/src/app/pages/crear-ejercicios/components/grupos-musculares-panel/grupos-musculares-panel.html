@@ -1,98 +1,127 @@
-<div class="section column-grupos">
-  <h2>
-    <i class="fi fi-rr-apps" aria-hidden="true"></i>
-    Grupos musculares
-  </h2>
-
-  <!-- Selector de grupo -->
-  <div class="form-group">
-    <label for="select-grupo">Selecciona un grupo muscular:</label>
-    <div class="select-wrapper">
-      <select
-        id="select-grupo"
-        name="grupo"
-        size="8"
-        [value]="selectedGrupoId() ?? ''"
-        (change)="onSelectChange($event)"
-      >
-        <option *ngIf="isLoadingGrupos() && gruposMusculares().length === 0" value="" disabled>
-          ⏳ Cargando grupos...
-        </option>
-        <option
-          *ngIf="!isLoadingGrupos() && gruposMusculares().length === 0 && !loadingError()"
-          value=""
-          disabled
-        >
-          No hay grupos disponibles
-        </option>
-        <option
-          *ngFor="let grupo of gruposMusculares(); trackBy: trackByGrupoId"
-          [value]="grupo.id"
-        >
-          {{ grupo.nombre }}
-        </option>
-      </select>
-      <button
-        *ngIf="loadingError()"
-        type="button"
-        (click)="retryLoadGrupos.emit()"
-        [disabled]="isLoadingGrupos()"
-        class="btn-retry"
-        title="Reintentar cargar grupos"
-      >
-        🔄 Reintentar
-      </button>
+<div class="panel-grupos">
+  <!-- Header del panel -->
+  <div class="panel-header">
+    <div class="header-icon-title">
+      <div class="header-icon-box">
+        <i class="fi fi-rr-apps" aria-hidden="true"></i>
+      </div>
+      <div>
+        <h2>Grupos musculares</h2>
+        <p class="panel-sub">Seleccioná un grupo muscular</p>
+      </div>
     </div>
   </div>
 
-  <!-- Edición del grupo seleccionado -->
-  <div class="form-group" *ngIf="selectedGrupoId()">
-    <label for="input-edit-grupo">Editar nombre del grupo seleccionado:</label>
-    <form [formGroup]="editGrupoForm" (ngSubmit)="submitUpdate()" class="form-inline">
-      <input
-        id="input-edit-grupo"
-        type="text"
-        formControlName="nombre"
-        placeholder="Nuevo nombre del grupo muscular"
-        autocomplete="off"
-      />
-      <button
-        type="submit"
-        [disabled]="isUpdatingGrupo() || editGrupoForm.invalid"
-        class="btn btn-secondary"
-      >
-        {{ isUpdatingGrupo() ? 'Guardando...' : 'Guardar Grupo' }}
-      </button>
-    </form>
+  <!-- Buscador de grupos musculares -->
+  <div class="search-box">
+    <i class="fi fi-rr-search search-icon" aria-hidden="true"></i>
+    <input
+      type="text"
+      [ngModel]="searchQuery()"
+      (ngModelChange)="onSearchChange($event)"
+      placeholder="Buscar grupo..."
+      autocomplete="off"
+      aria-label="Buscar grupo muscular"
+    />
+    <button
+      *ngIf="searchQuery()"
+      type="button"
+      class="btn-clear-search"
+      (click)="clearSearch()"
+      aria-label="Limpiar búsqueda"
+    >
+      <i class="fi fi-rr-cross-small" aria-hidden="true"></i>
+    </button>
   </div>
 
-  <!-- Crear nuevo grupo -->
-  <div class="form-group">
-    <label for="input-nuevo-grupo">Crear nuevo grupo muscular:</label>
-    <form [formGroup]="createGrupoForm" (ngSubmit)="submitCreate()" class="form-inline">
-      <input
-        id="input-nuevo-grupo"
-        type="text"
-        formControlName="nombre"
-        placeholder="Escribe el nombre del grupo muscular (ej: Pecho, Espalda...)"
-        autocomplete="off"
-      />
-      <button
-        type="submit"
-        [disabled]="isCreatingGrupo() || createGrupoForm.invalid"
-        class="btn btn-primary"
-      >
-        {{ isCreatingGrupo() ? 'Creando...' : 'Crear Grupo' }}
-      </button>
-    </form>
+  <!-- Lista de tarjetas de grupos musculares -->
+  <div class="grupos-cards-container" role="listbox" aria-label="Lista de grupos musculares">
+    <!-- Estado de carga -->
+    <div *ngIf="isLoadingGrupos() && gruposMusculares().length === 0" class="state-message">
+      <div class="spinner"></div>
+      <span>Cargando grupos...</span>
+    </div>
 
-    <p
-      *ngIf="feedbackMessage()"
-      class="form-feedback"
-      [ngClass]="'form-feedback-' + feedbackType()"
-      aria-live="polite"
+    <!-- Error de carga -->
+    <div *ngIf="loadingError() && gruposMusculares().length === 0" class="state-message error">
+      <i class="fi fi-rr-triangle-warning" aria-hidden="true"></i>
+      <span>Error al cargar los grupos</span>
+      <button
+        type="button"
+        class="btn-retry"
+        (click)="retryLoadGrupos.emit()"
+        [disabled]="isLoadingGrupos()"
+      >
+        Reintentar
+      </button>
+    </div>
+
+    <!-- Búsqueda sin resultados -->
+    <div
+      *ngIf="!isLoadingGrupos() && filteredGrupos().length === 0 && searchQuery()"
+      class="state-message"
     >
-      {{ feedbackMessage() }}
-    </p>
+      <i class="fi fi-rr-info" aria-hidden="true"></i>
+      <span>No hay grupos que coincidan con "{{ searchQuery() }}"</span>
+    </div>
+
+    <!-- Lista vacía sin datos -->
+    <div
+      *ngIf="!isLoadingGrupos() && gruposMusculares().length === 0 && !loadingError()"
+      class="state-message"
+    >
+      <span>No hay grupos musculares disponibles</span>
+    </div>
+
+    <!-- Tarjetas de cada grupo muscular -->
+    <div
+      *ngFor="let grupo of filteredGrupos(); trackBy: trackByGrupoId"
+      class="grupo-card"
+      [class.selected]="grupo.id === selectedGrupoId()"
+      (click)="selectGrupo(grupo.id)"
+      role="option"
+      [attr.aria-selected]="grupo.id === selectedGrupoId()"
+      tabindex="0"
+      (keydown.enter)="selectGrupo(grupo.id)"
+      (keydown.space)="selectGrupo(grupo.id); $event.preventDefault()"
+    >
+      <!-- Ícono o ilustración del músculo -->
+      <div class="grupo-icon-box">
+        <i [class]="getMeta(grupo.nombre).icono" aria-hidden="true"></i>
+      </div>
+
+      <!-- Información del grupo -->
+      <div class="grupo-info">
+        <span class="grupo-name">{{ formatNombre(grupo.nombre) }}</span>
+        <span class="grupo-desc">{{ getMeta(grupo.nombre).descripcion }}</span>
+      </div>
+
+      <!-- Acciones y chevron -->
+      <div class="grupo-meta-actions">
+        <button
+          type="button"
+          class="btn-edit-grupo"
+          (click)="onEditClick($event, grupo)"
+          title="Editar nombre del grupo"
+          aria-label="Editar grupo"
+        >
+          <i class="fi fi-rr-pencil" aria-hidden="true"></i>
+        </button>
+        <i class="fi fi-rr-angle-small-right chevron-icon" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón inferior para crear nuevo grupo muscular -->
+  <div class="panel-footer">
+    <button
+      type="button"
+      class="btn-create-grupo"
+      (click)="openCreateGrupo.emit()"
+      [disabled]="isCreatingGrupo()"
+    >
+      <i class="fi fi-rr-plus" aria-hidden="true"></i>
+      <span>Crear Grupo</span>
+    </button>
   </div>
 </div>

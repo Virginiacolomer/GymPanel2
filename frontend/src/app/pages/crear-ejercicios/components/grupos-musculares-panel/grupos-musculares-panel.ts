@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, Component, effect, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CatalogoGrupoMuscularResumen } from '../../../../core/services/plan-entrenamiento-api.service';
+import { getGrupoMuscularMeta, GrupoMuscularMeta } from '../../models/grupo-muscular-meta';
 
 @Component({
   selector: 'app-grupos-musculares-panel',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './grupos-musculares-panel.html',
   styleUrl: './grupos-musculares-panel.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,76 +26,52 @@ export class GruposMuscularesPanelComponent {
 
   // Outputs
   readonly grupoSelected = output<number | null>();
-  readonly createGrupo = output<string>();
-  readonly updateGrupo = output<string>();
+  readonly openCreateGrupo = output<void>();
+  readonly openEditGrupo = output<CatalogoGrupoMuscularResumen>();
   readonly retryLoadGrupos = output<void>();
 
-  // Reactive Forms
-  readonly createGrupoForm = new FormGroup({
-    nombre: new FormControl<string>('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.pattern(/\S/)],
-    }),
+  // Legacy outputs for test/caller compatibility
+  readonly createGrupo = output<string>();
+  readonly updateGrupo = output<string>();
+
+  // State
+  readonly searchQuery = signal<string>('');
+
+  // Filtered list
+  readonly filteredGrupos = computed(() => {
+    const list = this.gruposMusculares();
+    const query = this.searchQuery().trim().toLowerCase();
+    if (!query) {
+      return list;
+    }
+    return list.filter((g) => g.nombre.toLowerCase().includes(query));
   });
 
-  readonly editGrupoForm = new FormGroup({
-    nombre: new FormControl<string>('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.pattern(/\S/)],
-    }),
-  });
-
-  constructor() {
-    // Sincroniza el formulario de edición cuando cambia el grupo seleccionado
-    effect(() => {
-      const nombre = this.selectedGrupoNombre();
-      this.editGrupoForm.setValue({ nombre }, { emitEvent: false });
-    });
-
-    // Controla estado enabled/disabled según el estado de carga
-    effect(() => {
-      if (this.isUpdatingGrupo()) {
-        this.editGrupoForm.controls.nombre.disable({ emitEvent: false });
-      } else {
-        this.editGrupoForm.controls.nombre.enable({ emitEvent: false });
-      }
-    });
-
-    effect(() => {
-      if (this.isCreatingGrupo()) {
-        this.createGrupoForm.controls.nombre.disable({ emitEvent: false });
-      } else {
-        this.createGrupoForm.controls.nombre.enable({ emitEvent: false });
-      }
-    });
+  onSearchChange(value: string): void {
+    this.searchQuery.set(value);
   }
 
-  onSelectChange(event: Event): void {
-    const select = event.target as HTMLSelectElement;
-    const value = select.value;
-    const parsedId = value ? Number(value) : null;
-    this.grupoSelected.emit(Number.isInteger(parsedId) ? parsedId : null);
+  clearSearch(): void {
+    this.searchQuery.set('');
   }
 
-  submitCreate(): void {
-    if (this.createGrupoForm.invalid || this.isCreatingGrupo()) {
-      return;
-    }
-    const nombre = this.createGrupoForm.getRawValue().nombre.trim();
-    if (nombre) {
-      this.createGrupo.emit(nombre);
-      this.createGrupoForm.reset({ nombre: '' });
-    }
+  selectGrupo(id: number): void {
+    this.grupoSelected.emit(id);
   }
 
-  submitUpdate(): void {
-    if (this.editGrupoForm.invalid || this.isUpdatingGrupo()) {
-      return;
-    }
-    const nombre = this.editGrupoForm.getRawValue().nombre.trim();
-    if (nombre) {
-      this.updateGrupo.emit(nombre);
-    }
+  getMeta(nombre: string): GrupoMuscularMeta {
+    return getGrupoMuscularMeta(nombre);
+  }
+
+  formatNombre(nombre: string): string {
+    if (!nombre) return '';
+    const lower = nombre.toLowerCase();
+    return lower.charAt(0).toUpperCase() + lower.slice(1);
+  }
+
+  onEditClick(event: MouseEvent, grupo: CatalogoGrupoMuscularResumen): void {
+    event.stopPropagation();
+    this.openEditGrupo.emit(grupo);
   }
 
   trackByGrupoId(_index: number, grupo: CatalogoGrupoMuscularResumen): number {

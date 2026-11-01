@@ -12,15 +12,15 @@ describe('CrearEjercicios', () => {
   let fixture: ComponentFixture<CrearEjercicios>;
   let apiServiceMock: Partial<PlanEntrenamientoApiService>;
 
-  const mockGrupos: CatalogoGrupoMuscularResumen[] = [
-    { id: 1, nombre: 'PECHO' },
-    { id: 2, nombre: 'ESPALDA' },
+  const mockGrupos = [
+    { id: 1, nombre: 'PECHO', ejercicios: [] },
+    { id: 2, nombre: 'ESPALDA', ejercicios: [] },
   ];
 
   beforeEach(async () => {
     apiServiceMock = {
       getCatalogoGruposMuscularesResumen: () => of(mockGrupos),
-      getCatalogoGruposMusculares: () => of([]),
+      getCatalogoGruposMusculares: () => of(mockGrupos),
       getEjerciciosByGrupoMuscularId: () => of([]),
       getGrupoMuscularById: () => of({ id: 1, nombre: 'PECHO', ejercicios: [] }),
       createGrupoMuscular: (req) => of({ id: 99, nombre: req.nombre, message: 'Creado' }),
@@ -70,5 +70,37 @@ describe('CrearEjercicios', () => {
     component.createGrupoMuscular('PECHO');
     expect(component.grupoFeedbackType).toBe('error');
     expect(component.grupoFeedbackMessage).toContain('ya existe');
+  });
+
+  it('should open and close grupo modal', () => {
+    expect(component.isGrupoModalOpen).toBe(false);
+
+    component.openCreateGrupoModal();
+    expect(component.isGrupoModalOpen).toBe(true);
+    expect(component.isEditingGrupoModal).toBe(false);
+
+    component.openEditGrupoModal(mockGrupos[0]);
+    expect(component.isGrupoModalOpen).toBe(true);
+    expect(component.isEditingGrupoModal).toBe(true);
+    expect(component.editingGrupoNombre).toBe('PECHO');
+
+    component.closeGrupoModal();
+    expect(component.isGrupoModalOpen).toBe(false);
+  });
+
+  it('should open and close ejercicio modal', () => {
+    expect(component.isEjercicioModalOpen).toBe(false);
+
+    component.openCreateEjercicioModal();
+    expect(component.isEjercicioModalOpen).toBe(true);
+    expect(component.isEditingEjercicioModal).toBe(false);
+
+    component.openEditEjercicioModal({ id: 10, nombre: 'Press banca', imagenUrl: null });
+    expect(component.isEjercicioModalOpen).toBe(true);
+    expect(component.isEditingEjercicioModal).toBe(true);
+    expect(component.editingEjercicioNombre).toBe('Press banca');
+
+    component.closeEjercicioModal();
+    expect(component.isEjercicioModalOpen).toBe(false);
   });
 });
