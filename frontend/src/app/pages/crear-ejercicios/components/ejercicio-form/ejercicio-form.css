@@ -20,8 +20,24 @@
 }
 
 .form-inline {
-  display: grid;
+  display: flex;
   gap: 0.75rem;
+  align-items: stretch;
+}
+
+.form-inline input {
+  flex: 1;
+}
+
+.form-inline .btn {
+  white-space: nowrap;
+  padding: 0 1.6rem;
+}
+
+@media (max-width: 680px) {
+  .form-inline {
+    flex-direction: column;
+  }
 }
 
 .form-group input {

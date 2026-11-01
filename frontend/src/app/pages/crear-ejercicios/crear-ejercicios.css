@@ -11,12 +11,12 @@
 .page-body {
   display: flex;
   justify-content: center;
-  padding: 1rem max(1.25rem, env(safe-area-inset-right)) calc(2.4rem + env(safe-area-inset-bottom))
-    max(1.25rem, env(safe-area-inset-left));
+  padding: 1rem max(1.5rem, env(safe-area-inset-right)) calc(2.4rem + env(safe-area-inset-bottom))
+    max(1.5rem, env(safe-area-inset-left));
 }
 
 .crear-ejercicios-container {
-  width: min(100%, 1020px);
+  width: min(100%, 1440px);
   font-family: 'Manrope', sans-serif;
 }
 
@@ -42,7 +42,7 @@
 
 .ejercicios-columns {
   display: grid;
-  grid-template-columns: 1fr 1.3fr;
+  grid-template-columns: 360px 1fr;
   gap: 1.75rem;
   align-items: start;
 }
@@ -127,7 +127,7 @@
   border: 1px solid var(--accent-border);
 }
 
-@media (max-width: 860px) {
+@media (max-width: 960px) {
   .ejercicios-columns {
     grid-template-columns: 1fr;
     gap: 1.5rem;

@@ -4,6 +4,11 @@
     <strong class="highlight-grupo">{{ selectedGrupoNombre() || 'este grupo' }}</strong
     >:
   </label>
+  <label for="input-nuevo-ejercicio">
+    Agregar nuevo ejercicio a
+    <strong class="highlight-grupo">{{ selectedGrupoNombre() || 'este grupo' }}</strong
+    >:
+  </label>
   <form [formGroup]="form" (ngSubmit)="submit()" class="form-inline">
     <input
       id="input-nuevo-ejercicio"

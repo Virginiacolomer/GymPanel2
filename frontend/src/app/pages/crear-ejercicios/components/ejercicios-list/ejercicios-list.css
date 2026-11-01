@@ -7,18 +7,18 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1.25rem 1.4rem;
+  padding: 1.5rem 1.6rem;
   margin-bottom: 1.25rem;
-  border-radius: 14px;
+  border-radius: 16px;
   background: rgba(0, 229, 255, 0.04);
   border: 1px dashed rgba(0, 229, 255, 0.25);
   color: var(--text-secondary);
-  font-size: 0.92rem;
+  font-size: 0.95rem;
 }
 
 .ejercicios-empty-hint i {
   color: var(--accent);
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   flex-shrink: 0;
 }
 
@@ -28,11 +28,11 @@
 
 .ejercicios-list {
   margin: 0 0 1.25rem;
-  padding: 1.1rem;
+  padding: 1.25rem;
   border-radius: 16px;
   background: var(--bg-elevated);
   border: 1px solid var(--border-strong);
-  max-height: 380px;
+  max-height: 520px;
   overflow-y: auto;
   color-scheme: dark;
   scrollbar-width: thin;
@@ -64,19 +64,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.85rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 1rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .ejercicios-list-header h3 {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--text-primary);
   display: flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.5rem;
 }
 
 .highlight-grupo {
@@ -88,24 +88,25 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 22px;
-  height: 22px;
-  padding: 0 0.45rem;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 0.55rem;
   border-radius: 12px;
   background: rgba(0, 229, 255, 0.12);
   color: var(--accent);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 700;
   border: 1px solid var(--accent-border);
 }
 
+/* Grilla de 2 columnas para aprovechar el ancho */
 .ejercicios-list ul {
   margin: 0;
   padding: 0;
   list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 0.65rem;
 }
 
 .ejercicios-list li {
@@ -118,37 +119,44 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  padding: 0.65rem 0.85rem;
+  padding: 0.7rem 0.85rem;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  min-height: 52px;
+  box-sizing: border-box;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .ejercicio-row:hover {
-  background: rgba(0, 229, 255, 0.04);
-  border-color: rgba(0, 229, 255, 0.2);
+  background: rgba(0, 229, 255, 0.05);
+  border-color: rgba(0, 229, 255, 0.25);
+  transform: translateY(-1px);
 }
 
 .ejercicio-info {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.65rem;
   flex: 1;
   min-width: 0;
 }
 
 .ejercicio-nombre {
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 600;
   color: var(--text-primary);
-  word-break: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.3;
 }
 
 .ejercicio-thumb {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
   flex-shrink: 0;
   object-fit: cover;
   border: 1px solid var(--border-strong);
@@ -166,7 +174,7 @@
   grid-template-columns: minmax(0, 1fr) auto auto;
   gap: 0.5rem;
   align-items: center;
-  padding: 0.4rem;
+  padding: 0.45rem;
   border-radius: 12px;
   background: rgba(0, 229, 255, 0.05);
   border: 1px solid var(--accent-border);
@@ -179,7 +187,7 @@
   border-radius: 10px;
   background: var(--bg-card);
   color: var(--text-primary);
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   font-family: 'Manrope', sans-serif;
   transition: all 0.2s ease;
   box-sizing: border-box;
@@ -202,7 +210,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
   padding: 0.75rem 1.4rem;
   border: none;
   border-radius: 12px;
@@ -215,7 +223,7 @@
 
 .btn-small {
   padding: 0.45rem 0.75rem;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   border-radius: 8px;
   white-space: nowrap;
 }
@@ -279,6 +287,10 @@
 }
 
 @media (max-width: 600px) {
+  .ejercicios-list ul {
+    grid-template-columns: 1fr;
+  }
+
   .ejercicio-edit-row {
     grid-template-columns: 1fr;
   }

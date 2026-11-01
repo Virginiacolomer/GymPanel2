@@ -109,7 +109,7 @@
 
 .select-wrapper select {
   flex: 1;
-  min-height: 200px;
+  min-height: 280px;
   padding: 0.5rem;
   border: 1px solid var(--border-strong);
   border-radius: 14px;
