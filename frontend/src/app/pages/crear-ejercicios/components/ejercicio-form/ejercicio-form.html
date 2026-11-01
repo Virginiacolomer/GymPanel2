@@ -1,0 +1,26 @@
+<div class="form-group">
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-inline">
+    <input
+      type="text"
+      formControlName="nombre"
+      placeholder="Escribe el nombre del ejercicio (ej: Press de banca...)"
+    />
+    <button
+      type="submit"
+      [disabled]="isCreatingEjercicio() || form.invalid || !selectedGrupoId()"
+      class="btn btn-primary"
+    >
+      <i class="fi fi-rs-gym" aria-hidden="true"></i>
+      {{ isCreatingEjercicio() ? 'Creando...' : 'Crear Ejercicio' }}
+    </button>
+  </form>
+
+  <p
+    *ngIf="feedbackMessage()"
+    class="form-feedback"
+    [ngClass]="'form-feedback-' + feedbackType()"
+    aria-live="polite"
+  >
+    {{ feedbackMessage() }}
+  </p>
+</div>

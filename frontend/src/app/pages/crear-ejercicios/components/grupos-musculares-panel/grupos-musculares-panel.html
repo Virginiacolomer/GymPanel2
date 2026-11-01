@@ -1,0 +1,93 @@
+<div class="section column-grupos">
+  <h2>Grupos musculares</h2>
+
+  <!-- Selector de grupo -->
+  <div class="form-group">
+    <label for="select-grupo">Selecciona un grupo muscular:</label>
+    <div class="select-wrapper">
+      <select
+        id="select-grupo"
+        name="grupo"
+        size="8"
+        [value]="selectedGrupoId() ?? ''"
+        (change)="onSelectChange($event)"
+      >
+        <option *ngIf="isLoadingGrupos() && gruposMusculares().length === 0" value="" disabled>
+          ⏳ Cargando grupos...
+        </option>
+        <option
+          *ngIf="!isLoadingGrupos() && gruposMusculares().length === 0 && !loadingError()"
+          value=""
+          disabled
+        >
+          No hay grupos disponibles
+        </option>
+        <option
+          *ngFor="let grupo of gruposMusculares(); trackBy: trackByGrupoId"
+          [value]="grupo.id"
+        >
+          {{ grupo.nombre }}
+        </option>
+      </select>
+      <button
+        *ngIf="loadingError()"
+        type="button"
+        (click)="retryLoadGrupos.emit()"
+        [disabled]="isLoadingGrupos()"
+        class="btn-retry"
+        title="Reintentar cargar grupos"
+      >
+        🔄 Reintentar
+      </button>
+    </div>
+  </div>
+
+  <!-- Edición del grupo seleccionado -->
+  <div class="form-group" *ngIf="selectedGrupoId()">
+    <label for="input-edit-grupo">Editar nombre del grupo seleccionado:</label>
+    <form [formGroup]="editGrupoForm" (ngSubmit)="submitUpdate()" class="form-inline">
+      <input
+        id="input-edit-grupo"
+        type="text"
+        formControlName="nombre"
+        placeholder="Nuevo nombre del grupo muscular"
+      />
+      <button
+        type="submit"
+        [disabled]="isUpdatingGrupo() || editGrupoForm.invalid"
+        class="btn btn-secondary"
+      >
+        {{ isUpdatingGrupo() ? 'Guardando...' : 'Guardar Grupo' }}
+      </button>
+    </form>
+  </div>
+
+  <!-- Crear nuevo grupo -->
+  <div class="form-group">
+    <label for="input-nuevo-grupo">Crear nuevo grupo muscular:</label>
+    <form [formGroup]="createGrupoForm" (ngSubmit)="submitCreate()" class="form-inline">
+      <input
+        id="input-nuevo-grupo"
+        type="text"
+        formControlName="nombre"
+        placeholder="Escribe el nombre del grupo muscular (ej: Pecho, Espalda...)"
+      />
+      <button
+        type="submit"
+        [disabled]="isCreatingGrupo() || createGrupoForm.invalid"
+        class="btn btn-primary"
+      >
+        {{ isCreatingGrupo() ? 'Creando...' : 'Crear Grupo' }}
+      </button>
+    </form>
+
+    <p
+      *ngIf="feedbackMessage()"
+      class="form-feedback"
+      [ngClass]="'form-feedback-' + feedbackType()"
+      aria-live="polite"
+    >
+      {{ feedbackMessage() }}
+    </p>
+  </div>
+</div>
