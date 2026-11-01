@@ -83,4 +83,3 @@ describe('EjerciciosListComponent', () => {
     expect(deleteTarget).toBe(mockEjercicios[1]);
   });
 });
-

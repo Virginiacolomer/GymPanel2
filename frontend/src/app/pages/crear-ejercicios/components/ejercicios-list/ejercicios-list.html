@@ -1,7 +1,13 @@
+<!-- Indicador si no se ha seleccionado grupo -->
+<div *ngIf="!selectedGrupoId() && !isLoadingGrupoDetalle()" class="ejercicios-empty-hint">
+  <i class="fi fi-rr-arrow-small-left" aria-hidden="true"></i>
+  <p>Selecciona un grupo muscular a la izquierda para ver y gestionar sus ejercicios.</p>
+</div>
+
 <!-- Display existing exercises in selected group -->
 <div *ngIf="isLoadingGrupoDetalle()" class="ejercicios-list">
   <h3>Ejercicios en este grupo:</h3>
-  <p class="empty-state">Cargando ejercicios...</p>
+  <p class="empty-state">⏳ Cargando ejercicios...</p>
 </div>
 
 <div *ngIf="selectedGrupoId() && !isLoadingGrupoDetalle()" class="ejercicios-list">
@@ -20,7 +26,7 @@
               [alt]="ejercicio.nombre"
               class="ejercicio-thumb"
             ></app-zoomable-image>
-            <span>{{ ejercicio.nombre }}</span>
+            <span class="ejercicio-nombre">{{ ejercicio.nombre }}</span>
           </div>
           <div class="ejercicio-actions">
             <button

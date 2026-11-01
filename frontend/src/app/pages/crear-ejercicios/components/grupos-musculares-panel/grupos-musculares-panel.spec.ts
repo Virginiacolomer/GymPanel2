@@ -66,4 +66,3 @@ describe('GruposMuscularesPanelComponent', () => {
     expect(retried).toBe(true);
   });
 });
-
