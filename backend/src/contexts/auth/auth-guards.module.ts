@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { resolverSecretoJwt } from './infrastructure/secreto-jwt';
 import { JwtAuthGuard } from './presentation/jwt-auth.guard';
 import { RolesGuard } from './presentation/roles.guard';
 
@@ -14,8 +15,7 @@ import { RolesGuard } from './presentation/roles.guard';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        secret:
-          configService.get<string>('JWT_SECRET') || 'gympanel-dev-secret',
+        secret: resolverSecretoJwt(configService),
         signOptions: { expiresIn: '12h' },
       }),
     }),
