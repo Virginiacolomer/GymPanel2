@@ -3,219 +3,92 @@
     <app-page-header-compact backHref="/menu-admin"></app-page-header-compact>
     <section class="page-body">
       <div class="crear-ejercicios-container">
-        <h1>
-          <i class="fi fi-rs-gym" aria-hidden="true"></i>
-          Crear Ejercicios
-        </h1>
-
-        <!-- Status Message -->
+        <!-- Status Message general -->
         <div *ngIf="statusMessage" class="status-message" [ngClass]="'status-' + statusType">
           {{ statusMessage }}
         </div>
 
         <div class="ejercicios-columns">
-          <!-- Column 1: Grupos musculares (ver, seleccionar, editar, crear) -->
-          <div class="section column-grupos">
-            <h2>Grupos musculares</h2>
-
-            <div class="form-group">
-              <label>Selecciona un grupo muscular:</label>
-              <div class="select-wrapper">
-                <select
-                  [(ngModel)]="selectedGrupoId"
-                  (ngModelChange)="onGrupoChange($event)"
-                  name="grupo"
-                  size="8"
-                >
-                  <option *ngIf="isLoadingGrupos && gruposMusculares.length === 0" [ngValue]="null" disabled>
-                    ⏳ Cargando grupos...
-                  </option>
-                  <option *ngIf="!isLoadingGrupos && gruposMusculares.length === 0 && !loadingError" [ngValue]="null" disabled>
-                    No hay grupos disponibles
-                  </option>
-                  <option *ngFor="let grupo of gruposMusculares; trackBy: trackByGrupoId" [ngValue]="grupo.id">
-                    {{ grupo.nombre }}
-                  </option>
-                </select>
-                <button
-                  *ngIf="loadingError"
-                  (click)="loadGruposMusculares()"
-                  [disabled]="isLoadingGrupos"
-                  class="btn-retry"
-                  title="Reintentar cargar grupos"
-                >
-                  🔄 Reintentar
-                </button>
-              </div>
-            </div>
-
-            <div class="form-group" *ngIf="selectedGrupoId">
-              <label>Editar nombre del grupo seleccionado:</label>
-              <input
-                type="text"
-                [(ngModel)]="editarGrupoNombre"
-                placeholder="Nuevo nombre del grupo muscular"
-                [disabled]="isUpdatingGrupo"
-              />
-              <button
-                (click)="updateGrupoMuscular()"
-                [disabled]="isUpdatingGrupo || !editarGrupoNombre.trim()"
-                class="btn btn-secondary"
-              >
-                {{ isUpdatingGrupo ? 'Guardando...' : 'Guardar Grupo' }}
-              </button>
-            </div>
-
-            <div class="form-group">
-              <label>Crear nuevo grupo muscular:</label>
-              <input
-                type="text"
-                [(ngModel)]="nuevoGrupoNombre"
-                placeholder="Escribe el nombre del grupo muscular (ej: Pecho, Espalda...)"
-              />
-              <button
-                (click)="createGrupoMuscular()"
-                [disabled]="!nuevoGrupoNombre.trim()"
-                class="btn btn-primary"
-              >
-                Crear Grupo
-              </button>
-
-              <p
-                *ngIf="grupoFeedbackMessage"
-                class="form-feedback"
-                [ngClass]="'form-feedback-' + grupoFeedbackType"
-                aria-live="polite"
-              >
-                {{ grupoFeedbackMessage }}
-              </p>
-            </div>
+          <!-- Columna 1: Panel de Grupos Musculares -->
+          <div class="column-grupos-wrapper">
+            <app-grupos-musculares-panel
+              [gruposMusculares]="gruposMusculares"
+              [selectedGrupoId]="selectedGrupoId"
+              [selectedGrupoNombre]="selectedGrupoNombre"
+              [isLoadingGrupos]="isLoadingGrupos"
+              [isUpdatingGrupo]="isUpdatingGrupo"
+              [isCreatingGrupo]="isCreatingGrupo"
+              [loadingError]="loadingError"
+              [feedbackMessage]="grupoFeedbackMessage"
+              [feedbackType]="grupoFeedbackType"
+              (grupoSelected)="onGrupoChange($event)"
+              (openCreateGrupo)="openCreateGrupoModal()"
+              (openEditGrupo)="openEditGrupoModal($event)"
+              (retryLoadGrupos)="loadGruposMusculares()"
+            ></app-grupos-musculares-panel>
           </div>
 
-          <!-- Column 2: Ejercicios del grupo seleccionado (ver, editar, borrar, crear) -->
-          <div class="section column-ejercicios">
-            <h2>Ejercicios</h2>
-
-            <!-- Display existing exercises in selected group -->
-            <div *ngIf="isLoadingGrupoDetalle" class="ejercicios-list">
-              <h3>Ejercicios en este grupo:</h3>
-              <p class="empty-state">Cargando ejercicios...</p>
-            </div>
-
-            <div *ngIf="selectedGrupoId && !isLoadingGrupoDetalle" class="ejercicios-list">
-              <h3>Ejercicios en este grupo:</h3>
-              <div *ngIf="selectedEjercicios.length > 0; else noEjercicios">
-                <ul>
-                  <li *ngFor="let ejercicio of selectedEjercicios">
-                    <div class="ejercicio-row" *ngIf="editingEjercicioId !== ejercicio.id; else editEjercicioTpl">
-                      <div class="ejercicio-info">
-                        <app-zoomable-image
-                          *ngIf="ejercicio.imagenUrl"
-                          [src]="ejercicio.imagenUrl"
-                          [alt]="ejercicio.nombre"
-                          class="ejercicio-thumb"
-                        ></app-zoomable-image>
-                        <span>{{ ejercicio.nombre }}</span>
-                      </div>
-                      <div class="ejercicio-actions">
-                        <button
-                          type="button"
-                          class="btn btn-secondary btn-small"
-                          [class.btn-image-success]="recentlyUploadedImagenEjercicioId === ejercicio.id"
-                          (click)="triggerImageUpload(ejercicio)"
-                          [disabled]="isUploadingImagenEjercicioId === ejercicio.id"
-                        >
-                          {{
-                            isUploadingImagenEjercicioId === ejercicio.id
-                              ? 'Subiendo...'
-                              : recentlyUploadedImagenEjercicioId === ejercicio.id
-                                ? '✓ Imagen subida'
-                                : ejercicio.imagenUrl
-                                  ? 'Reemplazar imagen'
-                                  : 'Subir imagen'
-                          }}
-                        </button>
-                        <button
-                          type="button"
-                          class="btn btn-secondary btn-small"
-                          (click)="startEditEjercicio(ejercicio)"
-                          [disabled]="(isUpdatingEjercicio && pendingEditEjercicioId === ejercicio.id) || (isDeletingEjercicio && pendingDeleteEjercicioId === ejercicio.id)"
-                        >
-                          Editar
-                        </button>
-                        <button
-                          type="button"
-                          class="btn btn-danger btn-small"
-                          (click)="removeEjercicio(ejercicio)"
-                          [disabled]="(isUpdatingEjercicio && pendingEditEjercicioId === ejercicio.id) || (isDeletingEjercicio && pendingDeleteEjercicioId === ejercicio.id)"
-                        >
-                          {{ isDeletingEjercicio && pendingDeleteEjercicioId === ejercicio.id ? 'Eliminando...' : 'Borrar' }}
-                        </button>
-                      </div>
-                    </div>
-                    <ng-template #editEjercicioTpl>
-                      <div class="ejercicio-edit-row">
-                        <input
-                          type="text"
-                          [(ngModel)]="editingEjercicioNombre"
-                          [disabled]="isUpdatingEjercicio"
-                          placeholder="Nombre del ejercicio"
-                        />
-                        <button
-                          type="button"
-                          class="btn btn-secondary btn-small"
-                          (click)="saveEditEjercicio()"
-                          [disabled]="(isUpdatingEjercicio && pendingEditEjercicioId === ejercicio.id) || !editingEjercicioNombre.trim()"
-                        >
-                          {{ isUpdatingEjercicio && pendingEditEjercicioId === ejercicio.id ? 'Guardando...' : 'Guardar' }}
-                        </button>
-                        <button
-                          type="button"
-                          class="btn btn-small btn-ghost"
-                          (click)="cancelEditEjercicio()"
-                          [disabled]="isUpdatingEjercicio && pendingEditEjercicioId === ejercicio.id"
-                        >
-                          Cancelar
-                        </button>
-                      </div>
-                    </ng-template>
-                  </li>
-                </ul>
-              </div>
-              <ng-template #noEjercicios>
-                <p *ngIf="hasLoadedGrupoDetalle" class="empty-state">No hay ejercicios registrados en este grupo aún</p>
-              </ng-template>
-            </div>
-
-            <!-- Input Exercise Name -->
-            <div class="form-group">
-              <input
-                type="text"
-                [(ngModel)]="ejercicioNombre"
-                placeholder="Escribe el nombre del ejercicio (ej: Press de banca...)"
-                [disabled]="isCreatingEjercicio"
-              />
-              <button
-                (click)="createEjercicio()"
-                [disabled]="isCreatingEjercicio || !ejercicioNombre.trim()"
-                class="btn btn-primary"
-              >
-                <i class="fi fi-rs-gym" aria-hidden="true"></i>
-                {{ isCreatingEjercicio ? 'Creando...' : 'Crear Ejercicio' }}
-              </button>
-
-              <p
-                *ngIf="ejercicioFeedbackMessage"
-                class="form-feedback"
-                [ngClass]="'form-feedback-' + ejercicioFeedbackType"
-                aria-live="polite"
-              >
-                {{ ejercicioFeedbackMessage }}
-              </p>
-            </div>
+          <!-- Columna 2: Ejercicios del grupo seleccionado -->
+          <div class="column-ejercicios-wrapper">
+            <app-ejercicios-list
+              [ejercicios]="selectedEjercicios"
+              [selectedGrupoId]="selectedGrupoId"
+              [selectedGrupoNombre]="selectedGrupoNombre"
+              [isLoadingGrupoDetalle]="isLoadingGrupoDetalle"
+              [hasLoadedGrupoDetalle]="hasLoadedGrupoDetalle"
+              [isUpdatingEjercicio]="isUpdatingEjercicio"
+              [isDeletingEjercicio]="isDeletingEjercicio"
+              [pendingEditEjercicioId]="pendingEditEjercicioId"
+              [pendingDeleteEjercicioId]="pendingDeleteEjercicioId"
+              [isUploadingImagenEjercicioId]="isUploadingImagenEjercicioId"
+              [recentlyUploadedImagenEjercicioId]="recentlyUploadedImagenEjercicioId"
+              (openCreateEjercicio)="openCreateEjercicioModal()"
+              (openEditEjercicio)="openEditEjercicioModal($event)"
+              (openDetalle)="openDetalleModal($event)"
+              (uploadImage)="triggerImageUpload($event)"
+              (deleteEjercicio)="removeEjercicio($event)"
+            ></app-ejercicios-list>
           </div>
         </div>
 
+        <!-- Modal para Crear / Editar Grupo Muscular -->
+        <app-grupo-modal
+          [isOpen]="isGrupoModalOpen"
+          [isEditing]="isEditingGrupoModal"
+          [initialNombre]="editingGrupoNombre"
+          [isSubmitting]="isCreatingGrupo || isUpdatingGrupo"
+          [feedbackMessage]="grupoFeedbackMessage"
+          [feedbackType]="grupoFeedbackType"
+          (save)="onSaveGrupoModal($event)"
+          (close)="closeGrupoModal()"
+        ></app-grupo-modal>
+
+        <!-- Modal para Crear / Editar Ejercicio -->
+        <app-ejercicio-modal
+          [isOpen]="isEjercicioModalOpen"
+          [isEditing]="isEditingEjercicioModal"
+          [initialNombre]="editingEjercicioNombre"
+          [initialData]="editingEjercicioData"
+          [gruposMusculares]="gruposMusculares"
+          [selectedGrupoId]="selectedGrupoId"
+          [selectedGrupoNombre]="selectedGrupoNombre"
+          [isSubmitting]="isCreatingEjercicio || isUpdatingEjercicio"
+          [feedbackMessage]="ejercicioFeedbackMessage"
+          [feedbackType]="ejercicioFeedbackType"
+          (save)="onSaveEjercicioModal($event)"
+          (close)="closeEjercicioModal()"
+        ></app-ejercicio-modal>
+
+        <!-- Modal para Detalle de Ejercicio -->
+        <app-ejercicio-detalle-modal
+          [isOpen]="isDetalleModalOpen"
+          [ejercicio]="selectedEjercicioDetalle"
+          [grupoNombre]="detalleGrupoNombre"
+          (close)="closeDetalleModal()"
+          (edit)="onEditFromDetalle($event)"
+        ></app-ejercicio-detalle-modal>
+
+        <!-- Input oculto para subida de imagen de ejercicio -->
         <input
           #imagenFileInput
           type="file"

@@ -1,0 +1,166 @@
+<div
+  *ngIf="isOpen() && ejercicio()"
+  class="modal-backdrop"
+  (click)="onBackdropClick($event)"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="'Detalle de ' + ejercicio()!.nombre"
+>
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <!-- 1. ENCABEZADO -->
+    <header class="modal-header">
+      <div class="header-left">
+        <div class="header-badge-row">
+          <span class="grupo-pill" *ngIf="formattedGrupoNombre()">
+            <i [class]="grupoMeta().icono" aria-hidden="true"></i>
+            {{ formattedGrupoNombre() }}
+          </span>
+          <span class="id-tag">ID #{{ ejercicio()!.id }}</span>
+        </div>
+        <h2 class="exercise-title">{{ ejercicio()!.nombre }}</h2>
+      </div>
+
+      <div class="header-actions">
+        <button
+          type="button"
+          class="btn-edit-header"
+          (click)="onEditClick()"
+          title="Editar ejercicio"
+          aria-label="Editar ejercicio"
+        >
+          <i class="fi fi-rr-pencil" aria-hidden="true"></i>
+          <span>Editar ejercicio</span>
+        </button>
+
+        <button
+          type="button"
+          class="btn-close"
+          (click)="close.emit()"
+          title="Cerrar detalle"
+          aria-label="Cerrar detalle"
+        >
+          <i class="fi fi-rr-cross-small" aria-hidden="true"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- 2. CONTENIDO PRINCIPAL SCROLLABLE -->
+    <div class="modal-body-scroll">
+      <div class="main-split-grid">
+        <!-- Columna Izquierda: Fotografía destacada (450-500px, contain) -->
+        <div class="media-column">
+          <div class="media-frame">
+            <img
+              *ngIf="ejercicio()!.imagenUrl"
+              [src]="ejercicio()!.imagenUrl"
+              [alt]="ejercicio()!.nombre"
+              class="exercise-photo"
+            />
+
+            <!-- Placeholder cuando no hay fotografía -->
+            <div *ngIf="!ejercicio()!.imagenUrl" class="photo-placeholder">
+              <div class="placeholder-icon-wrap">
+                <i class="fi fi-rs-gym" aria-hidden="true"></i>
+              </div>
+              <p class="placeholder-title">Sin fotografía asignada</p>
+              <p class="placeholder-hint">Podés subir una foto editando el ejercicio.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna Derecha: Información y Equipamiento -->
+        <div class="info-column">
+          <!-- Tarjeta de enfoque muscular -->
+          <div class="meta-card">
+            <div class="meta-icon">
+              <i [class]="grupoMeta().icono" aria-hidden="true"></i>
+            </div>
+            <div class="meta-details">
+              <span class="meta-label">Grupo muscular principal</span>
+              <span class="meta-value">{{ formattedGrupoNombre() }}</span>
+              <span class="meta-sub">{{ grupoMeta().descripcion }}</span>
+            </div>
+          </div>
+
+          <!-- Sección: Descripción (espacio amplio) -->
+          <section class="section-block">
+            <h3 class="section-title">
+              <i class="fi fi-rr-document-signed" aria-hidden="true"></i>
+              Descripción
+            </h3>
+            <div class="section-content">
+              <p class="description-text">
+                {{ ejercicio()!.descripcion || ('Ejercicio enfocado en el desarrollo, acondicionamiento y fortalecimiento muscular de ' + formattedGrupoNombre().toLowerCase() + '.') }}
+              </p>
+            </div>
+          </section>
+
+          <!-- Sección: Equipamiento -->
+          <section class="section-block" *ngIf="equipamiento()">
+            <div class="section-header-row">
+              <h3 class="section-title">
+                <i class="fi fi-rr-dumbbell" aria-hidden="true"></i>
+                Equipamiento
+              </h3>
+              <span class="badge-tag">{{ ejercicio()!.equipamiento ? 'Asignado' : 'Sugerido' }}</span>
+            </div>
+
+            <div class="equipment-card">
+              <div class="equipment-icon-box">
+                <i [class]="equipamiento()!.icono" aria-hidden="true"></i>
+              </div>
+              <div class="equipment-info">
+                <span class="equipment-name">{{ equipamiento()!.nombre }}</span>
+                <span class="equipment-type">{{ equipamiento()!.tipo }}</span>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- 3. SECCIÓN: TÉCNICA DE EJECUCIÓN -->
+      <section class="tecnica-section">
+        <h3 class="section-title">
+          <i class="fi fi-rr-list-check" aria-hidden="true"></i>
+          Técnica de ejecución
+        </h3>
+
+        <!-- Si tiene técnica registrada -->
+        <div *ngIf="ejercicio()!.tecnica" class="tecnica-custom-card">
+          <div class="tecnica-icon-wrap active">
+            <i class="fi fi-rr-list-check" aria-hidden="true"></i>
+          </div>
+          <div class="tecnica-content">
+            <p class="tecnica-text">{{ ejercicio()!.tecnica }}</p>
+          </div>
+        </div>
+
+        <!-- Mensaje discreto si aún no se ha agregado técnica -->
+        <div *ngIf="!ejercicio()!.tecnica" class="tecnica-discreet-card">
+          <div class="tecnica-icon-wrap">
+            <i class="fi fi-rr-info" aria-hidden="true"></i>
+          </div>
+          <div class="tecnica-content">
+            <p class="tecnica-note">
+              Todavía no se ha registrado la guía técnica paso a paso para este ejercicio.
+            </p>
+            <p class="tecnica-subnote">
+              Los entrenadores pueden indicar indicaciones específicas, series y repeticiones al asignar planes de entrenamiento.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 4. PIE DE ACCIONES DEL MODAL -->
+    <footer class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-ghost"
+        (click)="close.emit()"
+      >
+        Cerrar detalle
+      </button>
+    </footer>
+  </div>
+</div>

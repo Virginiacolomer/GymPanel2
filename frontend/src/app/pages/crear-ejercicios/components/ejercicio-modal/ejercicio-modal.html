@@ -1,0 +1,236 @@
+<div
+  *ngIf="isOpen()"
+  class="modal-backdrop"
+  (click)="onBackdropClick($event)"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="isEditing() ? 'Editar ejercicio' : 'Crear nuevo ejercicio'"
+>
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-title-wrap">
+        <div class="modal-icon-badge">
+          <i class="fi fi-rs-gym" aria-hidden="true"></i>
+        </div>
+        <div>
+          <h3>{{ isEditing() ? 'Editar Ejercicio' : 'Crear Ejercicio' }}</h3>
+          <p class="modal-subtitle">
+            <span *ngIf="activeGrupoNombre()" class="grupo-pill">
+              {{ activeGrupoNombre() }}
+            </span>
+            {{
+              isEditing()
+                ? 'Modificá la información completa del ejercicio'
+                : 'Agregá un nuevo ejercicio con todos sus detalles'
+            }}
+          </p>
+        </div>
+      </div>
+      <button
+        type="button"
+        class="btn-close"
+        (click)="close.emit()"
+        aria-label="Cerrar modal"
+        [disabled]="isSubmitting()"
+      >
+        <i class="fi fi-rr-cross-small" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="modal-body">
+      <!-- Fila 1: Nombre y Grupo muscular (2 columnas) -->
+      <div class="form-row-2col">
+        <!-- Nombre del ejercicio -->
+        <div class="form-field">
+          <label for="ejercicio-modal-nombre">
+            Nombre del ejercicio <span class="required-star">*</span>
+          </label>
+          <div class="input-wrapper">
+            <i class="fi fi-rs-gym input-icon" aria-hidden="true"></i>
+            <input
+              id="ejercicio-modal-nombre"
+              type="text"
+              formControlName="nombre"
+              placeholder="Ej: Press de banca, Sentadilla..."
+              autocomplete="off"
+            />
+          </div>
+          <span
+            *ngIf="form.controls.nombre.invalid && form.controls.nombre.touched"
+            class="field-error"
+          >
+            El nombre del ejercicio es obligatorio.
+          </span>
+        </div>
+
+        <!-- Grupo muscular -->
+        <div class="form-field">
+          <label for="ejercicio-modal-grupo">
+            Grupo muscular principal <span class="required-star">*</span>
+          </label>
+          <div class="input-wrapper">
+            <i class="fi fi-rr-apps input-icon" aria-hidden="true"></i>
+            <select
+              id="ejercicio-modal-grupo"
+              formControlName="grupoMuscularId"
+              class="form-select"
+            >
+              <option [ngValue]="null" disabled>Seleccionar grupo muscular...</option>
+              <option *ngFor="let g of gruposMusculares()" [ngValue]="g.id">
+                {{ g.nombre }}
+              </option>
+            </select>
+          </div>
+          <span
+            *ngIf="form.controls.grupoMuscularId.invalid && form.controls.grupoMuscularId.touched"
+            class="field-error"
+          >
+            Debes seleccionar un grupo muscular.
+          </span>
+        </div>
+      </div>
+
+      <!-- Fila 2: Fotografía / Imagen con preview -->
+      <div class="form-field">
+        <label>Fotografía del ejercicio</label>
+        <div class="photo-upload-zone">
+          <div class="photo-preview-box">
+            <img
+              *ngIf="imagePreviewUrl()"
+              [src]="imagePreviewUrl()"
+              alt="Previsualización del ejercicio"
+              class="preview-img"
+            />
+            <div *ngIf="!imagePreviewUrl()" class="preview-empty">
+              <i class="fi fi-rs-gym" aria-hidden="true"></i>
+              <span>Sin foto</span>
+            </div>
+          </div>
+
+          <div class="photo-controls">
+            <input
+              #fileInputRef
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              (change)="onFileChange($event)"
+              class="visually-hidden"
+              [disabled]="isSubmitting()"
+            />
+            <div class="photo-btn-row">
+              <button
+                type="button"
+                class="btn btn-secondary btn-sm"
+                (click)="triggerFileInput()"
+                [disabled]="isSubmitting()"
+              >
+                <i class="fi fi-rr-upload" aria-hidden="true"></i>
+                <span>{{ imagePreviewUrl() ? 'Cambiar fotografía' : 'Subir fotografía' }}</span>
+              </button>
+
+              <button
+                *ngIf="selectedImageFile()"
+                type="button"
+                class="btn btn-ghost btn-sm"
+                (click)="removeSelectedFile()"
+                [disabled]="isSubmitting()"
+              >
+                <i class="fi fi-rr-trash" aria-hidden="true"></i>
+                <span>Quitar selección</span>
+              </button>
+            </div>
+
+            <p class="upload-hint" *ngIf="!fileError()">
+              Formatos soportados: JPG, PNG o WebP. Máximo 5 MB.
+            </p>
+            <p class="field-error" *ngIf="fileError()">
+              {{ fileError() }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fila 3: Equipamiento -->
+      <div class="form-field">
+        <label for="ejercicio-modal-equipamiento">Equipamiento</label>
+        <div class="input-wrapper">
+          <i class="fi fi-rr-dumbbell input-icon" aria-hidden="true"></i>
+          <select
+            id="ejercicio-modal-equipamiento"
+            formControlName="equipamiento"
+            class="form-select"
+          >
+            <option value="">Detectar automáticamente según el nombre</option>
+            <option *ngFor="let opt of equipamientoOpciones" [value]="opt">
+              {{ opt }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Fila 4: Descripción -->
+      <div class="form-field">
+        <label for="ejercicio-modal-descripcion">Descripción del ejercicio</label>
+        <textarea
+          id="ejercicio-modal-descripcion"
+          formControlName="descripcion"
+          rows="3"
+          placeholder="Escribí una descripción detallada, objetivos o enfoque del ejercicio..."
+          class="form-textarea"
+        ></textarea>
+      </div>
+
+      <!-- Fila 5: Técnica de ejecución -->
+      <div class="form-field">
+        <label for="ejercicio-modal-tecnica">
+          Técnica de ejecución (pasos y recomendaciones)
+        </label>
+        <textarea
+          id="ejercicio-modal-tecnica"
+          formControlName="tecnica"
+          rows="3"
+          placeholder="Ej: 1. Posición inicial con espalda recta.&#10;2. Descender controlando el movimiento.&#10;3. Empujar con los talones y exhalar al subir."
+          class="form-textarea"
+        ></textarea>
+      </div>
+
+      <p
+        *ngIf="feedbackMessage()"
+        class="form-feedback"
+        [ngClass]="'form-feedback-' + feedbackType()"
+        aria-live="polite"
+      >
+        {{ feedbackMessage() }}
+      </p>
+
+      <div class="modal-actions">
+        <button
+          type="button"
+          class="btn btn-ghost"
+          (click)="close.emit()"
+          [disabled]="isSubmitting()"
+        >
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid || isSubmitting()">
+          <i
+            *ngIf="!isSubmitting()"
+            class="fi"
+            [ngClass]="isEditing() ? 'fi-rr-disk' : 'fi-rr-plus'"
+            aria-hidden="true"
+          ></i>
+          <span>
+            {{
+              isSubmitting()
+                ? isEditing()
+                  ? 'Guardando...'
+                  : 'Creando...'
+                : isEditing()
+                  ? 'Guardar Cambios'
+                  : 'Crear Ejercicio'
+            }}
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

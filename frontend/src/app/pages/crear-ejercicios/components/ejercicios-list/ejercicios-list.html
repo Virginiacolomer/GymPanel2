@@ -1,0 +1,326 @@
+<!-- Estado cuando no hay grupo seleccionado -->
+<div *ngIf="!selectedGrupoId() && !isLoadingGrupoDetalle()" class="ejercicios-empty-prompt">
+  <div class="empty-prompt-icon">
+    <i class="fi fi-rr-arrow-small-left" aria-hidden="true"></i>
+  </div>
+  <h3>Selecciona un grupo muscular</h3>
+  <p>
+    Elegí un grupo muscular del panel izquierdo para explorar, gestionar y crear sus ejercicios.
+  </p>
+</div>
+
+<!-- Estado de carga del grupo -->
+<div *ngIf="isLoadingGrupoDetalle()" class="ejercicios-loading-state">
+  <div class="spinner-large"></div>
+  <p>Cargando ejercicios de {{ selectedGrupoNombre() }}...</p>
+</div>
+
+<!-- Contenido principal cuando hay grupo seleccionado y cargado -->
+<div
+  *ngIf="selectedGrupoId() && !isLoadingGrupoDetalle()"
+  class="ejercicios-container"
+  (click)="closeMenu()"
+>
+  <!-- 1. HERO HEADER DEL GRUPO MUSCULAR -->
+  <div class="hero-header">
+    <div class="hero-left">
+      <div class="hero-avatar">
+        <i [class]="currentGrupoMeta().icono" aria-hidden="true"></i>
+      </div>
+      <div class="hero-text">
+        <div class="hero-title-row">
+          <h2>{{ formatNombre(selectedGrupoNombre()) }}</h2>
+          <span class="badge-count" title="Total de ejercicios en este grupo">
+            {{ ejercicios().length }}
+          </span>
+        </div>
+        <p class="hero-description">
+          Trabajá tu {{ currentGrupoMeta().descripcion.toLowerCase() }} con los mejores ejercicios
+        </p>
+      </div>
+    </div>
+
+    <!-- Filtros de categoría: Todos, Con peso, Sin peso, En máquina -->
+    <div class="filter-pills" role="tablist" aria-label="Categorías de ejercicios">
+      <button
+        *ngFor="let cat of categories"
+        type="button"
+        class="filter-pill"
+        [class.active]="selectedCategory() === cat.id"
+        (click)="setCategory(cat.id)"
+        role="tab"
+        [attr.aria-selected]="selectedCategory() === cat.id"
+      >
+        {{ cat.label }}
+      </button>
+    </div>
+  </div>
+
+  <!-- 2. TOOLBAR: BUSCADOR, ORDEN Y VISTA -->
+  <div class="ejercicios-toolbar">
+    <!-- Buscador -->
+    <div class="search-input-wrapper">
+      <i class="fi fi-rr-search search-icon" aria-hidden="true"></i>
+      <input
+        type="text"
+        [ngModel]="searchQuery()"
+        (ngModelChange)="onSearchChange($event)"
+        placeholder="Buscar ejercicio..."
+        autocomplete="off"
+        aria-label="Buscar ejercicio"
+      />
+      <button
+        *ngIf="searchQuery()"
+        type="button"
+        class="btn-clear-search"
+        (click)="clearSearch()"
+        aria-label="Limpiar búsqueda"
+      >
+        <i class="fi fi-rr-cross-small" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div class="toolbar-actions">
+      <!-- Orden A-Z / Z-A -->
+      <button type="button" class="btn-toolbar-toggle" (click)="toggleSort()" title="Cambiar orden">
+        <i class="fi fi-rr-sort-alt" aria-hidden="true"></i>
+        <span>Ordenar: {{ sortOrder() === 'asc' ? 'A-Z' : 'Z-A' }}</span>
+      </button>
+
+      <!-- Alternar vista Cuadrícula / Lista -->
+      <div class="view-toggles" role="group" aria-label="Modo de vista">
+        <button
+          type="button"
+          class="btn-view-mode"
+          [class.active]="viewMode() === 'grid'"
+          (click)="setViewMode('grid')"
+          title="Vista cuadrícula"
+          aria-label="Vista cuadrícula"
+        >
+          <i class="fi fi-rr-grid" aria-hidden="true"></i>
+        </button>
+        <button
+          type="button"
+          class="btn-view-mode"
+          [class.active]="viewMode() === 'list'"
+          (click)="setViewMode('list')"
+          title="Vista lista"
+          aria-label="Vista lista"
+        >
+          <i class="fi fi-rr-list" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <!-- Botón Crear Ejercicio en Toolbar -->
+      <button type="button" class="btn-add-ejercicio" (click)="openCreateEjercicio.emit()">
+        <i class="fi fi-rr-plus" aria-hidden="true"></i>
+        <span>Crear Ejercicio</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 3. CONTENIDO: CUADRÍCULA O LISTA -->
+  <div *ngIf="displayedEjercicios().length > 0; else noEjerciciosMatch">
+    <!-- Modo Cuadrícula (Cards) -->
+    <div *ngIf="viewMode() === 'grid'" class="ejercicios-grid">
+      <div
+        *ngFor="let ejercicio of displayedEjercicios(); trackBy: trackByEjercicioId"
+        class="ejercicio-card clickable-card"
+        (click)="onOpenDetalle(ejercicio)"
+      >
+        <!-- Área superior: Foto o Placeholder con botón favorito -->
+        <div class="card-media">
+          <img
+            *ngIf="ejercicio.imagenUrl"
+            [src]="ejercicio.imagenUrl"
+            [alt]="ejercicio.nombre"
+            class="exercise-img"
+            loading="lazy"
+          />
+          <div *ngIf="!ejercicio.imagenUrl" class="exercise-placeholder">
+            <div class="placeholder-badge">
+              <i class="fi fi-rs-gym" aria-hidden="true"></i>
+            </div>
+            <span class="placeholder-text">Sin fotografía</span>
+          </div>
+
+          <!-- Indicador de favorito interactivo -->
+          <button
+            type="button"
+            class="btn-fav"
+            [class.is-favorite]="isFavorite(ejercicio.id)"
+            (click)="toggleFavorite(ejercicio.id, $event)"
+            title="Marcar como favorito"
+            aria-label="Marcar como favorito"
+          >
+            <i
+              class="fi"
+              [ngClass]="isFavorite(ejercicio.id) ? 'fi-sr-star' : 'fi-rr-star'"
+              aria-hidden="true"
+            ></i>
+          </button>
+        </div>
+
+        <!-- Cuerpo de la tarjeta -->
+        <div class="card-body">
+          <div class="card-title-wrap">
+            <h4 class="card-title" [title]="ejercicio.nombre">{{ ejercicio.nombre }}</h4>
+            <p class="card-subtitle">{{ formatNombre(selectedGrupoNombre()) }}</p>
+          </div>
+
+          <!-- Acciones de la tarjeta -->
+          <div class="card-actions">
+            <!-- Botón Ver ejercicio -->
+            <button
+              type="button"
+              class="btn-demo"
+              (click)="onOpenDetalle(ejercicio, $event)"
+              title="Ver detalle del ejercicio"
+            >
+              <i class="fi fi-rr-eye" aria-hidden="true"></i>
+              <span>Ver ejercicio</span>
+            </button>
+
+            <!-- Menú de 3 puntos para mantener la tarjeta limpia -->
+            <div class="menu-container">
+              <button
+                type="button"
+                class="btn-dots"
+                (click)="toggleMenu(ejercicio.id, $event)"
+                title="Más opciones"
+                aria-label="Más opciones"
+              >
+                <i class="fi fi-rr-menu-dots-vertical" aria-hidden="true"></i>
+              </button>
+
+              <div
+                *ngIf="openMenuEjercicioId() === ejercicio.id"
+                class="dropdown-menu"
+                (click)="$event.stopPropagation()"
+              >
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  (click)="onEditAction(ejercicio)"
+                  [disabled]="isUpdatingEjercicio() && pendingEditEjercicioId() === ejercicio.id"
+                >
+                  <i class="fi fi-rr-pencil" aria-hidden="true"></i>
+                  <span>Editar ejercicio</span>
+                </button>
+                <button
+                  type="button"
+                  class="dropdown-item item-danger"
+                  (click)="onDeleteAction(ejercicio)"
+                  [disabled]="isDeletingEjercicio() && pendingDeleteEjercicioId() === ejercicio.id"
+                >
+                  <i class="fi fi-rr-trash" aria-hidden="true"></i>
+                  <span>
+                    {{
+                      isDeletingEjercicio() && pendingDeleteEjercicioId() === ejercicio.id
+                        ? 'Eliminando...'
+                        : 'Eliminar ejercicio'
+                    }}
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modo Lista -->
+    <div *ngIf="viewMode() === 'list'" class="ejercicios-table-list">
+      <div
+        *ngFor="let ejercicio of displayedEjercicios(); trackBy: trackByEjercicioId"
+        class="list-row clickable-row"
+        (click)="onOpenDetalle(ejercicio)"
+      >
+        <div class="list-left">
+          <div class="list-thumb">
+            <img
+              *ngIf="ejercicio.imagenUrl"
+              [src]="ejercicio.imagenUrl"
+              [alt]="ejercicio.nombre"
+            />
+            <i *ngIf="!ejercicio.imagenUrl" class="fi fi-rs-gym" aria-hidden="true"></i>
+          </div>
+          <div class="list-info">
+            <span class="list-name">{{ ejercicio.nombre }}</span>
+            <span class="list-grupo">{{ formatNombre(selectedGrupoNombre()) }}</span>
+          </div>
+        </div>
+
+        <div class="list-actions">
+          <button
+            type="button"
+            class="btn-fav-inline"
+            [class.is-favorite]="isFavorite(ejercicio.id)"
+            (click)="toggleFavorite(ejercicio.id, $event)"
+            title="Favorito"
+          >
+            <i
+              class="fi"
+              [ngClass]="isFavorite(ejercicio.id) ? 'fi-sr-star' : 'fi-rr-star'"
+              aria-hidden="true"
+            ></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary btn-sm"
+            (click)="onOpenDetalle(ejercicio, $event)"
+          >
+            Ver
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary btn-sm"
+            (click)="onEditAction(ejercicio)"
+            [disabled]="isUpdatingEjercicio() && pendingEditEjercicioId() === ejercicio.id"
+          >
+            Editar
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger btn-sm"
+            (click)="onDeleteAction(ejercicio)"
+            [disabled]="isDeletingEjercicio() && pendingDeleteEjercicioId() === ejercicio.id"
+          >
+            Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estado vacío cuando no hay coincidencia -->
+  <ng-template #noEjerciciosMatch>
+    <div class="empty-state-card">
+      <div class="empty-icon-box">
+        <i class="fi fi-rr-search-alt" aria-hidden="true"></i>
+      </div>
+      <h4>
+        {{ searchQuery() ? 'No se encontraron ejercicios' : 'No hay ejercicios en esta categoría' }}
+      </h4>
+      <p>
+        {{
+          searchQuery()
+            ? 'No hay ejercicios que coincidan con "' + searchQuery() + '".'
+            : 'Aún no registraste ejercicios clasificados en esta sección.'
+        }}
+      </p>
+      <button *ngIf="searchQuery()" type="button" class="btn btn-ghost" (click)="clearSearch()">
+        Limpiar búsqueda
+      </button>
+      <button
+        *ngIf="!searchQuery()"
+        type="button"
+        class="btn btn-primary"
+        (click)="openCreateEjercicio.emit()"
+      >
+        <i class="fi fi-rr-plus" aria-hidden="true"></i>
+        <span>Crear primer ejercicio</span>
+      </button>
+    </div>
+  </ng-template>
+</div>
