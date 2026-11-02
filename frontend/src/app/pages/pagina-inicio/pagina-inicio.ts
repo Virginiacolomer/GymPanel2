@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { PageHeaderComponent } from '../../shared/page-header/page-header';
 import { PageBgComponent } from '../../shared/page-bg/page-bg';
 
@@ -9,7 +10,7 @@ import { PageBgComponent } from '../../shared/page-bg/page-bg';
   // Permite usar el componente directamente en rutas sin declararlo en un NgModule.
   standalone: true,
   // Dependencias usadas en el template.
-  imports: [PageHeaderComponent, PageBgComponent],
+  imports: [RouterLink, PageHeaderComponent, PageBgComponent],
   // Template HTML asociado al componente.
   templateUrl: './pagina-inicio.html',
   // Hoja de estilos especifica del componente.

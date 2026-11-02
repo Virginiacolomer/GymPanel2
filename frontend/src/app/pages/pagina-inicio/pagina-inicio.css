@@ -183,6 +183,32 @@
 	padding: 0.5rem 0.85rem;
 }
 
+.feature-interactive {
+	text-decoration: none;
+	cursor: pointer;
+	border-color: var(--accent);
+	background: var(--accent-dim);
+	transition: all 180ms ease;
+}
+
+.feature-interactive:hover {
+	transform: translateY(-2px);
+	filter: brightness(1.15);
+	box-shadow: 0 0 14px rgba(0, 229, 255, 0.25);
+}
+
+.feature-content {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15rem;
+}
+
+.feature-sub {
+	font-size: 0.76rem;
+	color: var(--accent);
+	font-weight: 600;
+}
+
 /* Texto interno de cada fila. */
 .feature h2 {
 	margin: 0;

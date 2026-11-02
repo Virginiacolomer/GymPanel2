@@ -1,0 +1,317 @@
+<app-page-bg>
+  <main class="page-with-compact-header">
+    <app-page-header-compact backHref="/"></app-page-header-compact>
+
+    <section class="page-body tools-container">
+      <!-- Encabezado de la página -->
+      <header class="tools-header">
+        <div class="prototype-badge">
+          <i class="fi fi-sr-magic-wand" aria-hidden="true"></i>
+          <span>PROTOTIPO FUNCIONAL · SECCIÓN 14 AGENTS.MD</span>
+        </div>
+        <h1 class="tools-title">Herramientas Inteligentes</h1>
+        <p class="tools-subtitle">
+          Prototipo de visualización para el seguimiento avanzado del alumno y asistencia al entrenador.
+        </p>
+      </header>
+
+      <!-- Selector de pestañas / pestañas de navegación -->
+      <nav class="tools-nav" aria-label="Seleccionar herramienta">
+        <button
+          type="button"
+          class="nav-tab"
+          [class.active]="activeTab() === '1rm'"
+          (click)="setTab('1rm')"
+        >
+          <i class="fi fi-sr-calculator" aria-hidden="true"></i>
+          <span>Calculadora 1RM (Epley)</span>
+        </button>
+
+        <button
+          type="button"
+          class="nav-tab"
+          [class.active]="activeTab() === 'peso-sugerido'"
+          (click)="setTab('peso-sugerido')"
+        >
+          <i class="fi fi-sr-arrow-trend-up" aria-hidden="true"></i>
+          <span>Peso Sugerido</span>
+        </button>
+
+        <button
+          type="button"
+          class="nav-tab"
+          [class.active]="activeTab() === 'evaluaciones'"
+          (click)="setTab('evaluaciones')"
+        >
+          <i class="fi fi-sr-chart-line-up" aria-hidden="true"></i>
+          <span>Evaluación Mensual</span>
+        </button>
+      </nav>
+
+      <!-- Contenido Tab 1: Calculadora 1RM -->
+      @if (activeTab() === '1rm') {
+        <article class="tool-card">
+          <div class="card-head">
+            <div>
+              <h2>Cálculo de Fuerza Máxima Teórica (1RM)</h2>
+              <p class="card-desc">
+                Basado en la fórmula de Epley: <code>1RM = Peso × (1 + Reps / 30)</code>.
+                Precisa hasta 10-12 repeticiones, redondeada a múltiplos de 2.5 kg.
+              </p>
+            </div>
+            <div class="stat-highlight">
+              <span class="stat-label">1RM ESTIMADO</span>
+              <span class="stat-value">{{ calculated1RM() }} <small>kg</small></span>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="ejercicio-1rm">Ejercicio evaluado</label>
+              <select
+                id="ejercicio-1rm"
+                [ngModel]="ejercicio1RM()"
+                (ngModelChange)="ejercicio1RM.set($event)"
+              >
+                <option value="Press de banca">Press de banca plano</option>
+                <option value="Sentadilla">Sentadilla trasera</option>
+                <option value="Peso muerto">Peso muerto convencional</option>
+                <option value="Press militar">Press militar con barra</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="peso-1rm">Peso levantado (kg)</label>
+              <input
+                id="peso-1rm"
+                type="number"
+                min="5"
+                max="500"
+                step="2.5"
+                [ngModel]="peso1RM()"
+                (ngModelChange)="peso1RM.set($event)"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="reps-1rm">Repeticiones realizadas</label>
+              <input
+                id="reps-1rm"
+                type="number"
+                min="1"
+                max="15"
+                [ngModel]="reps1RM()"
+                (ngModelChange)="reps1RM.set($event)"
+              />
+            </div>
+          </div>
+
+          <div class="targets-section">
+            <h3>Sugerencia de cargas por repeticiones objetivo</h3>
+            <div class="targets-grid">
+              @for (target of repsBreakdown(); track target.reps) {
+                <div class="target-item" [class.highlighted]="target.reps === reps1RM()">
+                  <div class="target-reps">{{ target.reps }} RM</div>
+                  <div class="target-pct">{{ target.percentage }}%</div>
+                  <div class="target-weight">{{ target.weight }} kg</div>
+                </div>
+              }
+            </div>
+          </div>
+        </article>
+      }
+
+      <!-- Contenido Tab 2: Peso Sugerido -->
+      @if (activeTab() === 'peso-sugerido') {
+        <article class="tool-card">
+          <div class="card-head">
+            <div>
+              <h2>Carga inicial para ejercicio nuevo</h2>
+              <p class="card-desc">
+                Calcula una carga inicial conservadora transfiriendo el historial de un ejercicio equivalente
+                del mismo grupo muscular para una adaptación segura.
+              </p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="grupo-muscular">Grupo muscular</label>
+              <select
+                id="grupo-muscular"
+                [ngModel]="grupoMuscular()"
+                (ngModelChange)="grupoMuscular.set($event)"
+              >
+                <option value="PECHO">Pectorales</option>
+                <option value="ESPALDA">Espalda / Dorsales</option>
+                <option value="PIERNAS">Cuádriceps / Piernas</option>
+                <option value="HOMBROS">Deltoides / Hombros</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="ejercicio-base">Ejercicio de referencia en tu historial</label>
+              <input
+                id="ejercicio-base"
+                type="text"
+                [ngModel]="ejercicioBase()"
+                (ngModelChange)="ejercicioBase.set($event)"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="peso-base">Carga habitual en ese ejercicio</label>
+              <div class="inline-inputs">
+                <input
+                  id="peso-base"
+                  type="number"
+                  placeholder="kg"
+                  [ngModel]="pesoBase()"
+                  (ngModelChange)="pesoBase.set($event)"
+                />
+                <input
+                  id="reps-base"
+                  type="number"
+                  placeholder="reps"
+                  [ngModel]="repsBase()"
+                  (ngModelChange)="repsBase.set($event)"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="ejercicio-nuevo">Nuevo ejercicio a incorporar</label>
+              <input
+                id="ejercicio-nuevo"
+                type="text"
+                [ngModel]="ejercicioNuevo()"
+                (ngModelChange)="ejercicioNuevo.set($event)"
+              />
+            </div>
+          </div>
+
+          @if (sugerenciaNuevoEjercicio(); as sug) {
+            <div class="suggestion-result">
+              <div class="suggestion-header">
+                <i class="fi fi-sr-shield-check" aria-hidden="true"></i>
+                <div>
+                  <strong>Recomendación para {{ ejercicioNuevo() }}:</strong>
+                  <span>{{ sug.enfoque }}</span>
+                </div>
+              </div>
+
+              <div class="suggestion-cards">
+                <div class="suggestion-box">
+                  <span class="box-tag">Variante con Barra</span>
+                  <span class="box-val">{{ sug.rangoBarra }}</span>
+                  <span class="box-sub">{{ sug.repsRecomendadas }}</span>
+                </div>
+
+                <div class="suggestion-box">
+                  <span class="box-tag">Variante con Mancuernas</span>
+                  <span class="box-val">{{ sug.rangoMancuernas }}</span>
+                  <span class="box-sub">{{ sug.repsRecomendadas }}</span>
+                </div>
+              </div>
+            </div>
+          }
+        </article>
+      }
+
+      <!-- Contenido Tab 3: Evaluaciones Mensuales -->
+      @if (activeTab() === 'evaluaciones') {
+        <article class="tool-card">
+          <div class="card-head">
+            <div>
+              <h2>Evolución física y de rendimiento</h2>
+              <p class="card-desc">
+                Registro y comparativa de evaluaciones mensuales del alumno para observar el progreso real.
+              </p>
+            </div>
+
+            <!-- Selector de periodo -->
+            <div class="period-selector">
+              <span>Periodo:</span>
+              <div class="period-pills">
+                @for (ev of evaluaciones; track ev.mes) {
+                  <button
+                    type="button"
+                    class="period-pill"
+                    [class.active]="mesSeleccionado() === ev.mes"
+                    (click)="mesSeleccionado.set(ev.mes)"
+                  >
+                    {{ ev.fecha }}
+                  </button>
+                }
+              </div>
+            </div>
+          </div>
+
+          <!-- Métricas del periodo seleccionado -->
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <span class="metric-label">Peso Corporal</span>
+              <span class="metric-value">{{ evaluacionActual().pesoCorporal }} <small>kg</small></span>
+              <span class="metric-trend" [class.negative]="+cambioTotal().deltaPeso < 0">
+                {{ cambioTotal().deltaPeso }} kg desde inicio
+              </span>
+            </div>
+
+            <div class="metric-card">
+              <span class="metric-label">Masa Magra Estimada</span>
+              <span class="metric-value">{{ evaluacionActual().masaMagra }} <small>kg</small></span>
+              <span class="metric-trend positive">
+                +{{ cambioTotal().deltaMasa }} kg músculo
+              </span>
+            </div>
+
+            <div class="metric-card">
+              <span class="metric-label">Perímetro Cintura</span>
+              <span class="metric-value">{{ evaluacionActual().cintura }} <small>cm</small></span>
+              <span class="metric-trend positive">
+                {{ cambioTotal().deltaCintura }} cm
+              </span>
+            </div>
+
+            <div class="metric-card">
+              <span class="metric-label">Fuerza 1RM (Básicos)</span>
+              <span class="metric-value">{{ evaluacionActual().fuerza1RM }} <small>kg</small></span>
+              <span class="metric-trend positive">
+                +{{ cambioTotal().deltaFuerza }} kg
+              </span>
+            </div>
+          </div>
+
+          <!-- Gráfico visual de barras / progreso -->
+          <div class="evolution-chart">
+            <h3>Progreso acumulado de 1RM por mes</h3>
+            <div class="chart-bars">
+              @for (ev of evaluaciones; track ev.mes) {
+                <div class="bar-col">
+                  <div
+                    class="bar-fill"
+                    [style.height.%]="(ev.fuerza1RM / 100) * 100"
+                    [class.active]="mesSeleccionado() === ev.mes"
+                  >
+                    <span class="bar-val">{{ ev.fuerza1RM }} kg</span>
+                  </div>
+                  <span class="bar-label">{{ ev.fecha }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        </article>
+      }
+
+      <!-- Banner de advertencia obligatoria de la cátedra (Sección 14 de AGENTS.md) -->
+      <footer class="disclaimer-banner">
+        <i class="fi fi-sr-info" aria-hidden="true"></i>
+        <p>
+          <strong>Aviso de uso:</strong> Las sugerencias y cálculos inteligentes son orientativos y de soporte técnico.
+          No reemplazan el criterio profesional ni la supervisión presencial del entrenador.
+        </p>
+      </footer>
+    </section>
+  </main>
+</app-page-bg>
+

@@ -27,6 +27,13 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/register/register').then((m) => m.Register),
     canActivate: [publicGuard],
   },
+  {
+    path: 'herramientas-inteligentes',
+    loadComponent: () =>
+      import('./pages/herramientas-inteligentes/herramientas-inteligentes').then(
+        (m) => m.HerramientasInteligentes,
+      ),
+  },
 
   // Rutas exclusivas para ADMIN
   {
