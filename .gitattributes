@@ -1,0 +1,3 @@
+# El repo guarda LF y Prettier lo exige: sin esto, core.autocrlf en Windows
+# deja CRLF al hacer checkout y npm run lint falla en todos los archivos.
+* text=auto eol=lf

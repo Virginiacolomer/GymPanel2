@@ -1,5 +1,5 @@
-﻿import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { User } from '../../../contexts/usuarios';
 
 @Entity({ name: 'plan_entrenamiento', schema: 'public' })
 export class PlanEntrenamiento {

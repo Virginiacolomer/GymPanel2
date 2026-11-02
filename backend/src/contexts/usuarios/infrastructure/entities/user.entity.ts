@@ -1,4 +1,4 @@
-import { PlanEntrenamiento } from '../../plan-entrenamiento/entities/plan-entrenamiento.entity';
+import { PlanEntrenamiento } from '../../../../modules/plan-entrenamiento/entities/plan-entrenamiento.entity';
 import {
   Entity,
   Column,
@@ -7,8 +7,8 @@ import {
   JoinColumn,
   Index,
 } from 'typeorm';
-import { UserRole } from '../enums/user-role.enum';
-import { UserStatus } from '../enums/user-status.enum';
+import { UserRole } from '../../domain/value-objects/rol.vo';
+import { UserStatus } from '../../domain/value-objects/estado-usuario.vo';
 
 @Entity({ name: 'user', schema: 'public' })
 // El email es unico en todo el sistema (restriccion, no regla de negocio).

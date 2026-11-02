@@ -417,8 +417,9 @@ Aún falta el análisis (lenguaje ubicuo, contexto, reglas, casos de uso, criter
 | `shared/domain/domain-error.ts` | `DomainError` y categorías: `NoEncontradoError` (404), `ConflictoError` (409), `ReglaDeNegocioError` (400), `NoAutorizadoError` (401), `ProhibidoError` (403) | Listo. Usalo en vez de las excepciones HTTP de Nest dentro de domain/application. |
 | `shared/domain/entity.ts`, `value-object.ts` | Bases para entidades (igualdad por id) y VOs (inmutables, igualdad por valor) | Listo |
 | `shared/infrastructure/domain-error.filter.ts` | Filtro global: traduce `DomainError` a HTTP con el **mismo cuerpo** que Nest (`{ message, error, statusCode }`) | Listo, registrado en `app.setup.ts` |
+| `shared/domain/hasher-contrasenas.ts`, `shared/infrastructure/hasher-contrasenas.module.ts` | Puerto `HasherContrasenas` y su adapter bcrypt. Importá `HasherContrasenasModule` e inyectá `HASHER_CONTRASENAS` | Listo |
 | `app.setup.ts` | CORS + `ValidationPipe` + filtro; lo usan `main.ts` y los e2e | Listo |
-| `contexts/auth/` | **Contexto de ejemplo**: `domain/` (errores + regla "solo ACTIVO inicia sesión"), `application/` (caso de uso `IniciarSesion`), `presentation/` (controller, DTO, guards, `@Roles`), `index.ts` (API pública) | Migrado. **Copiá este patrón.** |
+| `contexts/auth/` | **Contexto de ejemplo**: `domain/` (errores + regla "solo ACTIVO inicia sesión"), `application/` (caso de uso `IniciarSesion`, puerto `EmisorDeTokens`), `infrastructure/` (adapter JWT, resolución del secreto), `presentation/` (controller, DTO, guards, `@Roles`), `index.ts` (API pública) | Migrado. **Copiá este patrón.** |
 | `contexts/auth/auth-guards.module.ts` | JWT + `JwtAuthGuard` + `RolesGuard`. Lo importan Usuarios y Planes | Separado de `AuthModule` (login) para evitar el ciclo Usuarios ↔ Auth |
 | `modules/users/` | Usuarios (código viejo). Expone el puerto `UsuariosQuery` (`usuarios.query.ts`, token `USUARIOS_QUERY`) con implementación `typeorm-usuarios.query.ts` | A migrar (sección 2) |
 | `modules/plan-entrenamiento/` | Planes **y** ejercicios/grupos musculares mezclados; service de ~780 líneas | A migrar (secciones 3 y 4) |
@@ -450,8 +451,8 @@ Aún falta el análisis (lenguaje ubicuo, contexto, reglas, casos de uso, criter
 > Regla de oro (sección 1): **mismas rutas, mismas respuestas, mismos códigos de error**. Nada de funcionalidades nuevas (sesiones, entrenador, días por semana, herramientas inteligentes): eso es la etapa siguiente.
 
 **Sección 1 — Auth + shared kernel** (dueño de `shared/`, `app.module.ts`, `app.setup.ts`, `eslint.config.mjs`)
-- Auth ya está migrado. Falta: puerto `HasherContrasenas` con adapter bcrypt (lo usa también el registro de Usuarios → coordinar con la sección 2) y puerto para emitir tokens (hoy `IniciarSesion` usa `JwtService` directo) — DT-01.
-- Centralizar el secreto JWT, hoy repetido con fallback `'gympanel-dev-secret'` en 3 lugares — DT-06.
+- Auth ya está migrado, con los puertos `HasherContrasenas` (shared kernel, lo usan login y registro) y `EmisorDeTokens` — DT-01 resuelta.
+- `JWT_SECRET` se lee en un solo lugar y en producción el backend no arranca si falta — DT-06 resuelta.
 - Revisar todo PR que toque `shared/`; agregar al shared kernel solo lo que usan dos o más contextos.
 
 **Sección 2 — Usuarios (backend)**
@@ -495,6 +496,7 @@ Aún falta el análisis (lenguaje ubicuo, contexto, reglas, casos de uso, criter
 - Desde fuera de `src/contexts` se importa una capa interna de un contexto (`contexts/<ctx>/domain|application|infrastructure|presentation/...`). Usá `contexts/<ctx>` (su `index.ts`).
 - Desde un contexto se importa una capa de **otro** contexto (ej. `../../usuarios/domain/...`). `shared/` sí se puede importar.
 - Un archivo de `domain/` (de un contexto o del shared kernel) importa de `application/`, `infrastructure/`, `presentation/`, `@nestjs/*`, `typeorm` o `express`.
+- Un archivo de `domain/` importa otro contexto por algo que no sea su `contrato.ts`. El `index.ts` exporta módulos y entidades, así que cargarlo arrastra NestJS y TypeORM aunque el import parezca limpio. Un contexto cuyo dominio necesite algo de otro expone esa parte en `contexts/<ctx>/contrato.ts`, sin frameworks (ver `contexts/usuarios/contrato.ts`).
 
 Los bloques se generan solos leyendo las carpetas de `src/contexts`: al crear un contexto queda cubierto sin tocar la configuración. **No desactives la regla con `eslint-disable`**; si te bloquea, falta un puerto o la API pública del otro contexto.
 
@@ -514,7 +516,6 @@ Los bloques se generan solos leyendo las carpetas de `src/contexts`: al crear un
 | Tema | Secciones | Opciones a evaluar (las decide el equipo) |
 |---|---|---|
 | Dónde vive la asignación de plan (hoy columna `user.plan_entrenamiento_id`, usada por Planes con el repositorio de usuarios) | 2 ↔ 4 | (a) Usuarios expone un puerto para leer/escribir el plan asignado; (b) Planes pasa a ser dueño de la asignación con una tabla propia (requiere migración de datos); (c) dejarlo como está y registrarlo como deuda |
-| Hashing de contraseñas compartido entre login y registro | 1 ↔ 2 | Puerto `HasherContrasenas` en el shared kernel o en Usuarios (expuesto a Auth) |
 | Orden de registro de módulos con rutas bajo `plan-entrenamiento` | 3 ↔ 4 | Ver la advertencia de la sección 3 |
 
 ### 16.7 Comandos útiles (backend)
@@ -536,12 +537,12 @@ Variables de entorno: `backend/.env.example`.
 
 | ID | Título | Tipo / Área | Detalle | Sección que la toma |
 |---|---|---|---|---|
-| DT-01 | Auth usa bcrypt y JwtService directo | Arquitectónica / backend | `IniciarSesion` depende de implementaciones concretas; falta puerto de hashing y de emisión de tokens | 1 (y 2 para el registro) |
+| DT-01 | ~~Auth usa bcrypt y JwtService directo~~ | Arquitectónica / backend | **Resuelta:** puertos `HasherContrasenas` (`shared/domain`) y `EmisorDeTokens` (`contexts/auth`). `seeds/seed.ts` y los fixtures e2e siguen usando bcrypt directo: son herramientas, no código de la app | 1 |
 | DT-02 | Planes hardcodeados en `ver-plan` | Código muerto / frontend | Se filtraban por la frecuencia de la membresía (eliminada); la sección ya no se muestra | 7 |
 | DT-03 | Sin test de subida exitosa de imágenes | Pruebas / backend | El e2e no llama a Supabase Storage; cubrir con un doble del puerto `AlmacenamientoImagenes` | 6 (cuando 3 cree el puerto) |
 | DT-04 | Texto con caracteres rotos en `ver-plan` | Calidad / frontend | "Â¿Confirmar asignaciÃ³n..." (encoding) | 7 |
 | DT-05 | Falso positivo de TypeORM en defaults jsonb | Herramientas / BD | `schema:log`/`migration:generate` siempre proponen 3 `SET DEFAULT` en `plan_entrenamiento`; ignorarlos | 7 |
-| DT-06 | Secreto JWT con fallback repetido | Seguridad / backend | `'gympanel-dev-secret'` en 3 lugares; en producción debe fallar si falta `JWT_SECRET` | 1 |
+| DT-06 | ~~Secreto JWT con fallback repetido~~ | Seguridad / backend | **Resuelta:** se lee solo en `resolverSecretoJwt`. En producción el backend no arranca sin `JWT_SECRET`; el valor por defecto queda solo para desarrollo | 1 |
 | DT-07 | Lenguaje ubicuo distinto entre análisis y código | Lenguaje ubicuo | Cliente/Entrenador/BAJA (análisis) vs `User`/`ADMIN`/`inactivo` (código); se alinea en la etapa de funcionalidades | Equipo |
 | DT-08 | Variables de entorno sin uso en Railway | Configuración | `MERCADOPAGO_*`, `GYM_SETUP_SECRET`, `BACKEND_URL`, `FRONTEND_URL` | Equipo |
 | DT-09 | `user_role_enum` puede conservar `SUPERADMIN` en bases viejas | BD | Postgres no permite borrar un valor de enum sin recrear el tipo; no afecta al código | 7 |

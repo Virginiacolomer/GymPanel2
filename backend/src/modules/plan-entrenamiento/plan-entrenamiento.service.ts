@@ -12,7 +12,7 @@ import { UpdatePlanEntrenamientoDto } from './dto/update-plan-entrenamiento.dto'
 import { PlanEntrenamiento } from './entities/plan-entrenamiento.entity';
 import { Ejercicio } from './entities/ejercicio.entity';
 import { GrupoMuscular } from './entities/grupoMuscular.entity';
-import { User } from '../users/entities/user.entity';
+import { User } from '../../contexts/usuarios';
 import { CreateEjercicioDto } from './dto/create-ejercicio.dto';
 import { CreateGrupoMuscularDto } from './dto/create-grupo-muscular.dto';
 import { UpdateEjercicioDto } from './dto/update-ejercicio.dto';

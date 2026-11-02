@@ -1,20 +1,21 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { resolverSecretoJwt } from './infrastructure/secreto-jwt';
 import { JwtAuthGuard } from './presentation/jwt-auth.guard';
 import { RolesGuard } from './presentation/roles.guard';
 
 // Control de acceso que usan los otros contextos (JWT + roles). Esta separado
 // del login (AuthModule) para que Usuarios pueda usar los guards y a la vez
 // proveerle UsuariosQuery al login, sin dependencia circular.
+// Es el unico lugar que lee JWT_SECRET: firmar y verificar usan este JwtModule.
 @Module({
   imports: [
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        secret:
-          configService.get<string>('JWT_SECRET') || 'gympanel-dev-secret',
+        secret: resolverSecretoJwt(configService),
         signOptions: { expiresIn: '12h' },
       }),
     }),

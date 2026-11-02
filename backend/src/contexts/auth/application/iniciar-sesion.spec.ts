@@ -1,20 +1,19 @@
-import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
+import { HasherContrasenas } from '../../../shared/domain/hasher-contrasenas';
 import {
   UserRole,
   UserStatus,
   UsuarioConCredenciales,
   UsuariosQuery,
-} from '../../../modules/users/usuarios.query';
+} from '../../usuarios/contrato';
 import {
   ContrasenaIncorrectaError,
   CuentaNoActivaError,
   EmailNoRegistradoError,
 } from '../domain/errores-autenticacion';
 import { IniciarSesion } from './iniciar-sesion';
+import { DatosDelToken, EmisorDeTokens } from './puertos/emisor-de-tokens';
 
-// Puerto falso: el caso de uso se prueba sin base de datos.
+// Puertos falsos: el caso de uso se prueba sin base de datos ni JWT.
 class UsuariosEnMemoria implements UsuariosQuery {
   constructor(private readonly usuarios: UsuarioConCredenciales[]) {}
 
@@ -25,31 +24,44 @@ class UsuariosEnMemoria implements UsuariosQuery {
   }
 }
 
-describe('IniciarSesion', () => {
-  const secret = 'secreto-de-test';
-  const jwtService = new JwtService();
-  const configService = { get: () => secret } as unknown as ConfigService;
-  let usuario: UsuarioConCredenciales;
+class HasherFalso implements HasherContrasenas {
+  hashear(contrasena: string) {
+    return Promise.resolve(`hash:${contrasena}`);
+  }
 
-  beforeAll(async () => {
-    usuario = {
-      id: 7,
-      nombre: 'Tomas',
-      apellido: 'Ferreyra',
-      dni: '30111222',
-      email: 'tomas@mail.com',
-      role: UserRole.CLIENTE,
-      estado: UserStatus.ACTIVO,
-      planEntrenamientoId: null,
-      passwordHash: await bcrypt.hash('secreto1', 4),
-    };
-  });
+  comparar(contrasena: string, hash: string) {
+    return Promise.resolve(hash === `hash:${contrasena}`);
+  }
+}
+
+class EmisorDeTokensFalso implements EmisorDeTokens {
+  datos?: DatosDelToken;
+
+  emitir(datos: DatosDelToken) {
+    this.datos = datos;
+    return Promise.resolve('token-de-test');
+  }
+}
+
+describe('IniciarSesion', () => {
+  const emisorDeTokens = new EmisorDeTokensFalso();
+  const usuario: UsuarioConCredenciales = {
+    id: 7,
+    nombre: 'Tomas',
+    apellido: 'Ferreyra',
+    dni: '30111222',
+    email: 'tomas@mail.com',
+    role: UserRole.CLIENTE,
+    estado: UserStatus.ACTIVO,
+    planEntrenamientoId: null,
+    passwordHash: 'hash:secreto1',
+  };
 
   function casoDeUso(usuarios: UsuarioConCredenciales[]) {
     return new IniciarSesion(
       new UsuariosEnMemoria(usuarios),
-      jwtService,
-      configService,
+      new HasherFalso(),
+      emisorDeTokens,
     );
   }
 
@@ -61,7 +73,8 @@ describe('IniciarSesion', () => {
 
     const { passwordHash, ...sinPassword } = usuario;
     expect(resultado.user).toEqual(sinPassword);
-    expect(jwtService.verify(resultado.accessToken, { secret })).toMatchObject({
+    expect(resultado.accessToken).toBe('token-de-test');
+    expect(emisorDeTokens.datos).toEqual({
       sub: 7,
       email: 'tomas@mail.com',
       role: 'CLIENTE',

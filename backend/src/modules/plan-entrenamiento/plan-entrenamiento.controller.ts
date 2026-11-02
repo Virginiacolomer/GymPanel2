@@ -21,7 +21,7 @@ import { CreateEjercicioDto } from './dto/create-ejercicio.dto';
 import { CreateGrupoMuscularDto } from './dto/create-grupo-muscular.dto';
 import { UpdateEjercicioDto } from './dto/update-ejercicio.dto';
 import { UpdateGrupoMuscularDto } from './dto/update-grupo-muscular.dto';
-import { UserRole } from '../users/enums/user-role.enum';
+import { UserRole } from '../../contexts/usuarios';
 import {
   AuthenticatedRequest,
   JwtAuthGuard,

@@ -49,14 +49,14 @@ The codebase is mid-migration to DDD bounded contexts. Out of scope for the prod
 
 ### Backend layout
 
-- `src/contexts/<ctx>/{domain,application,infrastructure,presentation}` — target structure. Only `auth` is migrated so far and is the reference example. Each context exposes a public API in its `index.ts`; ESLint (`no-restricted-imports`, generated from the folders in `src/contexts`) forbids importing another context's layers and forbids `domain/` from importing other layers or NestJS/TypeORM/Express.
-- `src/modules/{users,plan-entrenamiento}` — legacy modules still to be migrated. `users` exposes the `UsuariosQuery` port (`usuarios.query.ts`, token `USUARIOS_QUERY`) that Auth uses instead of the user repository.
-- `src/shared/domain` — shared kernel: `DomainError` categories (`NoEncontradoError` 404, `ConflictoError` 409, `ReglaDeNegocioError` 400, `NoAutorizadoError` 401, `ProhibidoError` 403), `Entity`, `ValueObject`. `src/shared/infrastructure/domain-error.filter.ts` maps them to HTTP with the same body shape as Nest's exceptions.
+- `src/contexts/<ctx>/{domain,application,infrastructure,presentation}` — target structure. `auth` and `usuarios` are migrated; `auth` is the reference example. Each context exposes a public API in its `index.ts`, plus a framework-free `contrato.ts` when another context's domain needs something from it (`index.ts` also exports modules and entities, so importing it pulls in NestJS and TypeORM); ESLint (`no-restricted-imports`, generated from the folders in `src/contexts`) forbids importing another context's layers and forbids `domain/` from importing other layers or NestJS/TypeORM/Express.
+- `src/modules/plan-entrenamiento` — legacy module still to be migrated. `contexts/usuarios` exposes the `UsuariosQuery` port (token `USUARIOS_QUERY`, in `contrato.ts`) that Auth uses instead of the user repository.
+- `src/shared/domain` — shared kernel: `DomainError` categories (`NoEncontradoError` 404, `ConflictoError` 409, `ReglaDeNegocioError` 400, `NoAutorizadoError` 401, `ProhibidoError` 403), `Entity`, `ValueObject`, and the `HasherContrasenas` port used by login and registration (bcrypt adapter in `shared/infrastructure`; import `HasherContrasenasModule`). `src/shared/infrastructure/domain-error.filter.ts` maps errors to HTTP with the same body shape as Nest's exceptions.
 - `src/app.setup.ts` — global HTTP config (CORS, ValidationPipe, DomainErrorFilter) shared by `main.ts` and the e2e tests.
 
 ### Guards and roles
 
-`AuthGuardsModule` (JWT config + `JwtAuthGuard` + `RolesGuard`) is separate from `AuthModule` (login) so that `users` can use the guards and also provide `UsuariosQuery` to the login without a circular dependency. Import them from `contexts/auth` (index). `AuthModule` is only registered in `app.module.ts`.
+`AuthGuardsModule` (JWT config + `JwtAuthGuard` + `RolesGuard`) is the only place that reads `JWT_SECRET`, and the backend refuses to start in production without it. It is separate from `AuthModule` (login) so that `usuarios` can use the guards and also provide `UsuariosQuery` to the login without a circular dependency. Import them from `contexts/auth` (index). `AuthModule` is only registered in `app.module.ts`.
 
 Authorization is per-route: protected endpoints stack `@UseGuards(JwtAuthGuard, RolesGuard)` with `@Roles(UserRole.ADMIN | UserRole.CLIENTE)`. `JwtAuthGuard` attaches `{ sub, email, role }` to `request.user`. Client-scoped endpoints (`/plan-entrenamiento/mio`) take the user id from `request.user.sub`.
 
