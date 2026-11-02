@@ -7,6 +7,7 @@ import { RolesGuard } from './presentation/roles.guard';
 // Control de acceso que usan los otros contextos (JWT + roles). Esta separado
 // del login (AuthModule) para que Usuarios pueda usar los guards y a la vez
 // proveerle UsuariosQuery al login, sin dependencia circular.
+// Es el unico lugar que lee JWT_SECRET: firmar y verificar usan este JwtModule.
 @Module({
   imports: [
     JwtModule.registerAsync({

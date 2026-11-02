@@ -1,5 +1,3 @@
-import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import {
   UserRole,
@@ -13,8 +11,9 @@ import {
   EmailNoRegistradoError,
 } from '../domain/errores-autenticacion';
 import { IniciarSesion } from './iniciar-sesion';
+import { DatosDelToken, EmisorDeTokens } from './puertos/emisor-de-tokens';
 
-// Puerto falso: el caso de uso se prueba sin base de datos.
+// Puertos falsos: el caso de uso se prueba sin base de datos ni JWT.
 class UsuariosEnMemoria implements UsuariosQuery {
   constructor(private readonly usuarios: UsuarioConCredenciales[]) {}
 
@@ -25,10 +24,17 @@ class UsuariosEnMemoria implements UsuariosQuery {
   }
 }
 
+class EmisorDeTokensFalso implements EmisorDeTokens {
+  datos?: DatosDelToken;
+
+  emitir(datos: DatosDelToken) {
+    this.datos = datos;
+    return Promise.resolve('token-de-test');
+  }
+}
+
 describe('IniciarSesion', () => {
-  const secret = 'secreto-de-test';
-  const jwtService = new JwtService();
-  const configService = { get: () => secret } as unknown as ConfigService;
+  const emisorDeTokens = new EmisorDeTokensFalso();
   let usuario: UsuarioConCredenciales;
 
   beforeAll(async () => {
@@ -46,11 +52,7 @@ describe('IniciarSesion', () => {
   });
 
   function casoDeUso(usuarios: UsuarioConCredenciales[]) {
-    return new IniciarSesion(
-      new UsuariosEnMemoria(usuarios),
-      jwtService,
-      configService,
-    );
+    return new IniciarSesion(new UsuariosEnMemoria(usuarios), emisorDeTokens);
   }
 
   it('devuelve el token y el usuario sin la contrasena', async () => {
@@ -61,7 +63,8 @@ describe('IniciarSesion', () => {
 
     const { passwordHash, ...sinPassword } = usuario;
     expect(resultado.user).toEqual(sinPassword);
-    expect(jwtService.verify(resultado.accessToken, { secret })).toMatchObject({
+    expect(resultado.accessToken).toBe('token-de-test');
+    expect(emisorDeTokens.datos).toEqual({
       sub: 7,
       email: 'tomas@mail.com',
       role: 'CLIENTE',

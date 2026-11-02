@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { UsuariosModule } from '../usuarios';
 import { IniciarSesion } from './application/iniciar-sesion';
+import { EMISOR_DE_TOKENS } from './application/puertos/emisor-de-tokens';
 import { AuthGuardsModule } from './auth-guards.module';
+import { JwtEmisorDeTokens } from './infrastructure/jwt-emisor-de-tokens';
 import { AuthController } from './presentation/auth.controller';
 
 // Inicio de sesion. Usa JwtModule (via AuthGuardsModule) para firmar el token
@@ -9,6 +11,9 @@ import { AuthController } from './presentation/auth.controller';
 @Module({
   imports: [AuthGuardsModule, UsuariosModule],
   controllers: [AuthController],
-  providers: [IniciarSesion],
+  providers: [
+    IniciarSesion,
+    { provide: EMISOR_DE_TOKENS, useClass: JwtEmisorDeTokens },
+  ],
 })
 export class AuthModule {}
