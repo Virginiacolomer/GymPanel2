@@ -32,6 +32,15 @@ const haciaOtroContexto = (ctx) => ({
     'No importes capas internas de otro contexto: usa su API publica (../../<ctx>).',
 });
 
+// Desde el dominio del contexto `ctx`, otro contexto solo se importa por su
+// contrato.ts: index.ts exporta modulos y entidades, y cargarlo arrastra
+// NestJS y TypeORM aunque el import parezca limpio.
+const haciaContratoDeOtroContexto = (ctx) => ({
+  regex: `^(\.\./)+(${contexts.filter((otro) => otro !== ctx).join('|')})(/(?!contrato$).*)?$`,
+  message:
+    'El dominio solo importa otro contexto por su contrato (../../<ctx>/contrato).',
+});
+
 const dominioPuro = [
   {
     regex: '(^|/)(application|infrastructure|presentation)(/|$)',
@@ -69,7 +78,13 @@ const fronteras = [
       rules: {
         'no-restricted-imports': [
           'error',
-          { patterns: [haciaOtroContexto(ctx), ...dominioPuro] },
+          {
+            patterns: [
+              haciaOtroContexto(ctx),
+              haciaContratoDeOtroContexto(ctx),
+              ...dominioPuro,
+            ],
+          },
         ],
       },
     },

@@ -6,7 +6,7 @@ import {
   USUARIOS_QUERY,
   UsuarioConCredenciales,
   UsuariosQuery,
-} from '../../usuarios';
+} from '../../usuarios/contrato';
 import {
   ContrasenaIncorrectaError,
   EmailNoRegistradoError,

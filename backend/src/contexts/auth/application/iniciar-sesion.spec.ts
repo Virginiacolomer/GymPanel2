@@ -6,7 +6,7 @@ import {
   UserStatus,
   UsuarioConCredenciales,
   UsuariosQuery,
-} from '../../usuarios';
+} from '../../usuarios/contrato';
 import {
   ContrasenaIncorrectaError,
   CuentaNoActivaError,

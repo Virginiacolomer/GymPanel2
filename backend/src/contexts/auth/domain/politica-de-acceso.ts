@@ -1,4 +1,4 @@
-import { UserStatus } from '../../usuarios';
+import { UserStatus } from '../../usuarios/contrato';
 import { CuentaNoActivaError } from './errores-autenticacion';
 
 // Regla: solo un usuario ACTIVO puede iniciar sesion. Un usuario recien

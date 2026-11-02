@@ -49,7 +49,7 @@ The codebase is mid-migration to DDD bounded contexts. Out of scope for the prod
 
 ### Backend layout
 
-- `src/contexts/<ctx>/{domain,application,infrastructure,presentation}` — target structure. Only `auth` is migrated so far and is the reference example. Each context exposes a public API in its `index.ts`; ESLint (`no-restricted-imports`, generated from the folders in `src/contexts`) forbids importing another context's layers and forbids `domain/` from importing other layers or NestJS/TypeORM/Express.
+- `src/contexts/<ctx>/{domain,application,infrastructure,presentation}` — target structure. Only `auth` is migrated so far and is the reference example. Each context exposes a public API in its `index.ts`, plus a framework-free `contrato.ts` when another context's domain needs something from it (`index.ts` also exports modules and entities, so importing it pulls in NestJS and TypeORM); ESLint (`no-restricted-imports`, generated from the folders in `src/contexts`) forbids importing another context's layers and forbids `domain/` from importing other layers or NestJS/TypeORM/Express.
 - `src/modules/{users,plan-entrenamiento}` — legacy modules still to be migrated. `users` exposes the `UsuariosQuery` port (`usuarios.query.ts`, token `USUARIOS_QUERY`) that Auth uses instead of the user repository.
 - `src/shared/domain` — shared kernel: `DomainError` categories (`NoEncontradoError` 404, `ConflictoError` 409, `ReglaDeNegocioError` 400, `NoAutorizadoError` 401, `ProhibidoError` 403), `Entity`, `ValueObject`. `src/shared/infrastructure/domain-error.filter.ts` maps them to HTTP with the same body shape as Nest's exceptions.
 - `src/app.setup.ts` — global HTTP config (CORS, ValidationPipe, DomainErrorFilter) shared by `main.ts` and the e2e tests.

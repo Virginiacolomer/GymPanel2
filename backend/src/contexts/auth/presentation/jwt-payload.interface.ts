@@ -1,4 +1,4 @@
-import { UserRole } from '../../usuarios';
+import { UserRole } from '../../usuarios/contrato';
 
 // Forma del payload decodificado que JwtAuthGuard deja en request.user.
 export interface JwtPayload {

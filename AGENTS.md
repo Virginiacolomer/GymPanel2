@@ -495,6 +495,7 @@ Aún falta el análisis (lenguaje ubicuo, contexto, reglas, casos de uso, criter
 - Desde fuera de `src/contexts` se importa una capa interna de un contexto (`contexts/<ctx>/domain|application|infrastructure|presentation/...`). Usá `contexts/<ctx>` (su `index.ts`).
 - Desde un contexto se importa una capa de **otro** contexto (ej. `../../usuarios/domain/...`). `shared/` sí se puede importar.
 - Un archivo de `domain/` (de un contexto o del shared kernel) importa de `application/`, `infrastructure/`, `presentation/`, `@nestjs/*`, `typeorm` o `express`.
+- Un archivo de `domain/` importa otro contexto por algo que no sea su `contrato.ts`. El `index.ts` exporta módulos y entidades, así que cargarlo arrastra NestJS y TypeORM aunque el import parezca limpio. Un contexto cuyo dominio necesite algo de otro expone esa parte en `contexts/<ctx>/contrato.ts`, sin frameworks (ver `contexts/usuarios/contrato.ts`).
 
 Los bloques se generan solos leyendo las carpetas de `src/contexts`: al crear un contexto queda cubierto sin tocar la configuración. **No desactives la regla con `eslint-disable`**; si te bloquea, falta un puerto o la API pública del otro contexto.
 
