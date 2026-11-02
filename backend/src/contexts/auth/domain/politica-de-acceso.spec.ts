@@ -1,4 +1,4 @@
-import { UserStatus } from '../../../modules/users/usuarios.query';
+import { UserStatus } from '../../usuarios';
 import { CuentaNoActivaError } from './errores-autenticacion';
 import { asegurarQuePuedeIniciarSesion } from './politica-de-acceso';
 

@@ -6,7 +6,7 @@ import {
   USUARIOS_QUERY,
   UsuarioConCredenciales,
   UsuariosQuery,
-} from '../../../modules/users/usuarios.query';
+} from '../../usuarios';
 import {
   ContrasenaIncorrectaError,
   EmailNoRegistradoError,

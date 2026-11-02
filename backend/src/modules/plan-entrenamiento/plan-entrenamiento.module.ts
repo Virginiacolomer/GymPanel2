@@ -6,7 +6,7 @@ import { SupabaseStorageService } from './supabase-storage.service';
 import { PlanEntrenamiento } from './entities/plan-entrenamiento.entity';
 import { Ejercicio } from './entities/ejercicio.entity';
 import { GrupoMuscular } from './entities/grupoMuscular.entity';
-import { User } from '../users/entities/user.entity';
+import { User } from '../../contexts/usuarios';
 import { AuthGuardsModule } from '../../contexts/auth';
 
 @Module({

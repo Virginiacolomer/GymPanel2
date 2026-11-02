@@ -2,9 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
-import { UsuarioConCredenciales, UsuariosQuery } from './usuarios.query';
+import {
+  UsuarioConCredenciales,
+  UsuariosQuery,
+} from '../application/puertos/usuarios.query';
 
-// Implementacion de UsuariosQuery sobre TypeORM.
 @Injectable()
 export class TypeOrmUsuariosQuery implements UsuariosQuery {
   constructor(
