@@ -91,10 +91,4 @@
 .btn-sm{padding:.35rem .65rem;font-size:.74rem;border-radius:5px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:#f1f3f9;cursor:pointer}
 .btn-danger{background:rgba(255,82,82,.15);border:1px solid rgba(255,82,82,.3)}
 
-/* Modal preview */
-.image-modal-backdrop{position:fixed;inset:0;background:rgba(8,11,20,.85);display:flex;align-items:center;justify-content:center;padding:1rem;z-index:1100}
-.image-modal-card{max-width:540px;width:100%;background:#111522;border:1px solid #293247;border-radius:14px;overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.8)}
-.image-modal-header{display:flex;align-items:center;justify-content:space-between;padding:.75rem .95rem;border-bottom:1px solid #1f2537}
-.image-modal-header h4{margin:0;color:#f1f3f9;font-size:.88rem}
-.image-modal-body{padding:.75rem;display:flex;justify-content:center;background:#080b14}
-.image-modal-body img{max-width:100%;max-height:70vh;object-fit:contain;border-radius:7px}
+.clickable-card,.clickable-row{cursor:pointer}

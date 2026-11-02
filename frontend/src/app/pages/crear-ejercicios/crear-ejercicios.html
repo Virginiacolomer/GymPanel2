@@ -44,6 +44,7 @@
               [recentlyUploadedImagenEjercicioId]="recentlyUploadedImagenEjercicioId"
               (openCreateEjercicio)="openCreateEjercicioModal()"
               (openEditEjercicio)="openEditEjercicioModal($event)"
+              (openDetalle)="openDetalleModal($event)"
               (uploadImage)="triggerImageUpload($event)"
               (deleteEjercicio)="removeEjercicio($event)"
             ></app-ejercicios-list>
@@ -74,6 +75,15 @@
           (save)="onSaveEjercicioModal($event)"
           (close)="closeEjercicioModal()"
         ></app-ejercicio-modal>
+
+        <!-- Modal para Detalle de Ejercicio -->
+        <app-ejercicio-detalle-modal
+          [isOpen]="isDetalleModalOpen"
+          [ejercicio]="selectedEjercicioDetalle"
+          [grupoNombre]="selectedGrupoNombre"
+          (close)="closeDetalleModal()"
+          (edit)="onEditFromDetalle($event)"
+        ></app-ejercicio-detalle-modal>
 
         <!-- Input oculto para subida de imagen de ejercicio -->
         <input

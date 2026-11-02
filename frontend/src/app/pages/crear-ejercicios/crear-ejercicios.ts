@@ -18,6 +18,7 @@ import { GruposMuscularesPanelComponent } from './components/grupos-musculares-p
 import { EjerciciosListComponent } from './components/ejercicios-list/ejercicios-list';
 import { GrupoModalComponent } from './components/grupo-modal/grupo-modal';
 import { EjercicioModalComponent } from './components/ejercicio-modal/ejercicio-modal';
+import { EjercicioDetalleModalComponent } from './components/ejercicio-detalle-modal/ejercicio-detalle-modal';
 
 const MAX_IMAGEN_SIZE_BYTES = 5 * 1024 * 1024;
 
@@ -32,6 +33,7 @@ const MAX_IMAGEN_SIZE_BYTES = 5 * 1024 * 1024;
     EjerciciosListComponent,
     GrupoModalComponent,
     EjercicioModalComponent,
+    EjercicioDetalleModalComponent,
   ],
   templateUrl: './crear-ejercicios.html',
   styleUrl: './crear-ejercicios.css',
@@ -88,6 +90,9 @@ export class CrearEjercicios implements OnInit {
   isEditingEjercicioModal = false;
   editingEjercicioId: number | null = null;
   editingEjercicioNombre = '';
+
+  isDetalleModalOpen = false;
+  selectedEjercicioDetalle: CatalogoEjercicio | null = null;
 
   get selectedGrupoNombre(): string {
     if (!this.selectedGrupoId) {
@@ -248,6 +253,21 @@ export class CrearEjercicios implements OnInit {
     this.isEditingEjercicioModal = false;
     this.editingEjercicioNombre = '';
     this.editingEjercicioId = null;
+  }
+
+  openDetalleModal(ejercicio: CatalogoEjercicio): void {
+    this.selectedEjercicioDetalle = ejercicio;
+    this.isDetalleModalOpen = true;
+  }
+
+  closeDetalleModal(): void {
+    this.isDetalleModalOpen = false;
+    this.selectedEjercicioDetalle = null;
+  }
+
+  onEditFromDetalle(ejercicio: CatalogoEjercicio): void {
+    this.closeDetalleModal();
+    this.openEditEjercicioModal(ejercicio);
   }
 
   onSaveEjercicioModal(nombre: string): void {

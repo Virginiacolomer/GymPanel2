@@ -125,7 +125,8 @@
     <div *ngIf="viewMode() === 'grid'" class="ejercicios-grid">
       <div
         *ngFor="let ejercicio of displayedEjercicios(); trackBy: trackByEjercicioId"
-        class="ejercicio-card"
+        class="ejercicio-card clickable-card"
+        (click)="onOpenDetalle(ejercicio)"
       >
         <!-- Área superior: Foto o Placeholder con botón favorito -->
         <div class="card-media">
@@ -135,7 +136,6 @@
             [alt]="ejercicio.nombre"
             class="exercise-img"
             loading="lazy"
-            (click)="openPreview(ejercicio.imagenUrl, ejercicio.nombre, $event)"
           />
           <div *ngIf="!ejercicio.imagenUrl" class="exercise-placeholder">
             <div class="placeholder-badge">
@@ -170,27 +170,15 @@
 
           <!-- Acciones de la tarjeta -->
           <div class="card-actions">
-            <!-- Botón Ver demo / foto -->
+            <!-- Botón Ver ejercicio -->
             <button
-              *ngIf="ejercicio.imagenUrl"
               type="button"
               class="btn-demo"
-              (click)="openPreview(ejercicio.imagenUrl, ejercicio.nombre, $event)"
+              (click)="onOpenDetalle(ejercicio, $event)"
+              title="Ver detalle del ejercicio"
             >
               <i class="fi fi-rr-eye" aria-hidden="true"></i>
-              <span>Ver foto</span>
-            </button>
-            <button
-              *ngIf="!ejercicio.imagenUrl"
-              type="button"
-              class="btn-demo"
-              (click)="onUploadAction(ejercicio)"
-              [disabled]="isUploadingImagenEjercicioId() === ejercicio.id"
-            >
-              <i class="fi fi-rr-camera" aria-hidden="true"></i>
-              <span>
-                {{ isUploadingImagenEjercicioId() === ejercicio.id ? 'Subiendo...' : 'Subir foto' }}
-              </span>
+              <span>Ver ejercicio</span>
             </button>
 
             <!-- Menú de 3 puntos para mantener la tarjeta limpia -->
@@ -254,7 +242,8 @@
     <div *ngIf="viewMode() === 'list'" class="ejercicios-table-list">
       <div
         *ngFor="let ejercicio of displayedEjercicios(); trackBy: trackByEjercicioId"
-        class="list-row"
+        class="list-row clickable-row"
+        (click)="onOpenDetalle(ejercicio)"
       >
         <div class="list-left">
           <div class="list-thumb">
@@ -262,7 +251,6 @@
               *ngIf="ejercicio.imagenUrl"
               [src]="ejercicio.imagenUrl"
               [alt]="ejercicio.nombre"
-              (click)="openPreview(ejercicio.imagenUrl, ejercicio.nombre, $event)"
             />
             <i *ngIf="!ejercicio.imagenUrl" class="fi fi-rs-gym" aria-hidden="true"></i>
           </div>
@@ -287,10 +275,9 @@
             ></i>
           </button>
           <button
-            *ngIf="ejercicio.imagenUrl"
             type="button"
             class="btn btn-secondary btn-sm"
-            (click)="openPreview(ejercicio.imagenUrl, ejercicio.nombre, $event)"
+            (click)="onOpenDetalle(ejercicio, $event)"
           >
             Ver
           </button>
@@ -353,30 +340,4 @@
       </button>
     </div>
   </ng-template>
-
-  <!-- MODAL DE PREVIEW DE IMAGEN -->
-  <div
-    *ngIf="previewImageSrc()"
-    class="image-modal-backdrop"
-    (click)="closePreview()"
-    role="dialog"
-    aria-modal="true"
-  >
-    <div class="image-modal-card" (click)="$event.stopPropagation()">
-      <div class="image-modal-header">
-        <h4>{{ previewImageAlt() }}</h4>
-        <button
-          type="button"
-          class="btn-close-modal"
-          (click)="closePreview()"
-          aria-label="Cerrar vista previa"
-        >
-          <i class="fi fi-rr-cross-small" aria-hidden="true"></i>
-        </button>
-      </div>
-      <div class="image-modal-body">
-        <img [src]="previewImageSrc()" [alt]="previewImageAlt()" />
-      </div>
-    </div>
-  </div>
 </div>

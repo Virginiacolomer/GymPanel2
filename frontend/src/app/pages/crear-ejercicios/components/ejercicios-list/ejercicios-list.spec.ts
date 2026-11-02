@@ -85,20 +85,24 @@ describe('EjerciciosListComponent', () => {
     let editTarget: CatalogoEjercicio | undefined;
     let uploadTarget: CatalogoEjercicio | undefined;
     let deleteTarget: CatalogoEjercicio | undefined;
+    let detalleTarget: CatalogoEjercicio | undefined;
 
     component.openCreateEjercicio.subscribe(() => (createTriggered = true));
     component.openEditEjercicio.subscribe((ej) => (editTarget = ej));
     component.uploadImage.subscribe((ej) => (uploadTarget = ej));
     component.deleteEjercicio.subscribe((ej) => (deleteTarget = ej));
+    component.openDetalle.subscribe((ej) => (detalleTarget = ej));
 
     component.openCreateEjercicio.emit();
     component.onEditAction(mockEjercicios[0]);
     component.onUploadAction(mockEjercicios[1]);
     component.onDeleteAction(mockEjercicios[2]);
+    component.onOpenDetalle(mockEjercicios[0]);
 
     expect(createTriggered).toBe(true);
     expect(editTarget).toBe(mockEjercicios[0]);
     expect(uploadTarget).toBe(mockEjercicios[1]);
     expect(deleteTarget).toBe(mockEjercicios[2]);
+    expect(detalleTarget).toBe(mockEjercicios[0]);
   });
 });

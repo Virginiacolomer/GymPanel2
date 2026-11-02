@@ -31,6 +31,7 @@ export class EjerciciosListComponent {
   readonly recentlyUploadedImagenEjercicioId = input<number | null>(null);
 
   // Outputs
+  readonly openDetalle = output<CatalogoEjercicio>();
   readonly openCreateEjercicio = output<void>();
   readonly openEditEjercicio = output<CatalogoEjercicio>();
   readonly uploadImage = output<CatalogoEjercicio>();
@@ -172,6 +173,14 @@ export class EjerciciosListComponent {
 
   isFavorite(ejercicioId: number): boolean {
     return this.favoriteIds().has(ejercicioId);
+  }
+
+  onOpenDetalle(ejercicio: CatalogoEjercicio, event?: MouseEvent): void {
+    if (event) {
+      event.stopPropagation();
+    }
+    this.closeMenu();
+    this.openDetalle.emit(ejercicio);
   }
 
   openPreview(src: string, alt: string, event?: MouseEvent): void {

@@ -103,4 +103,25 @@ describe('CrearEjercicios', () => {
     component.closeEjercicioModal();
     expect(component.isEjercicioModalOpen).toBe(false);
   });
+
+  it('should open, close and edit from detalle modal', () => {
+    const dummyEj = { id: 10, nombre: 'Press banca', imagenUrl: null };
+    expect(component.isDetalleModalOpen).toBe(false);
+    expect(component.selectedEjercicioDetalle).toBeNull();
+
+    component.openDetalleModal(dummyEj);
+    expect(component.isDetalleModalOpen).toBe(true);
+    expect(component.selectedEjercicioDetalle).toBe(dummyEj);
+
+    component.onEditFromDetalle(dummyEj);
+    expect(component.isDetalleModalOpen).toBe(false);
+    expect(component.isEjercicioModalOpen).toBe(true);
+    expect(component.editingEjercicioId).toBe(10);
+
+    component.closeEjercicioModal();
+    component.openDetalleModal(dummyEj);
+    component.closeDetalleModal();
+    expect(component.isDetalleModalOpen).toBe(false);
+    expect(component.selectedEjercicioDetalle).toBeNull();
+  });
 });
