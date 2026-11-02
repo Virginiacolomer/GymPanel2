@@ -83,7 +83,16 @@ export class EjercicioDetalleModalComponent {
 
   readonly equipamiento = computed<EquipamientoInfo | null>(() => {
     const ej = this.ejercicio();
-    return ej ? detectarEquipamiento(ej.nombre) : null;
+    if (!ej) return null;
+    if (ej.equipamiento) {
+      const detected = detectarEquipamiento(ej.equipamiento) || detectarEquipamiento(ej.nombre);
+      return {
+        nombre: ej.equipamiento,
+        tipo: detected?.tipo || 'Equipamiento',
+        icono: detected?.icono || 'fi fi-rs-gym',
+      };
+    }
+    return detectarEquipamiento(ej.nombre);
   });
 
   readonly formattedGrupoNombre = computed<string>(() => {
@@ -106,4 +115,3 @@ export class EjercicioDetalleModalComponent {
     }
   }
 }
-

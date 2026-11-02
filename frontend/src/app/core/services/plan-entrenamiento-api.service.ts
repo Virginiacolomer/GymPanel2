@@ -8,6 +8,10 @@ export interface CatalogoEjercicio {
   id: number;
   nombre: string;
   imagenUrl?: string | null;
+  grupoMuscularId?: number;
+  descripcion?: string;
+  equipamiento?: string;
+  tecnica?: string;
 }
 
 export interface CatalogoGrupoMuscular {

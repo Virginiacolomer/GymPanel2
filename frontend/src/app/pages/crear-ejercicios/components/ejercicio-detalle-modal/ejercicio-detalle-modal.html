@@ -90,19 +90,19 @@
             </h3>
             <div class="section-content">
               <p class="description-text">
-                Ejercicio enfocado en el desarrollo, acondicionamiento y fortalecimiento muscular de {{ formattedGrupoNombre().toLowerCase() }}.
+                {{ ejercicio()!.descripcion || ('Ejercicio enfocado en el desarrollo, acondicionamiento y fortalecimiento muscular de ' + formattedGrupoNombre().toLowerCase() + '.') }}
               </p>
             </div>
           </section>
 
-          <!-- Sección: Equipamiento (solo si se detecta/dispone) -->
+          <!-- Sección: Equipamiento -->
           <section class="section-block" *ngIf="equipamiento()">
             <div class="section-header-row">
               <h3 class="section-title">
                 <i class="fi fi-rr-dumbbell" aria-hidden="true"></i>
                 Equipamiento
               </h3>
-              <span class="badge-tag">Sugerido</span>
+              <span class="badge-tag">{{ ejercicio()!.equipamiento ? 'Asignado' : 'Sugerido' }}</span>
             </div>
 
             <div class="equipment-card">
@@ -125,8 +125,18 @@
           Técnica de ejecución
         </h3>
 
+        <!-- Si tiene técnica registrada -->
+        <div *ngIf="ejercicio()!.tecnica" class="tecnica-custom-card">
+          <div class="tecnica-icon-wrap active">
+            <i class="fi fi-rr-list-check" aria-hidden="true"></i>
+          </div>
+          <div class="tecnica-content">
+            <p class="tecnica-text">{{ ejercicio()!.tecnica }}</p>
+          </div>
+        </div>
+
         <!-- Mensaje discreto si aún no se ha agregado técnica -->
-        <div class="tecnica-discreet-card">
+        <div *ngIf="!ejercicio()!.tecnica" class="tecnica-discreet-card">
           <div class="tecnica-icon-wrap">
             <i class="fi fi-rr-info" aria-hidden="true"></i>
           </div>
@@ -163,4 +173,3 @@
     </footer>
   </div>
 </div>
-

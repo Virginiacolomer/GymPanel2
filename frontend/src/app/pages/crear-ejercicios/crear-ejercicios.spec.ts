@@ -111,7 +111,7 @@ describe('CrearEjercicios', () => {
 
     component.openDetalleModal(dummyEj);
     expect(component.isDetalleModalOpen).toBe(true);
-    expect(component.selectedEjercicioDetalle).toBe(dummyEj);
+    expect(component.selectedEjercicioDetalle).toEqual(expect.objectContaining({ id: 10, nombre: 'Press banca' }));
 
     component.onEditFromDetalle(dummyEj);
     expect(component.isDetalleModalOpen).toBe(false);

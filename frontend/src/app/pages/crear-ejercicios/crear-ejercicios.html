@@ -68,6 +68,9 @@
           [isOpen]="isEjercicioModalOpen"
           [isEditing]="isEditingEjercicioModal"
           [initialNombre]="editingEjercicioNombre"
+          [initialData]="editingEjercicioData"
+          [gruposMusculares]="gruposMusculares"
+          [selectedGrupoId]="selectedGrupoId"
           [selectedGrupoNombre]="selectedGrupoNombre"
           [isSubmitting]="isCreatingEjercicio || isUpdatingEjercicio"
           [feedbackMessage]="ejercicioFeedbackMessage"
@@ -80,7 +83,7 @@
         <app-ejercicio-detalle-modal
           [isOpen]="isDetalleModalOpen"
           [ejercicio]="selectedEjercicioDetalle"
-          [grupoNombre]="selectedGrupoNombre"
+          [grupoNombre]="detalleGrupoNombre"
           (close)="closeDetalleModal()"
           (edit)="onEditFromDetalle($event)"
         ></app-ejercicio-detalle-modal>

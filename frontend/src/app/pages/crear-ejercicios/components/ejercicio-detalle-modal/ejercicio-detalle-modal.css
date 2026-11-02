@@ -64,8 +64,11 @@
 /* 3. TECNICA SECTION (BOTTOM) */
 .tecnica-section{display:flex;flex-direction:column;gap:.65rem;padding-top:.75rem;border-top:1px solid #1f2537}
 .tecnica-discreet-card{display:flex;align-items:flex-start;gap:.85rem;padding:1rem 1.25rem;background:rgba(25,30,45,.6);border:1px dashed #293247;border-radius:14px}
+.tecnica-custom-card{display:flex;align-items:flex-start;gap:.9rem;padding:1.1rem 1.25rem;background:#151a27;border:1px solid rgba(0,213,232,.25);border-radius:14px}
 .tecnica-icon-wrap{color:#00d5e8;font-size:1.2rem;margin-top:.1rem;flex-shrink:0}
-.tecnica-content{display:flex;flex-direction:column;gap:.25rem}
+.tecnica-icon-wrap.active{width:36px;height:36px;border-radius:10px;background:rgba(0,213,232,.12);border:1px solid rgba(0,213,232,.3);display:flex;align-items:center;justify-content:center;color:#00d5e8;font-size:1.15rem;margin-top:0}
+.tecnica-content{display:flex;flex-direction:column;gap:.25rem;flex:1}
+.tecnica-text{margin:0;font-size:.9rem;color:#d1d5db;line-height:1.6;white-space:pre-line}
 .tecnica-note{margin:0;font-size:.86rem;color:#f1f3f9;font-weight:600;line-height:1.4}
 .tecnica-subnote{margin:0;font-size:.78rem;color:#929db8;line-height:1.45}
 
@@ -93,4 +96,3 @@
   .modal-footer{flex-direction:column-reverse;gap:.5rem}
   .modal-footer .btn{width:100%}
 }
-
