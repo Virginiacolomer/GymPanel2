@@ -205,7 +205,14 @@ export class EjerciciosListComponent {
 
   onDeleteAction(ejercicio: CatalogoEjercicio): void {
     this.closeMenu();
-    this.deleteEjercicio.emit(ejercicio);
+    const shouldConfirm = typeof window !== 'undefined' && typeof window.confirm === 'function';
+    const confirmed = shouldConfirm
+      ? window.confirm(`¿Estás seguro de que deseas eliminar el ejercicio "${ejercicio.nombre}"?`)
+      : true;
+
+    if (confirmed) {
+      this.deleteEjercicio.emit(ejercicio);
+    }
   }
 
   private loadFavoritesFromStorage(): Set<number> {

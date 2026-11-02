@@ -93,6 +93,7 @@ export class CrearEjercicios implements OnInit {
   editingEjercicioId: number | null = null;
   editingEjercicioNombre = '';
   editingEjercicioData: Partial<CatalogoEjercicio> | null = null;
+  private wasEditingFromDetalle = false;
 
   get detalleGrupoNombre(): string {
     if (this.selectedEjercicioDetalle?.grupoMuscularId) {
@@ -256,28 +257,48 @@ export class CrearEjercicios implements OnInit {
     this.isEditingEjercicioModal = true;
     this.editingEjercicioNombre = ejercicio.nombre;
     this.editingEjercicioId = ejercicio.id;
+    const enriched = this.ejercicioMetaStorageService.enrichEjercicio(ejercicio, this.selectedGrupoId ?? undefined);
+    this.editingEjercicioData = {
+      id: enriched.id,
+      nombre: enriched.nombre,
+      grupoMuscularId: enriched.grupoMuscularId ?? this.selectedGrupoId ?? undefined,
+      imagenUrl: enriched.imagenUrl,
+      descripcion: enriched.descripcion,
+      equipamiento: enriched.equipamiento,
+      tecnica: enriched.tecnica,
+    };
     this.isEjercicioModalOpen = true;
   }
 
   closeEjercicioModal(): void {
+    const shouldReopenDetalle = this.wasEditingFromDetalle && !!this.selectedEjercicioDetalle;
     this.isEjercicioModalOpen = false;
     this.isEditingEjercicioModal = false;
     this.editingEjercicioNombre = '';
     this.editingEjercicioId = null;
+    this.editingEjercicioData = null;
+    this.wasEditingFromDetalle = false;
+
+    if (shouldReopenDetalle) {
+      this.isDetalleModalOpen = true;
+    }
   }
 
   openDetalleModal(ejercicio: CatalogoEjercicio): void {
-    this.selectedEjercicioDetalle = ejercicio;
+    const enriched = this.ejercicioMetaStorageService.enrichEjercicio(ejercicio, this.selectedGrupoId ?? undefined);
+    this.selectedEjercicioDetalle = enriched;
     this.isDetalleModalOpen = true;
   }
 
   closeDetalleModal(): void {
     this.isDetalleModalOpen = false;
     this.selectedEjercicioDetalle = null;
+    this.wasEditingFromDetalle = false;
   }
 
   onEditFromDetalle(ejercicio: CatalogoEjercicio): void {
-    this.closeDetalleModal();
+    this.wasEditingFromDetalle = true;
+    this.isDetalleModalOpen = false;
     this.openEditEjercicioModal(ejercicio);
   }
 

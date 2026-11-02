@@ -23,13 +23,13 @@
       <div class="header-actions">
         <button
           type="button"
-          class="btn-action btn-edit"
+          class="btn-edit-header"
           (click)="onEditClick()"
-          title="Editar este ejercicio"
-          aria-label="Editar este ejercicio"
+          title="Editar ejercicio"
+          aria-label="Editar ejercicio"
         >
           <i class="fi fi-rr-pencil" aria-hidden="true"></i>
-          <span>Editar</span>
+          <span>Editar ejercicio</span>
         </button>
 
         <button
@@ -47,7 +47,7 @@
     <!-- 2. CONTENIDO PRINCIPAL SCROLLABLE -->
     <div class="modal-body-scroll">
       <div class="main-split-grid">
-        <!-- Columna Izquierda: Fotografía destacada (proporción 4:5) -->
+        <!-- Columna Izquierda: Fotografía destacada (450-500px, contain) -->
         <div class="media-column">
           <div class="media-frame">
             <img
@@ -63,7 +63,7 @@
                 <i class="fi fi-rs-gym" aria-hidden="true"></i>
               </div>
               <p class="placeholder-title">Sin fotografía asignada</p>
-              <p class="placeholder-hint">Podés subir una foto desde el menú de opciones o editando el ejercicio.</p>
+              <p class="placeholder-hint">Podés subir una foto editando el ejercicio.</p>
             </div>
           </div>
         </div>
@@ -82,7 +82,7 @@
             </div>
           </div>
 
-          <!-- Sección: Descripción -->
+          <!-- Sección: Descripción (espacio amplio) -->
           <section class="section-block">
             <h3 class="section-title">
               <i class="fi fi-rr-document-signed" aria-hidden="true"></i>
@@ -160,15 +160,6 @@
         (click)="close.emit()"
       >
         Cerrar detalle
-      </button>
-
-      <button
-        type="button"
-        class="btn btn-primary"
-        (click)="onEditClick()"
-      >
-        <i class="fi fi-rr-pencil" aria-hidden="true"></i>
-        <span>Editar ejercicio</span>
       </button>
     </footer>
   </div>

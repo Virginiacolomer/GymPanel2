@@ -95,6 +95,7 @@ describe('EjerciciosListComponent', () => {
 
     component.openCreateEjercicio.emit();
     component.onEditAction(mockEjercicios[0]);
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
     component.onUploadAction(mockEjercicios[1]);
     component.onDeleteAction(mockEjercicios[2]);
     component.onOpenDetalle(mockEjercicios[0]);

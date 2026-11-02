@@ -21,6 +21,7 @@ export interface SaveEjercicioEvent {
   nombre: string;
   grupoMuscularId: number;
   imagenFile: File | null;
+  removeImage?: boolean;
   descripcion: string;
   equipamiento: string;
   tecnica: string;
@@ -70,6 +71,7 @@ export class EjercicioModalComponent {
 
   // State local
   readonly selectedImageFile = signal<File | null>(null);
+  readonly isImageRemoved = signal<boolean>(false);
   readonly imagePreviewUrl = signal<string | null>(null);
   readonly fileError = signal<string>('');
 
@@ -151,6 +153,7 @@ export class EjercicioModalComponent {
     }
 
     this.selectedImageFile.set(file);
+    this.isImageRemoved.set(false);
 
     const reader = new FileReader();
     reader.onload = () => {
@@ -162,8 +165,8 @@ export class EjercicioModalComponent {
   removeSelectedFile(): void {
     this.selectedImageFile.set(null);
     this.fileError.set('');
-    const originalUrl = this.initialData()?.imagenUrl ?? null;
-    this.imagePreviewUrl.set(originalUrl);
+    this.imagePreviewUrl.set(null);
+    this.isImageRemoved.set(true);
     if (this.fileInputRef) {
       this.fileInputRef.nativeElement.value = '';
     }
@@ -198,6 +201,7 @@ export class EjercicioModalComponent {
       nombre,
       grupoMuscularId: grupoId,
       imagenFile: this.selectedImageFile(),
+      removeImage: this.isImageRemoved(),
       descripcion: (raw.descripcion || '').trim(),
       equipamiento: equip,
       tecnica: (raw.tecnica || '').trim(),

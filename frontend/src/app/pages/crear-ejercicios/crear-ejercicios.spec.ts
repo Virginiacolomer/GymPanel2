@@ -119,7 +119,7 @@ describe('CrearEjercicios', () => {
     expect(component.editingEjercicioId).toBe(10);
 
     component.closeEjercicioModal();
-    component.openDetalleModal(dummyEj);
+    expect(component.isDetalleModalOpen).toBe(true);
     component.closeDetalleModal();
     expect(component.isDetalleModalOpen).toBe(false);
     expect(component.selectedEjercicioDetalle).toBeNull();

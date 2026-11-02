@@ -205,16 +205,7 @@
                   [disabled]="isUpdatingEjercicio() && pendingEditEjercicioId() === ejercicio.id"
                 >
                   <i class="fi fi-rr-pencil" aria-hidden="true"></i>
-                  <span>Editar nombre</span>
-                </button>
-                <button
-                  type="button"
-                  class="dropdown-item"
-                  (click)="onUploadAction(ejercicio)"
-                  [disabled]="isUploadingImagenEjercicioId() === ejercicio.id"
-                >
-                  <i class="fi fi-rr-picture" aria-hidden="true"></i>
-                  <span>{{ ejercicio.imagenUrl ? 'Cambiar foto' : 'Subir foto' }}</span>
+                  <span>Editar ejercicio</span>
                 </button>
                 <button
                   type="button"
@@ -227,7 +218,7 @@
                     {{
                       isDeletingEjercicio() && pendingDeleteEjercicioId() === ejercicio.id
                         ? 'Eliminando...'
-                        : 'Eliminar'
+                        : 'Eliminar ejercicio'
                     }}
                   </span>
                 </button>
@@ -284,14 +275,6 @@
           <button
             type="button"
             class="btn btn-secondary btn-sm"
-            (click)="onUploadAction(ejercicio)"
-            [disabled]="isUploadingImagenEjercicioId() === ejercicio.id"
-          >
-            {{ ejercicio.imagenUrl ? 'Foto' : 'Subir foto' }}
-          </button>
-          <button
-            type="button"
-            class="btn btn-secondary btn-sm"
             (click)="onEditAction(ejercicio)"
             [disabled]="isUpdatingEjercicio() && pendingEditEjercicioId() === ejercicio.id"
           >
@@ -303,7 +286,7 @@
             (click)="onDeleteAction(ejercicio)"
             [disabled]="isDeletingEjercicio() && pendingDeleteEjercicioId() === ejercicio.id"
           >
-            Borrar
+            Eliminar
           </button>
         </div>
       </div>
