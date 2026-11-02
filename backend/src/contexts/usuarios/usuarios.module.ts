@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { HasherContrasenasModule } from '../../shared/infrastructure/hasher-contrasenas.module';
 import { AuthGuardsModule } from '../auth';
 import { User } from './infrastructure/entities/user.entity';
 import { USUARIO_REPOSITORY } from './domain/usuario.repository';
@@ -16,7 +17,11 @@ import { ListarTodosLosUsuarios } from './application/listar-todos-los-usuarios'
 import { EliminarUsuario } from './application/eliminar-usuario';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), AuthGuardsModule],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    AuthGuardsModule,
+    HasherContrasenasModule,
+  ],
   controllers: [UsuariosController],
   providers: [
     { provide: USUARIO_REPOSITORY, useClass: TypeOrmUsuarioRepository },

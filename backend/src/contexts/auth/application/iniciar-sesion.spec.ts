@@ -1,4 +1,4 @@
-import * as bcrypt from 'bcrypt';
+import { HasherContrasenas } from '../../../shared/domain/hasher-contrasenas';
 import {
   UserRole,
   UserStatus,
@@ -24,6 +24,16 @@ class UsuariosEnMemoria implements UsuariosQuery {
   }
 }
 
+class HasherFalso implements HasherContrasenas {
+  hashear(contrasena: string) {
+    return Promise.resolve(`hash:${contrasena}`);
+  }
+
+  comparar(contrasena: string, hash: string) {
+    return Promise.resolve(hash === `hash:${contrasena}`);
+  }
+}
+
 class EmisorDeTokensFalso implements EmisorDeTokens {
   datos?: DatosDelToken;
 
@@ -35,24 +45,24 @@ class EmisorDeTokensFalso implements EmisorDeTokens {
 
 describe('IniciarSesion', () => {
   const emisorDeTokens = new EmisorDeTokensFalso();
-  let usuario: UsuarioConCredenciales;
-
-  beforeAll(async () => {
-    usuario = {
-      id: 7,
-      nombre: 'Tomas',
-      apellido: 'Ferreyra',
-      dni: '30111222',
-      email: 'tomas@mail.com',
-      role: UserRole.CLIENTE,
-      estado: UserStatus.ACTIVO,
-      planEntrenamientoId: null,
-      passwordHash: await bcrypt.hash('secreto1', 4),
-    };
-  });
+  const usuario: UsuarioConCredenciales = {
+    id: 7,
+    nombre: 'Tomas',
+    apellido: 'Ferreyra',
+    dni: '30111222',
+    email: 'tomas@mail.com',
+    role: UserRole.CLIENTE,
+    estado: UserStatus.ACTIVO,
+    planEntrenamientoId: null,
+    passwordHash: 'hash:secreto1',
+  };
 
   function casoDeUso(usuarios: UsuarioConCredenciales[]) {
-    return new IniciarSesion(new UsuariosEnMemoria(usuarios), emisorDeTokens);
+    return new IniciarSesion(
+      new UsuariosEnMemoria(usuarios),
+      new HasherFalso(),
+      emisorDeTokens,
+    );
   }
 
   it('devuelve el token y el usuario sin la contrasena', async () => {

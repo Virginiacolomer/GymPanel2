@@ -1,5 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
+import {
+  HASHER_CONTRASENAS,
+  HasherContrasenas,
+} from '../../../shared/domain/hasher-contrasenas';
 import { Email } from '../domain/value-objects/email.vo';
 import { Usuario } from '../domain/usuario';
 import {
@@ -25,6 +28,8 @@ export class RegistrarUsuario {
   constructor(
     @Inject(USUARIO_REPOSITORY)
     private readonly usuarioRepository: UsuarioRepository,
+    @Inject(HASHER_CONTRASENAS)
+    private readonly hasher: HasherContrasenas,
   ) {}
 
   async ejecutar(comando: RegistrarUsuarioComando): Promise<UsuarioRespuesta> {
@@ -36,16 +41,7 @@ export class RegistrarUsuario {
       throw new EmailYaRegistradoError();
     }
 
-    const defaultRounds = process.env.NODE_ENV === 'production' ? 10 : 8;
-    const configuredRounds = Number(
-      process.env.BCRYPT_SALT_ROUNDS ?? defaultRounds,
-    );
-    const saltRounds =
-      Number.isFinite(configuredRounds) && configuredRounds > 3
-        ? configuredRounds
-        : defaultRounds;
-
-    const hashedPassword = await bcrypt.hash(comando.password, saltRounds);
+    const hashedPassword = await this.hasher.hashear(comando.password);
 
     const nuevoUsuario = Usuario.nuevo({
       nombre: comando.nombre,
