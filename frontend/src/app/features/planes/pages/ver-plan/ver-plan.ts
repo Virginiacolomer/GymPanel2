@@ -3,14 +3,14 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, finalize } from 'rxjs';
-import { PageHeaderCompactComponent } from '../../shared/page-header-compact/page-header-compact';
-import { PageBgComponent } from '../../shared/page-bg/page-bg';
-import { ZoomableImageComponent } from '../../shared/zoomable-image/zoomable-image';
+import { PageHeaderCompactComponent } from '../../../../shared/page-header-compact/page-header-compact';
+import { PageBgComponent } from '../../../../shared/page-bg/page-bg';
+import { ZoomableImageComponent } from '../../../../shared/zoomable-image/zoomable-image';
 import {
   CatalogoGrupoMuscular,
   PlanEntrenamientoApiService,
   PlanEntrenamientoResponse,
-} from '../../core/services/plan-entrenamiento-api.service';
+} from '../../../../core/services/plan-entrenamiento-api.service';
 
 type ExerciseRow = {
   exercise: string;
@@ -33,7 +33,7 @@ type PredefinedPlan = {
 };
 
 @Component({
-  
+
   standalone: true,
   imports: [FormsModule, PageHeaderCompactComponent, PageBgComponent, ZoomableImageComponent],
   templateUrl: './ver-plan.html',

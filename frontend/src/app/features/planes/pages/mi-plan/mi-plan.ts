@@ -1,15 +1,15 @@
 import { Component, OnInit, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { forkJoin, finalize } from 'rxjs';
-import { PageHeaderCompactComponent } from '../../shared/page-header-compact/page-header-compact';
-import { PageBgComponent } from '../../shared/page-bg/page-bg';
-import { ZoomableImageComponent } from '../../shared/zoomable-image/zoomable-image';
-import { AuthStateService } from '../../core/services/auth-state.service';
+import { PageHeaderCompactComponent } from '../../../../shared/page-header-compact/page-header-compact';
+import { PageBgComponent } from '../../../../shared/page-bg/page-bg';
+import { ZoomableImageComponent } from '../../../../shared/zoomable-image/zoomable-image';
+import { AuthStateService } from '../../../../core/services/auth-state.service';
 import {
   CatalogoGrupoMuscular,
   PlanEntrenamientoApiService,
   PlanEntrenamientoResponse,
   UserPlanResponse,
-} from '../../core/services/plan-entrenamiento-api.service';
+} from '../../../../core/services/plan-entrenamiento-api.service';
 
 type ExerciseRow = {
   exercise: string;

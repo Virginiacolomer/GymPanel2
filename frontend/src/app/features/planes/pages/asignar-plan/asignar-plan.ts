@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { finalize } from 'rxjs';
 import { RouterLink } from '@angular/router';
-import { PageHeaderCompactComponent } from '../../shared/page-header-compact/page-header-compact';
-import { PageBgComponent } from '../../shared/page-bg/page-bg';
-import { ActiveClientUserItem, UsersApiService } from '../../core/services/users-api.service';
+import { PageHeaderCompactComponent } from '../../../../shared/page-header-compact/page-header-compact';
+import { PageBgComponent } from '../../../../shared/page-bg/page-bg';
+import { ActiveClientUserItem, UsersApiService } from '../../../../core/services/users-api.service';
 
 type UserPlanRow = {
   id: number;
@@ -13,7 +13,7 @@ type UserPlanRow = {
 };
 
 @Component({
-  
+
   standalone: true,
   imports: [RouterLink, PageHeaderCompactComponent, PageBgComponent],
   templateUrl: './asignar-plan.html',

@@ -3,9 +3,9 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
-import { PageHeaderCompactComponent } from '../../shared/page-header-compact/page-header-compact';
-import { PageBgComponent } from '../../shared/page-bg/page-bg';
-import { PlanEntrenamientoApiService, PlanEntrenamientoResponse } from '../../core/services/plan-entrenamiento-api.service';
+import { PageHeaderCompactComponent } from '../../../../shared/page-header-compact/page-header-compact';
+import { PageBgComponent } from '../../../../shared/page-bg/page-bg';
+import { PlanEntrenamientoApiService, PlanEntrenamientoResponse } from '../../../../core/services/plan-entrenamiento-api.service';
 
 type EditableExerciseRow = {
   exercise: string;
@@ -19,7 +19,7 @@ type EditableTrainingDay = {
 };
 
 @Component({
-  
+
   standalone: true,
   imports: [FormsModule, RouterLink, PageHeaderCompactComponent, PageBgComponent],
   templateUrl: './editar-plan.html',
@@ -42,7 +42,7 @@ export class EditarPlan implements OnInit {
     { label: 'Dia 3', expanded: false, rows: this.createEmptyRows() },
   ];
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params) => {

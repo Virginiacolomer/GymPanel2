@@ -52,14 +52,14 @@ export const routes: Routes = [
   {
     path: 'asignar-plan',
     loadComponent: () =>
-      import('./pages/asignar-plan/asignar-plan').then((m) => m.AsignarPlan),
+      import('./features/planes/pages/asignar-plan/asignar-plan').then((m) => m.AsignarPlan),
     canActivate: [authGuard],
     data: { role: 'ADMIN' },
   },
   {
     path: 'crear-plan',
     loadComponent: () =>
-      import('./pages/crear-plan/crear-plan').then((m) => m.CrearPlan),
+      import('./features/planes/pages/crear-plan/crear-plan').then((m) => m.CrearPlan),
     canActivate: [authGuard],
     data: { role: 'ADMIN' },
   },
@@ -73,14 +73,14 @@ export const routes: Routes = [
   {
     path: 'editar-plan',
     loadComponent: () =>
-      import('./pages/editar-plan/editar-plan').then((m) => m.EditarPlan),
+      import('./features/planes/pages/editar-plan/editar-plan').then((m) => m.EditarPlan),
     canActivate: [authGuard],
     data: { role: 'ADMIN' },
   },
   {
     path: 'ver-plan',
     loadComponent: () =>
-      import('./pages/ver-plan/ver-plan').then((m) => m.VerPlan),
+      import('./features/planes/pages/ver-plan/ver-plan').then((m) => m.VerPlan),
     canActivate: [authGuard],
     data: { role: 'ADMIN' },
   },
@@ -95,7 +95,7 @@ export const routes: Routes = [
   },
   {
     path: 'mi-plan',
-    loadComponent: () => import('./pages/mi-plan/mi-plan').then((m) => m.MiPlan),
+    loadComponent: () => import('./features/planes/pages/mi-plan/mi-plan').then((m) => m.MiPlan),
     canActivate: [authGuard],
     data: { role: 'CLIENTE' },
   },
