@@ -1,8 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { User } from '../../../contexts/usuarios';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
+// No declara la relacion inversa con User: la clave foranea la define
+// User.planEntrenamiento (contexto Usuarios) y Planes accede a las asignaciones
+// por el puerto AsignacionesDePlan. Sacarla no cambia el esquema.
 @Entity({ name: 'plan_entrenamiento', schema: 'public' })
-export class PlanEntrenamiento {
+export class PlanEntrenamientoOrmEntity {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id!: number;
 
@@ -39,7 +41,4 @@ export class PlanEntrenamiento {
     default: () => "'[null,null,null,null,null,null,null]'::jsonb",
   })
   descripcionesDias!: Array<string | null> | null;
-
-  @OneToMany(() => User, (user: User) => user.planEntrenamiento)
-  users!: User[];
 }

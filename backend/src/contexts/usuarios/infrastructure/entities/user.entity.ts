@@ -1,4 +1,4 @@
-import { PlanEntrenamiento } from '../../../../modules/plan-entrenamiento/entities/plan-entrenamiento.entity';
+import { PlanEntrenamientoOrmEntity } from '../../../planes/persistencia';
 import {
   Entity,
   Column,
@@ -45,7 +45,7 @@ export class User {
   @Column({ name: 'plan_entrenamiento_id', type: 'int', nullable: true })
   planEntrenamientoId!: number | null;
 
-  @ManyToOne(() => PlanEntrenamiento, { nullable: true })
+  @ManyToOne(() => PlanEntrenamientoOrmEntity, { nullable: true })
   @JoinColumn({ name: 'plan_entrenamiento_id' })
-  planEntrenamiento!: PlanEntrenamiento | null;
+  planEntrenamiento!: PlanEntrenamientoOrmEntity | null;
 }

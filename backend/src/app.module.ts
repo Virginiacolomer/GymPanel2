@@ -4,7 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsuariosModule } from './contexts/usuarios';
 import { AuthModule } from './contexts/auth/auth.module';
 import { EjerciciosModule } from './contexts/ejercicios';
-import { PlanEntrenamientoModule } from './modules/plan-entrenamiento/plan-entrenamiento.module';
+import { PlanesModule } from './contexts/planes';
 import { AppController } from './app.controller';
 import { databaseOptions } from './database/database-options';
 
@@ -36,11 +36,11 @@ import { databaseOptions } from './database/database-options';
     }),
     UsuariosModule,
     AuthModule,
-    // EjerciciosModule debe registrarse antes que PlanEntrenamientoModule para
+    // EjerciciosModule debe registrarse antes que PlanesModule para
     // que las rutas estaticas (/grupos-musculares, /ejercicios) no sean tapadas
     // por GET /plan-entrenamiento/:id.
     EjerciciosModule,
-    PlanEntrenamientoModule,
+    PlanesModule,
   ],
 })
 export class AppModule {}
