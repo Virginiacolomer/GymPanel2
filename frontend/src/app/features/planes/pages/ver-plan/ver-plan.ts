@@ -1,11 +1,12 @@
-﻿import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+﻿import { EditorSemanaComponent } from '../../components/editor-semana/editor-semana';
+import { PlanDayConfig, PlanExerciseRow } from '../../models/plan.model';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, finalize } from 'rxjs';
 import { PageHeaderCompactComponent } from '../../../../shared/page-header-compact/page-header-compact';
 import { PageBgComponent } from '../../../../shared/page-bg/page-bg';
-import { ZoomableImageComponent } from '../../../../shared/zoomable-image/zoomable-image';
 import {
   CatalogoGrupoMuscular,
   PlanEntrenamientoApiService,
@@ -25,17 +26,9 @@ type TrainingDay = {
   exercises: ExerciseRow[];
 };
 
-type PredefinedPlan = {
-  id: string;
-  title: string;
-  frequency: number;
-  days: TrainingDay[];
-};
-
 @Component({
-
   standalone: true,
-  imports: [FormsModule, PageHeaderCompactComponent, PageBgComponent, ZoomableImageComponent],
+  imports: [FormsModule, PageHeaderCompactComponent, PageBgComponent, EditorSemanaComponent],
   templateUrl: './ver-plan.html',
   styleUrl: './ver-plan.css',
 })
@@ -49,9 +42,6 @@ export class VerPlan implements OnInit {
   isEditing = false;
   isLoading = false;
   statusMessage = '';
-  membershipFrequency = 1;
-  availablePlans: PredefinedPlan[] = [];
-  selectedPlanId = '';
   dbPlans: PlanEntrenamientoResponse[] = [];
   selectedDbPlanId: number | null = null;
   isAssigning = false;
@@ -60,11 +50,11 @@ export class VerPlan implements OnInit {
   private readonly exerciseImageById = new Map<number, string | null>();
   private readonly exerciseIdByNormalizedName = new Map<string, number>();
 
-  days: TrainingDay[] = [
+  days: PlanDayConfig[] = [
     {
       label: 'Dia 1',
       expanded: false,
-      exercises: [
+      rows: [
         { exercise: 'Sentadilla hack', workload: '3x15' },
         { exercise: 'Prensa inclinada', workload: '4x12' },
         { exercise: 'Camilla de cuadriceps', workload: '3x15' },
@@ -75,7 +65,7 @@ export class VerPlan implements OnInit {
     {
       label: 'Dia 2',
       expanded: false,
-      exercises: [
+      rows: [
         { exercise: 'Press banca plano', workload: '4x10' },
         { exercise: 'Remo con barra', workload: '4x12' },
         { exercise: 'Press militar', workload: '3x12' },
@@ -86,7 +76,7 @@ export class VerPlan implements OnInit {
     {
       label: 'Dia 3',
       expanded: false,
-      exercises: [
+      rows: [
         { exercise: 'Hip thrust', workload: '4x12' },
         { exercise: 'Zancadas caminando', workload: '3x14' },
         { exercise: 'Abductores', workload: '3x18' },
@@ -95,85 +85,7 @@ export class VerPlan implements OnInit {
       ],
     },
   ];
-
-  readonly predefinedPlans: PredefinedPlan[] = [
-    {
-      id: 'plan-2-fuerza',
-      title: 'Plan fuerza 2 dias',
-      frequency: 2,
-      days: [
-        {
-          label: 'Dia 1',
-          expanded: false,
-          exercises: [
-            { exercise: 'Sentadilla', workload: '4x8' },
-            { exercise: 'Prensa', workload: '4x10' },
-            { exercise: 'Gemelos', workload: '4x20' },
-          ],
-        },
-        {
-          label: 'Dia 2',
-          expanded: false,
-          exercises: [
-            { exercise: 'Press banca', workload: '4x8' },
-            { exercise: 'Remo', workload: '4x10' },
-            { exercise: 'Curl biceps', workload: '3x12' },
-          ],
-        },
-      ],
-    },
-    {
-      id: 'plan-3-hipertrofia',
-      title: 'Plan hipertrofia 3 dias',
-      frequency: 3,
-      days: [
-        {
-          label: 'Dia 1',
-          expanded: false,
-          exercises: [
-            { exercise: 'Sentadilla hack', workload: '3x15' },
-            { exercise: 'Camilla cuadriceps', workload: '3x15' },
-            { exercise: 'Peso muerto rumano', workload: '3x12' },
-          ],
-        },
-        {
-          label: 'Dia 2',
-          expanded: false,
-          exercises: [
-            { exercise: 'Press banca inclinado', workload: '4x10' },
-            { exercise: 'Jalon al pecho', workload: '4x12' },
-            { exercise: 'Elevaciones laterales', workload: '3x15' },
-          ],
-        },
-        {
-          label: 'Dia 3',
-          expanded: false,
-          exercises: [
-            { exercise: 'Hip thrust', workload: '4x12' },
-            { exercise: 'Abductores', workload: '3x18' },
-            { exercise: 'Plancha abdominal', workload: '4x30s' },
-          ],
-        },
-      ],
-    },
-    {
-      id: 'plan-7-pase-libre',
-      title: 'Plan pase libre 7 dias',
-      frequency: 7,
-      days: Array.from({ length: 7 }, (_, index) => ({
-        label: `Dia ${index + 1}`,
-        expanded: false,
-        exercises: [
-          { exercise: 'Circuito general', workload: '3 vueltas' },
-          { exercise: 'Cardio', workload: '20 min' },
-          { exercise: 'Core', workload: '3x20' },
-        ],
-      })),
-    },
-  ];
-
-  private originalDays: TrainingDay[] = [];
-
+  private originalDays: PlanDayConfig[] = [];
   constructor() {
     this.saveOriginalDays();
   }
@@ -185,51 +97,16 @@ export class VerPlan implements OnInit {
 
       const userId = Number(params.get('userId'));
       this.selectedUserId = Number.isFinite(userId) && userId > 0 ? userId : null;
-
-      const frecuencia = params.get('frecuencia');
-      if (frecuencia) {
-        this.membershipFrequency = parseInt(frecuencia, 10) || 1;
-      }
-      this.loadAvailablePlans();
       this.loadDbPlans();
       this.loadUserPlan();
     });
   }
-
-  loadAvailablePlans(): void {
-    this.availablePlans = this.predefinedPlans.filter((plan) => plan.frequency === this.membershipFrequency);
-  }
-
   get exerciseOptions(): string[] {
     return Array.from(this.exerciseNameById.values()).sort((a, b) => a.localeCompare(b, 'es-AR'));
   }
-
-  assignPredefinedPlan(): void {
-    if (!this.selectedPlanId) {
-      return;
-    }
-
-    const plan = this.availablePlans.find((item) => item.id === this.selectedPlanId);
-    if (!plan) {
-      return;
-    }
-
-    this.days = plan.days.map((planDay) => ({
-      label: planDay.label,
-      expanded: false,
-      exercises: planDay.exercises.map((ex) => ({
-        exercise: ex.exercise,
-        workload: ex.workload,
-      })),
-    }));
-
-    this.selectedPlanId = '';
-    this.saveOriginalDays();
-  }
-
   assignDbPlan(): void {
     if (!this.selectedUserId || !this.selectedDbPlanId) return;
-    if (!window.confirm('Â¿Confirmar asignaciÃ³n de este plan al usuario?')) return;
+    if (!window.confirm('¿Confirmar asignación de este plan al usuario?')) return;
 
     this.isAssigning = true;
     this.statusMessage = '';
@@ -251,77 +128,61 @@ export class VerPlan implements OnInit {
         },
       });
   }
-
   addExerciseRow(dayIndex: number): void {
     const day = this.days[dayIndex];
     if (!day) {
       return;
     }
-
-    day.exercises = [...day.exercises, { exercise: '', workload: '' }];
+    day.rows = [...day.rows, { exercise: '', workload: '' }];
   }
-
   validateExerciseSelection(dayIndex: number, rowIndex: number): void {
     const day = this.days[dayIndex];
-    const row = day?.exercises[rowIndex];
+    const row = day?.rows[rowIndex];
     if (!row) {
       return;
     }
-
     const typedValue = row.exercise.trim();
     if (!typedValue) {
       return;
     }
-
     const matched = this.exerciseOptions.find(
       (name) => this.normalizeText(name) === this.normalizeText(typedValue),
     );
-
     row.exercise = matched ?? '';
   }
-
   removeExerciseRow(dayIndex: number, rowIndex: number): void {
     const day = this.days[dayIndex];
     if (!day) {
       return;
     }
-
-    day.exercises = day.exercises.filter((_, index) => index !== rowIndex);
+    day.rows = day.rows.filter((_, index) => index !== rowIndex);
   }
-
   toggleDay(index: number): void {
     this.days = this.days.map((day, dayIndex) => ({
       ...day,
       expanded: dayIndex === index ? !day.expanded : day.expanded,
     }));
   }
-
   startEditing(): void {
     this.isEditing = true;
   }
-
   cancelEditing(): void {
     this.isEditing = false;
     this.restoreOriginalDays();
   }
-
   savePlan(): void {
     if (!this.selectedUserId) {
       this.statusMessage = 'No se pudo identificar al usuario para guardar cambios.';
       return;
     }
-
     if (!this.currentPlan) {
       this.statusMessage = 'No hay plan cargado para guardar cambios.';
       return;
     }
-
     try {
       const payload = this.buildUserEditedPlanPayload();
-
       this.isLoading = true;
       this.cdr.markForCheck();
-
       this.planEntrenamientoApiService
         .updatePlanForUser(this.selectedUserId, payload)
         .pipe(
@@ -350,7 +211,6 @@ export class VerPlan implements OnInit {
       this.cdr.detectChanges();
     }
   }
-
   private loadDbPlans(): void {
     this.planEntrenamientoApiService.getAllPlans().subscribe({
       next: (plans) => {
@@ -358,11 +218,10 @@ export class VerPlan implements OnInit {
         this.cdr.detectChanges();
       },
       error: () => {
-        // Non-critical â€” dropdown simply stays empty
+        // Non-critical — dropdown simply stays empty
       },
     });
   }
-
   private loadUserPlan(): void {
     if (!this.selectedUserId) {
       this.statusMessage = 'No se pudo identificar al usuario para cargar el plan.';
@@ -370,11 +229,9 @@ export class VerPlan implements OnInit {
       this.cdr.detectChanges();
       return;
     }
-
     this.isLoading = true;
     this.statusMessage = '';
     this.cdr.markForCheck();
-
     forkJoin({
       catalogo: this.planEntrenamientoApiService.getCatalogoGruposMusculares(),
       planData: this.planEntrenamientoApiService.getPlanByUserId(this.selectedUserId),
@@ -389,9 +246,7 @@ export class VerPlan implements OnInit {
         next: ({ catalogo, planData }: { catalogo: CatalogoGrupoMuscular[]; planData: { plan: PlanEntrenamientoResponse | null } }) => {
           this.buildExerciseNameMap(catalogo);
           const response = planData;
-
           console.log('[ver-plan] planData.plan (raw):', response.plan);
-
           if (!response.plan) {
             this.days = [];
             this.currentPlan = null;
@@ -400,7 +255,6 @@ export class VerPlan implements OnInit {
             this.cdr.detectChanges();
             return;
           }
-
           this.currentPlan = response.plan;
           this.days = this.mapPlanToDays(response.plan);
           console.log('[ver-plan] days mapeados:', this.days.map((day) => ({ label: day.label, description: day.description })));
@@ -417,34 +271,39 @@ export class VerPlan implements OnInit {
       });
   }
 
-  private mapPlanToDays(plan: PlanEntrenamientoResponse): TrainingDay[] {
-    const dayDescriptions = this.extractDayDescriptions(plan);
+  private mapPlanToDays(plan: PlanEntrenamientoResponse): PlanDayConfig[] {
+    const mappedDays: PlanDayConfig[] = [];
+    const descripciones = plan.descripciones_dias ?? plan.descripcionesDias ?? [];
 
-    return Array.from({ length: plan.cantidadDias }, (_, dayIndex) => {
-      const ejerciciosDia = plan.ejercicios[dayIndex];
-      const repeticionesDia = plan.repeticiones[dayIndex];
-      const descripcionDia = dayDescriptions[dayIndex] ?? '';
+    for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
+      const ejerciciosDia = plan.ejercicios?.[dayIndex];
+      const repeticionesDia = plan.repeticiones?.[dayIndex];
+      const descripcion = descripciones[dayIndex]?.trim() || null;
 
-      if (!Array.isArray(ejerciciosDia) || ejerciciosDia.length === 0) {
-        return {
-          label: `Dia ${dayIndex + 1}`,
-          expanded: false,
-          description: descripcionDia || undefined,
-          exercises: [],
-        };
+      if (!ejerciciosDia || ejerciciosDia.length === 0) {
+        if (dayIndex < plan.cantidadDias) {
+          mappedDays.push({
+            label: `Dia ${dayIndex + 1}`,
+            expanded: false,
+            description: descripcion,
+            rows: [],
+          });
+        }
+        continue;
       }
 
-      return {
+      mappedDays.push({
         label: `Dia ${dayIndex + 1}`,
         expanded: false,
-        description: descripcionDia || undefined,
-        exercises: ejerciciosDia.map((id, exerciseIndex) => ({
-          exercise: this.resolveExerciseName(id),
-          workload: Array.isArray(repeticionesDia) ? (repeticionesDia[exerciseIndex] ?? '') : '',
-          imagenUrl: this.resolveExerciseImage(id),
+        description: descripcion,
+        rows: ejerciciosDia.map((id, exerciseIndex) => ({
+          exercise: this.exerciseNameById.get(id) || `Ejercicio ${id}`,
+          workload: repeticionesDia?.[exerciseIndex] || '',
+          imagenUrl: this.exerciseImageById.get(id) || null,
         })),
-      };
-    });
+      });
+    }
+    return mappedDays;
   }
 
   private extractDayDescriptions(plan: PlanEntrenamientoResponse): string[] {
@@ -507,11 +366,17 @@ export class VerPlan implements OnInit {
   }
 
   private saveOriginalDays(): void {
-    this.originalDays = JSON.parse(JSON.stringify(this.days));
+    this.originalDays = this.days.map((day) => ({
+      ...day,
+      rows: day.rows.map((row) => ({ ...row })),
+    }));
   }
 
   private restoreOriginalDays(): void {
-    this.days = JSON.parse(JSON.stringify(this.originalDays));
+    this.days = this.originalDays.map((day) => ({
+      ...day,
+      rows: day.rows.map((row) => ({ ...row })),
+    }));
   }
 
   private normalizeText(value: string): string {
@@ -538,7 +403,7 @@ export class VerPlan implements OnInit {
       }
 
       const day = this.days[dayIndex];
-      const rows = day?.exercises ?? [];
+      const rows = day?.rows ?? [];
       if (rows.length === 0) {
         throw new Error(`El ${day?.label ?? `Dia ${dayIndex + 1}`} debe tener al menos un ejercicio.`);
       }
@@ -561,7 +426,7 @@ export class VerPlan implements OnInit {
       }
 
       const day = this.days[dayIndex];
-      const rows = day?.exercises ?? [];
+      const rows = day?.rows ?? [];
       if (rows.length === 0) {
         throw new Error(`El ${day?.label ?? `Dia ${dayIndex + 1}`} no tiene repeticiones cargadas.`);
       }
@@ -668,12 +533,12 @@ export class VerPlan implements OnInit {
       document.setFont('helvetica', 'normal');
       document.setFontSize(11);
 
-      if (day.exercises.length === 0) {
+      if (day.rows.length === 0) {
         addParagraph('Sin ejercicios cargados.', 11, 3);
         continue;
       }
 
-      for (const [index, exercise] of day.exercises.entries()) {
+      for (const [index, exercise] of day.rows.entries()) {
         const line = `${index + 1}. ${exercise.exercise} - ${exercise.workload}`;
         const lines = document.splitTextToSize(line, contentWidth);
         ensureSpace(lines.length * 6 + 2);
