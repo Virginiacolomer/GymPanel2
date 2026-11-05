@@ -1,0 +1,87 @@
+<section class="plan-days" aria-label="Rutina semanal">
+    @for (day of days(); track day.label; let dayIndex = $index) {
+    <article class="day-block">
+        <button type="button" class="day-toggle" [attr.aria-expanded]="day.expanded" (click)="onToggle(dayIndex)">
+            <span class="day-label">
+                {{ day.label }}
+                @if (day.description) {
+                <span class="day-description-inline"> - {{ day.description }}</span>
+                }
+            </span>
+            <span class="day-arrow" [class.day-arrow-open]="day.expanded" aria-hidden="true"></span>
+        </button>
+
+        @if (day.expanded) {
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ejercicio</th>
+                        <th>Series y repeticiones</th>
+                        @if (editable() && allowAddRemove()) {
+                        <th class="remove-head"></th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (row of day.rows; track $index; let rowIndex = $index) {
+                    <tr>
+                        @if (editable()) {
+                        <td>
+                            <label class="sr-only" [for]="'exercise-' + dayIndex + '-' + rowIndex">Ejercicio</label>
+                            <input [id]="'exercise-' + dayIndex + '-' + rowIndex" type="text" [(ngModel)]="row.exercise"
+                                class="exercise-input" placeholder="Nombre del ejercicio"
+                                [attr.list]="exerciseOptions().length > 0 ? 'exercise-options-' + dayIndex : null"
+                                (blur)="onBlur(dayIndex, rowIndex)" />
+                        </td>
+                        <td>
+                            <label class="sr-only" [for]="'workload-' + dayIndex + '-' + rowIndex">Series y
+                                repeticiones</label>
+                            <input [id]="'workload-' + dayIndex + '-' + rowIndex" type="text" [(ngModel)]="row.workload"
+                                class="workload-input" placeholder="Ej: 3x12" />
+                        </td>
+                        @if (allowAddRemove()) {
+                        <td class="remove-cell">
+                            <button type="button" class="remove-row-btn" (click)="onRemoveRow(dayIndex, rowIndex)"
+                                aria-label="Quitar fila" title="Quitar fila">
+                                -
+                            </button>
+                        </td>
+                        }
+                        } @else {
+                        <td>
+                            <span class="exercise-name-cell">
+                                @if (row.imagenUrl) {
+                                <app-zoomable-image [src]="row.imagenUrl" [alt]="row.exercise"
+                                    class="exercise-row-thumb"></app-zoomable-image>
+                                }
+                                {{ row.exercise }}
+                            </span>
+                        </td>
+                        <td>{{ row.workload }}</td>
+                        }
+                    </tr>
+                    }
+                </tbody>
+            </table>
+
+            @if (editable() && allowAddRemove()) {
+            <button type="button" class="add-row-btn" (click)="onAddRow(dayIndex)">
+                + Agregar ejercicio
+            </button>
+            }
+        </div>
+        }
+    </article>
+    }
+</section>
+
+@if (exerciseOptions().length > 0) {
+@for (day of days(); track day.label; let dayIndex = $index) {
+<datalist [id]="'exercise-options-' + dayIndex">
+    @for (option of exerciseOptions(); track option) {
+    <option [value]="option"></option>
+    }
+</datalist>
+}
+}

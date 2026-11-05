@@ -1,0 +1,212 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+.plan-days {
+    width: 100%;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: auto;
+}
+
+.day-block {
+    width: min(100%, 36rem);
+}
+
+.day-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--accent);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.day-label {
+    line-height: 0.9;
+}
+
+.day-description-inline {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--text-secondary);
+    line-height: 1.35;
+}
+
+.day-arrow {
+    position: relative;
+    width: 30px;
+    height: 22px;
+    border-radius: 8px;
+    background: var(--accent);
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.12);
+}
+
+.day-arrow::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid var(--accent-contrast);
+    transform: translate(-50%, -30%);
+    transition: transform 160ms ease;
+}
+
+.day-arrow-open::before {
+    transform: translate(-50%, -60%) rotate(180deg);
+}
+
+.table-wrap {
+    margin-top: 0.7rem;
+    overflow-x: auto;
+    border-radius: 18px;
+    background: var(--bg-card);
+    border: 0.5px solid var(--border);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--text-primary);
+    font-size: 0.96rem;
+}
+
+th,
+td {
+    padding: 0.95rem 1rem;
+    text-align: left;
+}
+
+thead th {
+    background: var(--bg-elevated);
+    font-size: 0.87rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-muted);
+}
+
+tbody tr:not(:last-child) td {
+    border-bottom: 1px solid var(--border);
+}
+
+tbody td:last-child,
+thead th:last-child {
+    width: 34%;
+}
+
+.remove-head,
+.remove-cell {
+    width: 56px;
+    text-align: center;
+}
+
+.remove-row-btn {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0.5px solid var(--danger-border);
+    border-radius: 3px 14px 3px 14px;
+    background: var(--danger-dim);
+    color: var(--danger);
+    font-family: 'Manrope', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1;
+    cursor: pointer;
+    transition: filter 140ms ease;
+}
+
+.remove-row-btn:hover {
+    filter: brightness(1.08);
+}
+
+.add-row-btn {
+    margin: 0.8rem 0.8rem 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 0.9rem;
+    border: 0.5px solid var(--accent-border);
+    border-radius: 3px 14px 3px 14px;
+    background: transparent;
+    color: var(--accent);
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: filter 140ms ease;
+}
+
+.add-row-btn:hover {
+    filter: brightness(1.05);
+}
+
+.exercise-input,
+.workload-input {
+    width: 100%;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+    background: var(--bg-input);
+    color: var(--text-primary);
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.96rem;
+    outline: 0;
+    transition: border-color 140ms ease;
+}
+
+.exercise-input:focus,
+.workload-input:focus {
+    border-color: var(--accent-border);
+}
+
+.exercise-input::placeholder,
+.workload-input::placeholder {
+    color: var(--text-muted);
+}
+
+.exercise-name-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.exercise-row-thumb {
+    width: 46px;
+    height: 46px;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}

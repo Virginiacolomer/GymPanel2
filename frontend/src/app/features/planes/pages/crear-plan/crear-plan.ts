@@ -1,15 +1,15 @@
 ﻿import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { timeout } from 'rxjs';
-import { PageHeaderCompactComponent } from '../../shared/page-header-compact/page-header-compact';
-import { PageBgComponent } from '../../shared/page-bg/page-bg';
-import { ZoomableImageComponent } from '../../shared/zoomable-image/zoomable-image';
+import { PageHeaderCompactComponent } from '../../../../shared/page-header-compact/page-header-compact';
+import { PageBgComponent } from '../../../../shared/page-bg/page-bg';
+import { ZoomableImageComponent } from '../../../../shared/zoomable-image/zoomable-image';
 import {
   CatalogoEjercicio,
   CatalogoGrupoMuscular,
   CreatePlanEntrenamientoRequest,
   PlanEntrenamientoApiService,
-} from '../../core/services/plan-entrenamiento-api.service';
+} from '../../../../core/services/plan-entrenamiento-api.service';
 
 type ExerciseRow = {
   muscleGroupId: number | null;

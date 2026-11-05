@@ -1,0 +1,45 @@
+<app-page-bg>
+  <main class="page-with-compact-header">
+    <app-page-header-compact backHref="/menu-cliente"></app-page-header-compact>
+    <section class="page-body">
+      <div class="plan-shell">
+        <h1>Mi plan</h1>
+
+        @if (isLoading) {
+        <div class="status-banner" role="status" aria-live="polite">
+          Cargando tu plan...
+        </div>
+        }
+
+        @if (errorMessage) {
+        <div class="status-banner status-banner-error" role="alert">
+          {{ errorMessage }}
+        </div>
+        }
+
+        <div class="no-plan-message" [class.is-hidden]="hasPlan || isLoading || !!errorMessage">
+          <p>¡Aun no tienes un plan de entrenamiento! Comunicate con tu entrenador</p>
+        </div>
+
+        <section class="plan-summary" [class.is-hidden]="!hasPlan">
+          <h2>{{ planName }}</h2>
+          @if (currentUser) {
+          <p>Alumno: {{ currentUser.nombre }} {{ currentUser.apellido }}</p>
+          }
+          @if (planDescription) {
+          <p>{{ planDescription }}</p>
+          }
+        </section>
+
+        @if (hasPlan && days.length > 0) {
+        <app-editor-semana [days]="days" [editable]="false" (dayToggled)="toggleDay($event)"></app-editor-semana>
+        }
+
+        <button type="button" class="download-btn" [class.is-hidden]="!hasPlan" (click)="downloadPdf()">
+          <span class="download-icon" aria-hidden="true"></span>
+          <span>Descargar PDF</span>
+        </button>
+      </div>
+    </section>
+  </main>
+</app-page-bg>

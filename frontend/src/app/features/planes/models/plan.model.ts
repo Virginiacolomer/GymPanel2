@@ -33,3 +33,16 @@ export interface UserEditedPlanResponse {
   message: string;
 }
 
+export interface PlanExerciseRow {
+  exercise: string;
+  workload: string;
+  imagenUrl?: string | null;
+}
+
+export interface PlanDayConfig {
+  label: string;
+  expanded: boolean;
+  description?: string | null;
+  rows: PlanExerciseRow[];
+}
+

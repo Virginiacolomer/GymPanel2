@@ -1,15 +1,16 @@
 import { Component, OnInit, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { forkJoin, finalize } from 'rxjs';
-import { PageHeaderCompactComponent } from '../../shared/page-header-compact/page-header-compact';
-import { PageBgComponent } from '../../shared/page-bg/page-bg';
-import { ZoomableImageComponent } from '../../shared/zoomable-image/zoomable-image';
-import { AuthStateService } from '../../core/services/auth-state.service';
+import { PageHeaderCompactComponent } from '../../../../shared/page-header-compact/page-header-compact';
+import { PageBgComponent } from '../../../../shared/page-bg/page-bg';
+import { AuthStateService } from '../../../../core/services/auth-state.service';
 import {
   CatalogoGrupoMuscular,
   PlanEntrenamientoApiService,
   PlanEntrenamientoResponse,
   UserPlanResponse,
-} from '../../core/services/plan-entrenamiento-api.service';
+} from '../../../../core/services/plan-entrenamiento-api.service';
+import { EditorSemanaComponent } from '../../components/editor-semana/editor-semana';
+import { PlanDayConfig } from '../../models/plan.model';
 
 type ExerciseRow = {
   exercise: string;
@@ -31,7 +32,7 @@ type CurrentPlanUser = {
 
 @Component({
   standalone: true,
-  imports: [PageHeaderCompactComponent, PageBgComponent, ZoomableImageComponent],
+  imports: [PageHeaderCompactComponent, PageBgComponent, EditorSemanaComponent],
   templateUrl: './mi-plan.html',
   styleUrl: './mi-plan.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -43,7 +44,7 @@ export class MiPlan implements OnInit {
   private readonly exerciseNameById = new Map<number, string>();
   private readonly exerciseImageById = new Map<number, string | null>();
 
-  days: TrainingDay[] = [];
+  days: PlanDayConfig[] = [];
   isLoading = false;
   hasPlan = false;
   errorMessage = '';
@@ -131,7 +132,7 @@ export class MiPlan implements OnInit {
       });
   }
 
-  private mapPlanToDays(plan: PlanEntrenamientoResponse): TrainingDay[] {
+  private mapPlanToDays(plan: PlanEntrenamientoResponse): PlanDayConfig[] {
     const dayDescriptions = this.extractDayDescriptions(plan);
 
     return Array.from({ length: plan.cantidadDias }, (_, dayIndex) => {
@@ -144,7 +145,7 @@ export class MiPlan implements OnInit {
           label: `Dia ${dayIndex + 1}`,
           expanded: false,
           description: descripcionDia || undefined,
-          exercises: [],
+          rows: [],
         };
       }
 
@@ -152,7 +153,7 @@ export class MiPlan implements OnInit {
         label: `Dia ${dayIndex + 1}`,
         expanded: false,
         description: descripcionDia || undefined,
-        exercises: ejerciciosDia.map((id, exerciseIndex) => ({
+        rows: ejerciciosDia.map((id, exerciseIndex) => ({
           exercise: this.resolveExerciseName(id),
           workload: Array.isArray(repeticionesDia) ? (repeticionesDia[exerciseIndex] ?? '') : '',
           imagenUrl: this.resolveExerciseImage(id),
@@ -312,12 +313,12 @@ export class MiPlan implements OnInit {
       document.setFont('helvetica', 'normal');
       document.setFontSize(11);
 
-      if (day.exercises.length === 0) {
+      if (day.rows.length === 0) {
         addParagraph('Sin ejercicios cargados.', 11, 3);
         continue;
       }
 
-      for (const [index, exercise] of day.exercises.entries()) {
+      for (const [index, exercise] of day.rows.entries()) {
         const line = `${index + 1}. ${exercise.exercise} - ${exercise.workload}`;
         const lines = document.splitTextToSize(line, contentWidth);
         ensureSpace(lines.length * 6 + 2);
