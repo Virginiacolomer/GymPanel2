@@ -9,5 +9,6 @@ export default new DataSource({
     process.env.DATABASE_URL,
     process.env.NODE_ENV === 'production',
   ),
-  entities: [join(__dirname, '..', '**', '*.entity.{ts,js}')],
+  // Los contextos migrados nombran sus entidades *.orm-entity.ts.
+  entities: [join(__dirname, '..', '**', '*{.entity,.orm-entity}.{ts,js}')],
 });
