@@ -1,4 +1,6 @@
-﻿import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+﻿import { EditorSemanaComponent } from '../../components/editor-semana/editor-semana';
+import { PlanDayConfig } from '../../models/plan.model';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
@@ -21,7 +23,7 @@ type EditableTrainingDay = {
 @Component({
 
   standalone: true,
-  imports: [FormsModule, RouterLink, PageHeaderCompactComponent, PageBgComponent],
+  imports: [FormsModule, RouterLink, PageHeaderCompactComponent, PageBgComponent, EditorSemanaComponent],
   templateUrl: './editar-plan.html',
   styleUrl: './editar-plan.css',
 })
@@ -36,7 +38,7 @@ export class EditarPlan implements OnInit {
   isLoading = false;
   statusMessage = '';
 
-  days: EditableTrainingDay[] = [
+  days: PlanDayConfig[] = [
     { label: 'Dia 1', expanded: false, rows: this.createEmptyRows() },
     { label: 'Dia 2', expanded: false, rows: this.createEmptyRows() },
     { label: 'Dia 3', expanded: false, rows: this.createEmptyRows() },
